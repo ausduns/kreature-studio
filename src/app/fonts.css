@@ -1,0 +1,179 @@
+/* Poly Sans Font Family — all styles */
+@font-face {
+  font-family: 'Poly Sans';
+  src: url('/fonts/polysanstrial-slim.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans';
+  src: url('/fonts/polysanstrial-neutral.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans';
+  src: url('/fonts/polysanstrial-median.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans';
+  src: url('/fonts/polysanstrial-bulky.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Wide variants */
+@font-face {
+  font-family: 'Poly Sans Wide';
+  src: url('/fonts/polysanstrial-slimwide.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Wide';
+  src: url('/fonts/polysanstrial-neutralwide.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Wide';
+  src: url('/fonts/polysanstrial-medianwide.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Wide';
+  src: url('/fonts/polysanstrial-bulkywide.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Mono variants */
+@font-face {
+  font-family: 'Poly Sans Mono';
+  src: url('/fonts/polysanstrial-slimmono.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Mono';
+  src: url('/fonts/polysanstrial-neutralmono.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Mono';
+  src: url('/fonts/polysanstrial-medianmono.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Mono';
+  src: url('/fonts/polysanstrial-bulkymono.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Italic variants */
+@font-face {
+  font-family: 'Poly Sans';
+  src: url('/fonts/polysansitalictrial-slimitalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans';
+  src: url('/fonts/polysansitalictrial-neutralitalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans';
+  src: url('/fonts/polysansitalictrial-medianitalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans';
+  src: url('/fonts/polysansitalictrial-bulkyitalic.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Wide Italic */
+@font-face {
+  font-family: 'Poly Sans Wide';
+  src: url('/fonts/polysansitalictrial-slimwideitalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Wide';
+  src: url('/fonts/polysansitalictrial-neutralwideitalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Wide';
+  src: url('/fonts/polysansitalictrial-medianwideitalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Wide';
+  src: url('/fonts/polysansitalictrial-bulkywideitalic.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Mono Italic */
+@font-face {
+  font-family: 'Poly Sans Mono';
+  src: url('/fonts/polysansitalictrial-slimmonoitalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Mono';
+  src: url('/fonts/polysansitalictrial-neutralmonoitalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Mono';
+  src: url('/fonts/polysansitalictrial-medianmonoitalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poly Sans Mono';
+  src: url('/fonts/polysansitalictrial-bulkymonoitalic.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}

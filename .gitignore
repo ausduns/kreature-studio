@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# cloned resources (too large, not part of the app build)
+/claude-resources/
+
+# playwright & firecrawl output
+/.playwright-mcp/
+/.firecrawl/
+
+# logs
+/logs/
+
+# design reference screenshots (kept locally only)
+/design-resources/*.png
+
+# keep fonts
+!/public/fonts/
