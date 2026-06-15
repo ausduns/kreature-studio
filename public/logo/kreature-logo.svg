@@ -1,0 +1,66 @@
+<svg viewBox="0 0 230 48" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="faceGrad" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="60%" stop-color="#F97316" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#ff6b00" stop-opacity="0.6"/>
+    </linearGradient>
+    <linearGradient id="eyeGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#ff6b00"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon mark -->
+  <g transform="translate(0, 1)">
+    <!-- Outer pill/circle background for dark mode -->
+    <rect x="0" y="1" width="44" height="44" rx="12" fill="#050816"/>
+    <rect x="0" y="1" width="44" height="44" rx="12" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+    <!-- Creature face silhouette -->
+    <!-- Head shape -->
+    <path d="
+      M 22 10
+      C 15 10, 10 16, 10 23
+      C 10 32, 14 38, 22 40
+      C 30 38, 34 32, 34 23
+      C 34 16, 29 10, 22 10
+      Z
+    " fill="url(#faceGrad)" opacity="0.12"/>
+
+    <!-- Left eye socket -->
+    <ellipse cx="16" cy="22" rx="4.5" ry="5.5" fill="#050816" stroke="none"/>
+    <!-- Left eye -->
+    <ellipse cx="16" cy="22" rx="3" ry="3.5" fill="url(#eyeGrad)"/>
+    <!-- Left pupil -->
+    <circle cx="16.5" cy="22" r="1.2" fill="#050816"/>
+
+    <!-- Right eye socket -->
+    <ellipse cx="28" cy="22" rx="4.5" ry="5.5" fill="#050816" stroke="none"/>
+    <!-- Right eye -->
+    <ellipse cx="28" cy="22" rx="3" ry="3.5" fill="url(#eyeGrad)"/>
+    <!-- Right pupil -->
+    <circle cx="27.5" cy="22" r="1.2" fill="#050816"/>
+
+    <!-- Central crest / forehead ridge -->
+    <path d="M 21 10 L 20 16 L 21 20 L 22 26 L 23 20 L 24 16 Z" fill="#F97316" opacity="0.2"/>
+
+    <!-- Between eyes bridge -->
+    <path d="M 20.5 20 C 21 21, 23 21, 23.5 20 L 23 25 L 21 25 Z" fill="#F97316" opacity="0.15"/>
+
+    <!-- Nose/snout -->
+    <path d="M 20 26 C 21 29, 23 29, 24 26" fill="none" stroke="#F97316" stroke-width="0.8" opacity="0.3"/>
+
+    <!-- Mouth line -->
+    <path d="M 18 30 C 20 33, 24 33, 26 30" fill="none" stroke="#F97316" stroke-width="0.7" opacity="0.2"/>
+
+    <!-- Brow ridge -->
+    <path d="M 12 18 C 14 16, 18 15, 22 15" fill="none" stroke="#F97316" stroke-width="0.8" opacity="0.25"/>
+    <path d="M 32 18 C 30 16, 26 15, 22 15" fill="none" stroke="#F97316" stroke-width="0.8" opacity="0.25"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="56" y="33" font-family="'Poly Sans', system-ui, -apple-system, sans-serif" font-weight="600" font-size="28" fill="#ffffff" letterSpacing="-0.5">
+    kreature<tspan fill="#F97316" font-weight="600">.</tspan>
+  </text>
+</svg>

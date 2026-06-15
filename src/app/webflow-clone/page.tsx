@@ -160,7 +160,10 @@ export default function KreatureClone(){
     {/* ═══════ NAV ═══════ */}
     <header className="sticky top-0 z-[999] h-[68px] flex items-center" style={{background:V("color-canvas"),borderBottom:`1px solid ${V("color-hairline")}`}}>
       <div className="max-w-[1440px] mx-auto w-full px-8 flex items-center justify-between h-full">
-        <a href="/" className="shrink-0 font-semibold text-lg" style={{color:V("color-ink")}}>Kreature</a>
+        <a href="/" className="shrink-0 flex items-center gap-2.5" style={{color:V("color-ink")}}>
+          <img src="/logo/kreature-icon.svg" alt="Kreature" className="h-[26px] w-auto" />
+          <span className="font-semibold text-lg tracking-tight">kreature<span style={{color:V("color-accent-blue")}}>.</span></span>
+        </a>
         <nav className="hidden lg:flex items-center gap-6" style={{color:V("color-ink")}}>
           {["Platform","Solutions","Resources"].map(l=><button key={l} className="hover:opacity-70 flex items-center gap-1" style={S.navLink}>{l} <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M1 1l4 4 4-4"/></svg></button>)}
           <a href="/enterprise" className="hover:opacity-70" style={S.navLink}>Enterprise</a>

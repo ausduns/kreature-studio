@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   title: "Kreature — AI Product Studio for Founders Who Ship Fast",
   description:
     "Kreature is a productized build engine for non-technical founders and indie builders. Ship your first product fast with fixed-scope sprints.",
+  icons: {
+    icon: "/logo/kreature-icon.svg",
+    apple: "/logo/kreature-icon.svg",
+  },
   openGraph: {
     title: "Kreature — AI Product Studio",
     description:

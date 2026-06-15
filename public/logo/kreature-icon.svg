@@ -1,0 +1,44 @@
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fg" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#ff6b00"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark sqircle background -->
+  <rect x="1" y="1" width="46" height="46" rx="12" fill="#050816"/>
+
+  <!-- Head silhouette glow -->
+  <path d="M24 10C16 10 10 17 10 25C10 34 15 40 24 42C33 40 38 34 38 25C38 17 32 10 24 10Z" fill="url(#fg)" opacity="0.12"/>
+
+  <!-- Left eye socket -->
+  <ellipse cx="17" cy="23" rx="5" ry="6" fill="#050816"/>
+  <!-- Left eye -->
+  <ellipse cx="17" cy="23" rx="3.5" ry="4" fill="url(#fg)"/>
+  <!-- Left pupil -->
+  <circle cx="17.5" cy="23" r="1.5" fill="#050816"/>
+
+  <!-- Right eye socket -->
+  <ellipse cx="31" cy="23" rx="5" ry="6" fill="#050816"/>
+  <!-- Right eye -->
+  <ellipse cx="31" cy="23" rx="3.5" ry="4" fill="url(#fg)"/>
+  <!-- Right pupil -->
+  <circle cx="30.5" cy="23" r="1.5" fill="#050816"/>
+
+  <!-- Central forehead ridge -->
+  <path d="M23 10L22 16L23 22L24 28L25 22L26 16Z" fill="#F97316" opacity="0.2"/>
+
+  <!-- Bridge between eyes -->
+  <path d="M22.5 21C23 23 25 23 25.5 21L25 27L23 27Z" fill="#F97316" opacity="0.15"/>
+
+  <!-- Nose -->
+  <path d="M22 28C23 31 25 31 26 28" fill="none" stroke="#F97316" stroke-width="1" opacity="0.3"/>
+
+  <!-- Mouth -->
+  <path d="M19 33C22 36 26 36 29 33" fill="none" stroke="#F97316" stroke-width="0.8" opacity="0.2"/>
+
+  <!-- Brow ridges -->
+  <path d="M13 19C15 17 19 16 24 16" fill="none" stroke="#F97316" stroke-width="0.8" opacity="0.25"/>
+  <path d="M35 19C33 17 29 16 24 16" fill="none" stroke="#F97316" stroke-width="0.8" opacity="0.25"/>
+</svg>
