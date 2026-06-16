@@ -414,9 +414,11 @@ function Body({
 function BodyLarge({
   children,
   className = "",
+  style,
 }: {
   children: ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <p
@@ -426,6 +428,7 @@ function BodyLarge({
         fontWeight: 400,
         lineHeight: 1.6,
         color: V("color-body"),
+        ...style,
       }}
     >
       {children}
