@@ -31,7 +31,7 @@ export default function Navigation() {
         {/* Logo + wordmark */}
         <a href="#" className="shrink-0 flex items-center gap-2.5">
           <img src="/logo/kreature-logo-light.png" alt="Kreature" className="h-[38px] w-auto" />
-          <span className="font-heading font-[800] text-xl tracking-tight">Kreature</span>
+          <span className="font-heading font-[800] text-xl tracking-tight">Kreature<span className="text-[#146ef5]">.</span></span>
         </a>
 
         {/* Desktop links */}

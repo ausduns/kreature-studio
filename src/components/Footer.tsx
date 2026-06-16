@@ -26,7 +26,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5 mb-3">
               <img src="/logo/kreature-logo-light.png" alt="Kreature" className="h-[36px] w-auto" />
-              <span className="font-heading font-[800] text-xl tracking-tight">Kreature</span>
+              <span className="font-heading font-[800] text-xl tracking-tight">Kreature<span className="text-[#146ef5]">.</span></span>
             </div>
             <p className="text-muted text-sm leading-relaxed max-w-sm">
               AI Product Studio for founders who ship fast.
