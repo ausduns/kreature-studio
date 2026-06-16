@@ -25,10 +25,11 @@ function PlayIcon({ className }: { className?: string }) {
   );
 }
 
-function BadgeIcon({ className }: { className?: string }) {
+function BadgeIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
     <svg
       className={className}
+      style={style}
       width="48"
       height="48"
       viewBox="0 0 48 48"
@@ -46,10 +47,11 @@ function BadgeIcon({ className }: { className?: string }) {
   );
 }
 
-function UniversityIcon({ className }: { className?: string }) {
+function UniversityIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
     <svg
       className={className}
+      style={style}
       width="32"
       height="32"
       viewBox="0 0 32 32"
@@ -62,10 +64,11 @@ function UniversityIcon({ className }: { className?: string }) {
   );
 }
 
-function HelpIcon({ className }: { className?: string }) {
+function HelpIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
     <svg
       className={className}
+      style={style}
       width="32"
       height="32"
       viewBox="0 0 32 32"
@@ -78,10 +81,11 @@ function HelpIcon({ className }: { className?: string }) {
   );
 }
 
-function CommunityIcon({ className }: { className?: string }) {
+function CommunityIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
     <svg
       className={className}
+      style={style}
       width="32"
       height="32"
       viewBox="0 0 32 32"
@@ -95,10 +99,11 @@ function CommunityIcon({ className }: { className?: string }) {
   );
 }
 
-function StoriesIcon({ className }: { className?: string }) {
+function StoriesIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
     <svg
       className={className}
+      style={style}
       width="32"
       height="32"
       viewBox="0 0 32 32"

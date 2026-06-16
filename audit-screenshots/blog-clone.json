@@ -1,0 +1,193 @@
+{
+  "pageTitle": "Website Design Tools & Software | Webflow",
+  "h1": {
+    "fs": "80px",
+    "fw": "600",
+    "lh": "83.2px",
+    "c": "rgb(8, 8, 8)",
+    "bg": "rgba(0, 0, 0, 0)"
+  },
+  "h2s": [
+    {
+      "t": "Platform",
+      "fs": "24px",
+      "c": "rgb(8, 8, 8)"
+    },
+    {
+      "t": "Build",
+      "fs": "20px",
+      "c": "rgb(90, 90, 90)"
+    },
+    {
+      "t": "Manage",
+      "fs": "20px",
+      "c": "rgb(90, 90, 90)"
+    },
+    {
+      "t": "Optimize",
+      "fs": "20px",
+      "c": "rgb(90, 90, 90)"
+    },
+    {
+      "t": "Extend",
+      "fs": "20px",
+      "c": "rgb(90, 90, 90)"
+    },
+    {
+      "t": "Platform Overview",
+      "fs": "32px",
+      "c": "rgb(255, 255, 255)"
+    }
+  ],
+  "sections": [
+    {
+      "idx": 0,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "80px",
+      "h2": "Build exactly what you want"
+    },
+    {
+      "idx": 1,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "80px",
+      "h2": "Bold ideas brought to life"
+    },
+    {
+      "idx": 2,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "0px",
+      "h2": "Turn design vision into reality"
+    },
+    {
+      "idx": 3,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "80px",
+      "h2": ""
+    },
+    {
+      "idx": 4,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "80px",
+      "h2": ""
+    },
+    {
+      "idx": 5,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "0px",
+      "h2": "Less busywork, more brand-building"
+    },
+    {
+      "idx": 6,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "80px",
+      "h2": ""
+    },
+    {
+      "idx": 7,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "0px",
+      "h2": "Real empowerment — without the brand risk"
+    },
+    {
+      "idx": 8,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "80px",
+      "h2": ""
+    },
+    {
+      "idx": 9,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "80px",
+      "h2": "Stay on brand as you scale"
+    },
+    {
+      "idx": 10,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "0px",
+      "h2": "One platform, two ways to launch"
+    },
+    {
+      "idx": 11,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "80px",
+      "h2": ""
+    },
+    {
+      "idx": 12,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "80px",
+      "h2": "All features"
+    },
+    {
+      "idx": 13,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "80px",
+      "h2": "Frequently asked questions"
+    },
+    {
+      "idx": 14,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "0px",
+      "pb": "144px",
+      "h2": "Start building for free"
+    },
+    {
+      "idx": 15,
+      "bg": "rgba(0, 0, 0, 0)",
+      "pt": "80px",
+      "pb": "80px",
+      "h2": ""
+    }
+  ],
+  "ctas": [
+    {
+      "t": "Learn more about Platform",
+      "bg": "rgba(0, 0, 0, 0)",
+      "br": "8px",
+      "fs": "16px"
+    },
+    {
+      "t": "Learn more about Ai",
+      "bg": "rgba(0, 0, 0, 0)",
+      "br": "8px",
+      "fs": "16px"
+    },
+    {
+      "t": "Learn more about Enterprise",
+      "bg": "rgba(0, 0, 0, 0)",
+      "br": "8px",
+      "fs": "16px"
+    }
+  ],
+  "bodyText": [
+    {
+      "fs": "16px",
+      "lh": "25.6px",
+      "c": "rgb(8, 8, 8)"
+    },
+    {
+      "fs": "16px",
+      "lh": "25.6px",
+      "c": "rgb(255, 255, 255)"
+    },
+    {
+      "fs": "16px",
+      "lh": "25.6px",
+      "c": "rgb(8, 8, 8)"
+    }
+  ]
+}

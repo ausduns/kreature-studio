@@ -1,0 +1,420 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - 'link "New: Kreature AI — Build sites with intelligence →" [ref=e3] [cursor=pointer]':
+      - /url: /feature/ai
+      - text: "New: Kreature AI — Build sites with intelligence"
+      - generic [ref=e4]: →
+  - banner [ref=e5]:
+    - generic [ref=e6]:
+      - link "Kreature Kreature." [ref=e7] [cursor=pointer]:
+        - /url: /
+        - img "Kreature" [ref=e8]
+        - generic [ref=e9]: Kreature.
+      - navigation [ref=e10]:
+        - button "Platform" [ref=e12]:
+          - text: Platform
+          - img [ref=e13]
+        - button "Solutions" [ref=e16]:
+          - text: Solutions
+          - img [ref=e17]
+        - button "Ecosystem" [ref=e20]:
+          - text: Ecosystem
+          - img [ref=e21]
+        - button "Resources" [ref=e24]:
+          - text: Resources
+          - img [ref=e25]
+        - button "Company" [ref=e28]:
+          - text: Company
+          - img [ref=e29]
+        - link "Enterprise" [ref=e31] [cursor=pointer]:
+          - /url: /enterprise
+        - link "Pricing" [ref=e32] [cursor=pointer]:
+          - /url: /pricing
+      - generic [ref=e33]:
+        - link "Log in" [ref=e34] [cursor=pointer]:
+          - /url: /login
+        - link "Contact Sales" [ref=e35] [cursor=pointer]:
+          - /url: /contact-sales
+        - link "Start for free" [ref=e36] [cursor=pointer]:
+          - /url: /signup
+        - button "Dark mode" [ref=e37]: ☾
+  - main [ref=e38]:
+    - generic [ref=e40]:
+      - paragraph [ref=e41]: Localization
+      - heading "Go global, stay local" [level=1] [ref=e42]
+      - paragraph [ref=e43]: Launch multi-language sites that feel native in every market. Automatic translation, locale-specific content, and SEO built for global reach — all managed from one dashboard.
+      - generic [ref=e44]:
+        - link "Start localizing →" [ref=e45] [cursor=pointer]:
+          - /url: /signup
+          - text: Start localizing
+          - generic [ref=e46]: →
+        - link "Explore features" [ref=e47] [cursor=pointer]:
+          - /url: "#features"
+    - generic [ref=e49]:
+      - generic [ref=e50]:
+        - paragraph [ref=e51]: Features
+        - heading "Everything you need to go multilingual" [level=2] [ref=e52]
+        - paragraph [ref=e53]: From automatic translation to RTL layout support, our localization engine handles the complexity so you can focus on growing globally.
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - generic [ref=e56]: 🌐
+          - heading "Automatic translation" [level=3] [ref=e57]
+          - paragraph [ref=e58]: AI-powered machine translation that instantly converts your content into dozens of languages. Powered by state-of-the-art neural models that understand context, idioms, and brand voice.
+        - generic [ref=e59]:
+          - generic [ref=e60]: ✍️
+          - heading "Manual translation control" [level=3] [ref=e61]
+          - paragraph [ref=e62]: Fine-tune every translation with a side-by-side editor. Invite translators, leave comments, and approve changes before they go live. Full version history on every string.
+        - generic [ref=e63]:
+          - generic [ref=e64]: 📍
+          - heading "Locale-specific content" [level=3] [ref=e65]
+          - paragraph [ref=e66]: Not just translation — true localization. Customize images, CTAs, pricing, and promotions per locale. Show different testimonials and case studies in each market.
+        - generic [ref=e67]:
+          - generic [ref=e68]: 🔍
+          - heading "SEO for every locale" [level=3] [ref=e69]
+          - paragraph [ref=e70]: Auto-generated hreflang tags, localized meta titles and descriptions, translated URLs, and per-locale sitemaps. Every page is crawlable and indexable in every language you support.
+        - generic [ref=e71]:
+          - generic [ref=e72]: ↔️
+          - heading "RTL support" [level=3] [ref=e73]
+          - paragraph [ref=e74]: Full right-to-left layout support for Arabic, Hebrew, Farsi, and Urdu. Text, navigation, forms, and components all mirror correctly with zero custom CSS.
+        - generic [ref=e75]:
+          - generic [ref=e76]: 💱
+          - heading "Currency formatting" [level=3] [ref=e77]
+          - paragraph [ref=e78]: Automatic currency conversion and locale-aware formatting. Display prices in local currency with proper symbols, decimal separators, and thousands grouping per region.
+    - generic [ref=e80]:
+      - generic [ref=e81]:
+        - paragraph [ref=e82]: Supported Languages
+        - heading "30+ languages and counting" [level=2] [ref=e83]
+        - paragraph [ref=e84]: Every major language supported out of the box. We add new languages regularly based on customer demand.
+      - generic [ref=e85]:
+        - generic [ref=e86]:
+          - generic [ref=e87]: 🇬🇧
+          - generic [ref=e88]: EN
+          - paragraph [ref=e89]: English
+        - generic [ref=e90]:
+          - generic [ref=e91]: 🇪🇸
+          - generic [ref=e92]: ES
+          - paragraph [ref=e93]: Spanish
+        - generic [ref=e94]:
+          - generic [ref=e95]: 🇫🇷
+          - generic [ref=e96]: FR
+          - paragraph [ref=e97]: French
+        - generic [ref=e98]:
+          - generic [ref=e99]: 🇩🇪
+          - generic [ref=e100]: DE
+          - paragraph [ref=e101]: German
+        - generic [ref=e102]:
+          - generic [ref=e103]: 🇮🇹
+          - generic [ref=e104]: IT
+          - paragraph [ref=e105]: Italian
+        - generic [ref=e106]:
+          - generic [ref=e107]: 🇵🇹
+          - generic [ref=e108]: PT
+          - paragraph [ref=e109]: Portuguese
+        - generic [ref=e110]:
+          - generic [ref=e111]: 🇳🇱
+          - generic [ref=e112]: NL
+          - paragraph [ref=e113]: Dutch
+        - generic [ref=e114]:
+          - generic [ref=e115]: 🇵🇱
+          - generic [ref=e116]: PL
+          - paragraph [ref=e117]: Polish
+        - generic [ref=e118]:
+          - generic [ref=e119]: 🇷🇺
+          - generic [ref=e120]: RU
+          - paragraph [ref=e121]: Russian
+        - generic [ref=e122]:
+          - generic [ref=e123]: 🇨🇳
+          - generic [ref=e124]: ZH
+          - paragraph [ref=e125]: Chinese (Simplified)
+        - generic [ref=e126]:
+          - generic [ref=e127]: 🇹🇼
+          - generic [ref=e128]: ZH
+          - paragraph [ref=e129]: Chinese (Traditional)
+        - generic [ref=e130]:
+          - generic [ref=e131]: 🇯🇵
+          - generic [ref=e132]: JA
+          - paragraph [ref=e133]: Japanese
+        - generic [ref=e134]:
+          - generic [ref=e135]: 🇰🇷
+          - generic [ref=e136]: KO
+          - paragraph [ref=e137]: Korean
+        - generic [ref=e138]:
+          - generic [ref=e139]: 🇦🇪
+          - generic [ref=e140]: AR
+          - paragraph [ref=e141]: Arabic
+        - generic [ref=e142]:
+          - generic [ref=e143]: 🇮🇱
+          - generic [ref=e144]: HE
+          - paragraph [ref=e145]: Hebrew
+        - generic [ref=e146]:
+          - generic [ref=e147]: 🇮🇳
+          - generic [ref=e148]: HI
+          - paragraph [ref=e149]: Hindi
+        - generic [ref=e150]:
+          - generic [ref=e151]: 🇹🇷
+          - generic [ref=e152]: TR
+          - paragraph [ref=e153]: Turkish
+        - generic [ref=e154]:
+          - generic [ref=e155]: 🇹🇭
+          - generic [ref=e156]: TH
+          - paragraph [ref=e157]: Thai
+        - generic [ref=e158]:
+          - generic [ref=e159]: 🇻🇳
+          - generic [ref=e160]: VI
+          - paragraph [ref=e161]: Vietnamese
+        - generic [ref=e162]:
+          - generic [ref=e163]: 🇮🇩
+          - generic [ref=e164]: ID
+          - paragraph [ref=e165]: Indonesian
+        - generic [ref=e166]:
+          - generic [ref=e167]: 🇸🇪
+          - generic [ref=e168]: SV
+          - paragraph [ref=e169]: Swedish
+        - generic [ref=e170]:
+          - generic [ref=e171]: 🇩🇰
+          - generic [ref=e172]: DA
+          - paragraph [ref=e173]: Danish
+        - generic [ref=e174]:
+          - generic [ref=e175]: 🇫🇮
+          - generic [ref=e176]: FI
+          - paragraph [ref=e177]: Finnish
+        - generic [ref=e178]:
+          - generic [ref=e179]: 🇳🇴
+          - generic [ref=e180]: "NO"
+          - paragraph [ref=e181]: Norwegian
+        - generic [ref=e182]:
+          - generic [ref=e183]: 🇨🇿
+          - generic [ref=e184]: CS
+          - paragraph [ref=e185]: Czech
+        - generic [ref=e186]:
+          - generic [ref=e187]: 🇷🇴
+          - generic [ref=e188]: RO
+          - paragraph [ref=e189]: Romanian
+        - generic [ref=e190]:
+          - generic [ref=e191]: 🇺🇦
+          - generic [ref=e192]: UK
+          - paragraph [ref=e193]: Ukrainian
+        - generic [ref=e194]:
+          - generic [ref=e195]: 🇬🇷
+          - generic [ref=e196]: EL
+          - paragraph [ref=e197]: Greek
+        - generic [ref=e198]:
+          - generic [ref=e199]: 🇭🇺
+          - generic [ref=e200]: HU
+          - paragraph [ref=e201]: Hungarian
+        - generic [ref=e202]:
+          - generic [ref=e203]: 🇲🇾
+          - generic [ref=e204]: MS
+          - paragraph [ref=e205]: Malay
+        - generic [ref=e206]:
+          - generic [ref=e207]: 🇵🇭
+          - generic [ref=e208]: TL
+          - paragraph [ref=e209]: Filipino
+        - generic [ref=e210]:
+          - generic [ref=e211]: 🇧🇩
+          - generic [ref=e212]: BN
+          - paragraph [ref=e213]: Bengali
+      - paragraph [ref=e214]:
+        - text: Don't see your language?
+        - link "Contact us" [ref=e215] [cursor=pointer]:
+          - /url: /contact-sales
+        - text: — we add new languages monthly.
+    - generic [ref=e217]:
+      - generic [ref=e218]:
+        - paragraph [ref=e219]: How it works
+        - heading "From one language to many in three steps" [level=2] [ref=e220]
+        - paragraph [ref=e221]: Set up new locales, translate your content, and publish — all within your existing workflow. No separate tools or platforms required.
+      - generic [ref=e222]:
+        - generic [ref=e223]:
+          - generic [ref=e225]: "01"
+          - heading "Setup your locales" [level=3] [ref=e226]
+          - paragraph [ref=e227]: Choose the languages and regions you want to target. Configure your default locale, fallback rules, and enable automatic language detection based on visitor browser preferences.
+        - generic [ref=e228]:
+          - generic [ref=e230]: "02"
+          - heading "Translate your content" [level=3] [ref=e231]
+          - paragraph [ref=e232]: Use AI-powered automatic translation for speed, or hand off to human translators for quality. Our side-by-side editor shows source and translation together — review, edit, and approve with full context.
+        - generic [ref=e233]:
+          - generic [ref=e235]: "03"
+          - heading "Publish localized pages" [level=3] [ref=e236]
+          - paragraph [ref=e237]: Hit publish and your localized content goes live instantly. Each locale gets its own URL structure, hreflang tags, and sitemap entry — fully optimized for search engines in every market.
+    - generic [ref=e239]:
+      - generic [ref=e240]:
+        - paragraph [ref=e241]: Enterprise
+        - heading "Advanced localization workflows" [level=2] [ref=e242]
+        - paragraph [ref=e243]: Built for teams that manage content across dozens of markets. Translation memory, approval chains, and analytics that scale with your global operations.
+      - generic [ref=e244]:
+        - generic [ref=e245]:
+          - generic [ref=e246]: Save up to 60%
+          - heading "Translation memory" [level=3] [ref=e247]
+          - paragraph [ref=e248]: Reuse previously translated strings across projects. Our TM stores every approved translation and suggests matches when similar content appears — reducing cost by up to 60%.
+        - generic [ref=e249]:
+          - generic [ref=e250]: Brand consistency
+          - heading "Glossary management" [level=3] [ref=e251]
+          - paragraph [ref=e252]: Define brand-specific terminology, product names, and style rules per language. The translation engine respects your glossary, ensuring consistent brand voice in every market.
+        - generic [ref=e253]:
+          - generic [ref=e254]: Enterprise workflows
+          - heading "Workflow automation" [level=3] [ref=e255]
+          - paragraph [ref=e256]: Set up approval chains and role-based permissions. Automatically route content to translators, reviewers, and publishers. Integrate with your existing CI/CD pipeline for automated deployments.
+        - generic [ref=e257]:
+          - generic [ref=e258]: Locale-level insights
+          - heading "Analytics per locale" [level=3] [ref=e259]
+          - paragraph [ref=e260]: Track traffic, engagement, and conversions broken down by language and region. See which markets are growing, where content gaps exist, and where to invest translation efforts next.
+        - generic [ref=e261]:
+          - generic [ref=e262]: Headless by design
+          - heading "API-first architecture" [level=3] [ref=e263]
+          - paragraph [ref=e264]: REST and GraphQL endpoints expose every translation for programmatic access. Pull translations into mobile apps, email campaigns, and third-party platforms automatically.
+        - generic [ref=e265]:
+          - generic [ref=e266]: SOC 2 + GDPR
+          - heading "Compliance ready" [level=3] [ref=e267]
+          - paragraph [ref=e268]: GDPR-compliant data handling with data residency options. SOC 2 Type II certified infrastructure. Audit logs track every translation change across your organization.
+    - generic [ref=e270]:
+      - heading "Start localizing" [level=2] [ref=e271]
+      - paragraph [ref=e272]: Reach customers in their native language. Launch your first localized site today — no credit card required.
+      - generic [ref=e273]:
+        - link "Get started free →" [ref=e274] [cursor=pointer]:
+          - /url: /signup
+          - text: Get started free
+          - generic [ref=e275]: →
+        - link "Talk to sales" [ref=e276] [cursor=pointer]:
+          - /url: /contact-sales
+  - contentinfo [ref=e277]:
+    - generic [ref=e278]:
+      - generic [ref=e279]:
+        - generic [ref=e280]:
+          - link "Kreature Kreature." [ref=e281] [cursor=pointer]:
+            - /url: /
+            - img "Kreature" [ref=e282]
+            - generic [ref=e283]: Kreature.
+          - paragraph [ref=e284]: AI Product Studio for founders who ship fast.
+        - generic [ref=e285]:
+          - generic [ref=e286]: Product
+          - list [ref=e287]:
+            - listitem [ref=e288]:
+              - link "CMS" [ref=e289] [cursor=pointer]:
+                - /url: /feature/cms
+            - listitem [ref=e290]:
+              - link "Hosting" [ref=e291] [cursor=pointer]:
+                - /url: /feature/hosting
+            - listitem [ref=e292]:
+              - link "Design" [ref=e293] [cursor=pointer]:
+                - /url: /feature/design
+            - listitem [ref=e294]:
+              - link "AI" [ref=e295] [cursor=pointer]:
+                - /url: /feature/ai
+            - listitem [ref=e296]:
+              - link "SEO" [ref=e297] [cursor=pointer]:
+                - /url: /feature/seo
+            - listitem [ref=e298]:
+              - link "Localization" [ref=e299] [cursor=pointer]:
+                - /url: /feature/localization
+            - listitem [ref=e300]:
+              - link "Optimize" [ref=e301] [cursor=pointer]:
+                - /url: /feature/optimize
+        - generic [ref=e302]:
+          - generic [ref=e303]: Solutions
+          - list [ref=e304]:
+            - listitem [ref=e305]:
+              - link "Enterprise" [ref=e306] [cursor=pointer]:
+                - /url: /enterprise
+            - listitem [ref=e307]:
+              - link "Agencies" [ref=e308] [cursor=pointer]:
+                - /url: /solutions
+            - listitem [ref=e309]:
+              - link "Ecommerce" [ref=e310] [cursor=pointer]:
+                - /url: /feature/ecommerce
+            - listitem [ref=e311]:
+              - link "Startups" [ref=e312] [cursor=pointer]:
+                - /url: /solutions
+        - generic [ref=e313]:
+          - generic [ref=e314]: Resources
+          - list [ref=e315]:
+            - listitem [ref=e316]:
+              - link "Blog" [ref=e317] [cursor=pointer]:
+                - /url: /blog
+            - listitem [ref=e318]:
+              - link "Templates" [ref=e319] [cursor=pointer]:
+                - /url: /templates
+            - listitem [ref=e320]:
+              - link "Libraries" [ref=e321] [cursor=pointer]:
+                - /url: /libraries
+            - listitem [ref=e322]:
+              - link "Glossary" [ref=e323] [cursor=pointer]:
+                - /url: /glossary
+            - listitem [ref=e324]:
+              - link "Made in Webflow" [ref=e325] [cursor=pointer]:
+                - /url: /made-in-webflow
+        - generic [ref=e326]:
+          - generic [ref=e327]: Company
+          - list [ref=e328]:
+            - listitem [ref=e329]:
+              - link "About" [ref=e330] [cursor=pointer]:
+                - /url: /company
+            - listitem [ref=e331]:
+              - link "Careers" [ref=e332] [cursor=pointer]:
+                - /url: /company
+            - listitem [ref=e333]:
+              - link "Customers" [ref=e334] [cursor=pointer]:
+                - /url: /customers
+            - listitem [ref=e335]:
+              - link "Partners" [ref=e336] [cursor=pointer]:
+                - /url: /certified-partners
+            - listitem [ref=e337]:
+              - link "Contact" [ref=e338] [cursor=pointer]:
+                - /url: /contact-sales
+        - generic [ref=e339]:
+          - generic [ref=e340]: Compare
+          - list [ref=e341]:
+            - listitem [ref=e342]:
+              - link "vs WordPress" [ref=e343] [cursor=pointer]:
+                - /url: /webflow-vs-wordpress
+            - listitem [ref=e344]:
+              - link "vs Framer" [ref=e345] [cursor=pointer]:
+                - /url: /webflow-vs-framer
+            - listitem [ref=e346]:
+              - link "vs Squarespace" [ref=e347] [cursor=pointer]:
+                - /url: /webflow-vs-squarespace
+            - listitem [ref=e348]:
+              - link "vs Wix" [ref=e349] [cursor=pointer]:
+                - /url: /webflow-vs-wix
+        - generic [ref=e350]:
+          - generic [ref=e351]: Community
+          - list [ref=e352]:
+            - listitem [ref=e353]:
+              - link "Forum" [ref=e354] [cursor=pointer]:
+                - /url: /community
+            - listitem [ref=e355]:
+              - link "Events" [ref=e356] [cursor=pointer]:
+                - /url: /community
+            - listitem [ref=e357]:
+              - link "Webflow TV" [ref=e358] [cursor=pointer]:
+                - /url: /community
+            - listitem [ref=e359]:
+              - link "Discord" [ref=e360] [cursor=pointer]:
+                - /url: /community
+        - generic [ref=e361]:
+          - generic [ref=e362]: Get Help
+          - list [ref=e363]:
+            - listitem [ref=e364]:
+              - link "Support" [ref=e365] [cursor=pointer]:
+                - /url: /contact-sales
+            - listitem [ref=e366]:
+              - link "Docs" [ref=e367] [cursor=pointer]:
+                - /url: /resources
+            - listitem [ref=e368]:
+              - link "Status" [ref=e369] [cursor=pointer]:
+                - /url: /resources
+            - listitem [ref=e370]:
+              - link "Login" [ref=e371] [cursor=pointer]:
+                - /url: /login
+      - generic [ref=e372]:
+        - paragraph [ref=e373]: © 2026 Kreature Studio. All rights reserved.
+        - generic [ref=e374]:
+          - link "Twitter" [ref=e375] [cursor=pointer]:
+            - /url: https://twitter.com
+            - img [ref=e376]
+          - link "LinkedIn" [ref=e378] [cursor=pointer]:
+            - /url: https://linkedin.com
+            - img [ref=e379]
+  - button "Open Next.js Dev Tools" [ref=e386] [cursor=pointer]:
+    - img [ref=e387]
+  - alert [ref=e390]

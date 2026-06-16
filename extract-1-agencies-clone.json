@@ -1,0 +1,130 @@
+{
+  "url": "http://localhost:3000/feature/optimize",
+  "h1": {
+    "fs": "80px",
+    "fw": "600",
+    "lh": "83.2px",
+    "c": "rgb(8, 8, 8)",
+    "bg": "rgba(0, 0, 0, 0)"
+  },
+  "h2s": [
+    {
+      "t": "The tools you need to grow",
+      "fs": "56px",
+      "c": "rgb(8, 8, 8)"
+    },
+    {
+      "t": "From hypothesis to winner in three steps",
+      "fs": "56px",
+      "c": "rgb(8, 8, 8)"
+    },
+    {
+      "t": "The right message to the right person",
+      "fs": "56px",
+      "c": "rgb(8, 8, 8)"
+    },
+    {
+      "t": "Real results from real optimizations",
+      "fs": "56px",
+      "c": "rgb(8, 8, 8)"
+    },
+    {
+      "t": "Optimization at scale",
+      "fs": "56px",
+      "c": "rgb(8, 8, 8)"
+    },
+    {
+      "t": "Start optimizing",
+      "fs": "56px",
+      "c": "rgb(8, 8, 8)"
+    }
+  ],
+  "sections": [
+    {
+      "idx": 0,
+      "bg": "rgb(255, 255, 255)",
+      "pt": "148px",
+      "pb": "112px",
+      "h2": ""
+    },
+    {
+      "idx": 1,
+      "bg": "rgb(245, 245, 245)",
+      "pt": "112px",
+      "pb": "112px",
+      "h2": "The tools you need to grow"
+    },
+    {
+      "idx": 2,
+      "bg": "rgb(255, 255, 255)",
+      "pt": "112px",
+      "pb": "112px",
+      "h2": "From hypothesis to winner in three steps"
+    },
+    {
+      "idx": 3,
+      "bg": "rgb(245, 245, 245)",
+      "pt": "112px",
+      "pb": "112px",
+      "h2": "The right message to the right person"
+    },
+    {
+      "idx": 4,
+      "bg": "rgb(255, 255, 255)",
+      "pt": "112px",
+      "pb": "112px",
+      "h2": "Real results from real optimizations"
+    },
+    {
+      "idx": 5,
+      "bg": "rgb(245, 245, 245)",
+      "pt": "112px",
+      "pb": "112px",
+      "h2": "Optimization at scale"
+    },
+    {
+      "idx": 6,
+      "bg": "rgb(255, 255, 255)",
+      "pt": "112px",
+      "pb": "112px",
+      "h2": "Start optimizing"
+    }
+  ],
+  "ctas": [
+    {
+      "t": "Start for free",
+      "bg": "rgb(20, 110, 245)",
+      "br": "4px",
+      "fs": "16px"
+    },
+    {
+      "t": "Start optimizing →",
+      "bg": "rgb(20, 110, 245)",
+      "br": "4px",
+      "fs": "16px"
+    },
+    {
+      "t": "Get started free →",
+      "bg": "rgb(20, 110, 245)",
+      "br": "4px",
+      "fs": "16px"
+    }
+  ],
+  "bodyText": [
+    {
+      "fs": "20px",
+      "lh": "25.6px",
+      "c": "rgb(90, 90, 90)"
+    },
+    {
+      "fs": "16px",
+      "lh": "25.6px",
+      "c": "rgb(90, 90, 90)"
+    },
+    {
+      "fs": "14px",
+      "lh": "22.4px",
+      "c": "rgb(90, 90, 90)"
+    }
+  ]
+}
