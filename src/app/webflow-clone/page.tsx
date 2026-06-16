@@ -187,6 +187,12 @@ export default function KreatureClone(){
         <div className="relative z-10 px-5 sm:px-8 pt-[clamp(2rem,5vw,5rem)] pb-[clamp(2rem,4vw,4rem)]">
           <div className="max-w-[1440px] mx-auto">
 
+            {/* H1 + subtext */}
+            <div className="mb-[clamp(2rem,4vw,3rem)]">
+              <h1 className="font-semibold leading-[1.04] tracking-[-0.01em] mb-6" style={{fontSize:"80px",fontWeight:600,lineHeight:"83.2px",letterSpacing:"-0.8px",color:V("color-ink")}}>Make your website a growth&nbsp;engine</h1>
+              <p className="max-w-[700px]" style={{...S.heroSub,color:V("color-ink")}}>Build your brand. Rank in AI search. Drive real revenue. All with Kreature.</p>
+            </div>
+
             {/* Video poster */}
             <div className="relative mb-10 rounded-lg overflow-hidden" style={{borderRadius:"8px"}}>
               <img src={`${CDN}/68c0557aa0ca3aef28f7396d_home-hero-vid-poster.webp`} alt="Kreature platform preview" className="w-full h-auto"/>
@@ -202,12 +208,6 @@ export default function KreatureClone(){
               <img src={`${CDN}/68c9a39c128261b2128439d9_nytimes.svg`} alt="NYT" className="h-5 w-auto" loading="lazy"/>
               <img src={`${CDN}/68c9a39c128261b2128439d8_TED.svg`} alt="TED" className="h-5 w-auto" loading="lazy"/>
               <img src={`${CDN}/68c9a39c128261b2128439c9_Docusign-dark.svg`} alt="Docusign" className="h-5 w-auto" loading="lazy"/>
-            </div>
-
-            {/* H1 + subtext */}
-            <div className="mb-[clamp(3rem,6vw,5rem)]">
-              <h1 className="font-semibold leading-[1.04] tracking-[-0.01em] mb-6" style={{fontSize:"80px",fontWeight:600,lineHeight:"83.2px",letterSpacing:"-0.8px",color:V("color-ink")}}>Make your website a growth&nbsp;engine</h1>
-              <p className="max-w-[700px]" style={{...S.heroSub,color:V("color-ink")}}>Build your brand. Rank in AI search. Drive real revenue. All with Kreature.</p>
             </div>
 
             {/* Build method cards */}
