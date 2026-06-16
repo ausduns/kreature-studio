@@ -28,9 +28,10 @@ export default function Navigation() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 h-[72px] flex items-center justify-between">
-        {/* Logo */}
-        <a href="#" className="shrink-0">
+        {/* Logo + wordmark */}
+        <a href="#" className="shrink-0 flex items-center gap-2.5">
           <img src="/logo/kreature-logo-light.png" alt="Kreature" className="h-[38px] w-auto" />
+          <span className="font-heading font-[800] text-xl tracking-tight">Kreature</span>
         </a>
 
         {/* Desktop links */}

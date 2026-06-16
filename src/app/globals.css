@@ -5,6 +5,7 @@
   --font-sans: 'Poly Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'Poly Sans Mono', ui-monospace, SFMono-Regular, monospace;
   --font-wide: 'Poly Sans Wide', 'Poly Sans', system-ui, sans-serif;
+  --font-heading: 'Poly Sans', system-ui, -apple-system, sans-serif;
 }
 
 /* ─── Light Mode (default) ─── */
