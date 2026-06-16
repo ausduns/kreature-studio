@@ -1,4 +1,3 @@
-import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import ProofBar from "@/components/ProofBar";
 import WhatWeSell from "@/components/WhatWeSell";
@@ -13,7 +12,6 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <>
-      <Navigation />
       <main>
         <Hero />
         <ProofBar />
