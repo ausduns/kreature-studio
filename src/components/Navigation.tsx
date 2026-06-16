@@ -28,9 +28,9 @@ export default function Navigation() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 h-[72px] flex items-center justify-between">
-        {/* Wordmark */}
-        <a href="#" className="font-heading font-[800] text-xl tracking-tight">
-          kreature<span className="text-accent">.</span>
+        {/* Logo */}
+        <a href="#" className="shrink-0">
+          <img src="/logo/kreature-logo-light.jpg" alt="Kreature" className="h-[38px] w-auto" />
         </a>
 
         {/* Desktop links */}

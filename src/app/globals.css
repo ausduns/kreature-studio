@@ -89,3 +89,9 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--color-accent-blue);
   color: #ffffff;
 }
+
+/* Logo visibility — dark logo for light mode, light logo for dark mode */
+.logo-dark { display: block; }
+.logo-light { display: none; }
+.dark .logo-dark { display: none; }
+.dark .logo-light { display: block; }

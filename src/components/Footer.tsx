@@ -24,9 +24,7 @@ export default function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <div className="font-heading font-[800] text-xl tracking-tight mb-3">
-              kreature<span className="text-accent">.</span>
-            </div>
+            <img src="/logo/kreature-logo-light.jpg" alt="Kreature" className="h-[36px] w-auto mb-3" />
             <p className="text-muted text-sm leading-relaxed max-w-sm">
               AI Product Studio for founders who ship fast.
             </p>
