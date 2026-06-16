@@ -119,25 +119,6 @@ function Arrow() {
   return <span className="ml-1 text-[1.1em] leading-none select-none">→</span>;
 }
 
-function ThemeToggle() {
-  const [dark, setDark] = useState(false);
-  function t() {
-    const n = !dark;
-    setDark(n);
-    document.documentElement.classList.toggle("dark", n);
-  }
-  return (
-    <button
-      onClick={t}
-      className="w-9 h-9 rounded-full border flex items-center justify-center text-sm shrink-0"
-      style={{ borderColor: V("color-hairline"), color: V("color-ink") }}
-      aria-label={dark ? "Light mode" : "Dark mode"}
-    >
-      {dark ? "☀" : "☾"}
-    </button>
-  );
-}
-
 /* ─── PAGE ─── */
 
 export default function BrandGuidelines() {
@@ -217,11 +198,6 @@ export default function BrandGuidelines() {
             <a href="#" className="inline-block transition-colors hover:opacity-70" style={{ ...T.navLabel, color: V("color-body-mid"), textDecoration: "none" }}>
               Search
             </a>
-          </div>
-
-          {/* Theme toggle at bottom */}
-          <div className="mt-auto pt-8">
-            <ThemeToggle />
           </div>
         </div>
       </aside>

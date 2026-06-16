@@ -115,12 +115,6 @@ const V = (n:string)=>`var(--${n})`;
 /* ─── HELPERS ─── */
 function Arrow(){return <span className="ml-1 text-[1.1em] leading-none select-none">→</span>;}
 
-function ThemeToggle(){
-  const [dark,setDark]=useState(false);
-  function t(){const n=!dark;setDark(n);document.documentElement.classList.toggle("dark",n);}
-  return <button onClick={t} className="w-9 h-9 rounded-full border flex items-center justify-center text-sm" style={{borderColor:V("color-hairline"),color:V("color-ink")}} aria-label={dark?"Light mode":"Dark mode"}>{dark?"☀":"☾"}</button>;
-}
-
 function MachineMode(){
   return <button className="flex items-center gap-2 px-4 py-2 rounded-sm border" style={{...S.caption,borderColor:V("color-hairline"),color:V("color-mute")}}>
     <span className="text-sm">🤖</span> Machine Mode
@@ -149,36 +143,6 @@ export default function KreatureClone(){
   const tl=(k:Team)=>k==="Marketing"?"Marketing teams":k==="Design"?"Design teams":k==="Engineering"?"Engineering teams":"Agencies";
 
   return <div className="page-wrapper" style={{background:V("color-canvas"),color:V("color-body")}}>
-
-    {/* ═══════ PROMO ═══════ */}
-    <aside role="complementary" style={{background:"transparent",padding:0}}>
-      <a href="/feature/aeo" className="flex items-center justify-center w-full transition-opacity" style={{color:"#fff",...S.bodySm,fontWeight:500,textDecoration:"none",padding:"12px 0",background:V("color-accent-blue")}}>
-        New for Enterprise: Kreature AEO. Own your visibility in AI search <Arrow />
-      </a>
-    </aside>
-
-    {/* ═══════ NAV ═══════ */}
-    <header className="sticky top-0 z-[999] h-[68px] flex items-center" style={{background:V("color-canvas"),borderBottom:`1px solid ${V("color-hairline")}`}}>
-      <div className="max-w-[1440px] mx-auto w-full px-8 flex items-center justify-between h-full">
-        <a href="/" className="shrink-0 flex items-center gap-2.5">
-          <img src="/logo/kreature-logo-dark.png" alt="Kreature" className="h-[42px] w-auto logo-dark" />
-          <img src="/logo/kreature-logo-light.png" alt="Kreature" className="h-[42px] w-auto logo-light" />
-          <span className="font-semibold text-xl tracking-tight" style={{color:V("color-ink")}}>Kreature<span style={{color:V("color-accent-blue")}}>.</span></span>
-        </a>
-        <nav className="hidden lg:flex items-center gap-6" style={{color:V("color-ink")}}>
-          {["Platform","Solutions","Resources"].map(l=><button key={l} className="hover:opacity-70 flex items-center gap-1" style={S.navLink}>{l} <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M1 1l4 4 4-4"/></svg></button>)}
-          <a href="/enterprise" className="hover:opacity-70" style={S.navLink}>Enterprise</a>
-          <a href="/pricing" className="hover:opacity-70" style={S.navLink}>Pricing</a>
-        </nav>
-        <div className="hidden lg:flex items-center gap-3">
-          <a href="/login" className="hover:opacity-70" style={{fontSize:"15.98px",fontWeight:500,color:V("color-ink"),padding:"20.78px 0 19.18px"}}>Log in</a>
-          <a href="/enterprise/contact-sales" className="hover:opacity-70" style={{fontSize:"15.98px",fontWeight:500,color:V("color-ink"),padding:"20.78px 0 19.18px"}}>Contact Sales</a>
-          <a href="/signup" className="transition-colors" style={{...S.btn,background:V("color-accent-blue"),color:"#fff"}}>Start for free</a>
-          <ThemeToggle/>
-        </div>
-        <button className="lg:hidden p-2" aria-label="Menu" style={{color:V("color-ink")}}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
-      </div>
-    </header>
 
     <main>
       {/* ═══════ HERO ═══════ */}
