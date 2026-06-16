@@ -1,116 +1,209 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
-/* ── Design token helper ── */
+/* ─── CSS Var helper ─── */
 const V = (n: string) => `var(--${n})`;
 
-/* ── Shared micro-components ── */
-
+/* ─── Arrow ─── */
 function Arrow() {
   return (
     <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>
   );
 }
 
-/* ── Data constants ── */
+/* ─── Inline SVG icons for Core Values Behaviors ─── */
+function IconUserExpert() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+  );
+}
 
-const CULTURE_ITEMS = [
+function IconCertificationRibbon() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="8" r="6" />
+      <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+    </svg>
+  );
+}
+
+function IconHeartHandshake() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7 7-7Z" />
+    </svg>
+  );
+}
+
+function IconStar() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function ArrowRight({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  );
+}
+
+function ChevronDown({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="12" height="7" viewBox="0 0 12 7" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M1 1l5 5 5-5" />
+    </svg>
+  );
+}
+
+/* ─── Data ─── */
+
+const CORE_BEHAVIORS = [
   {
-    title: "Remote-first",
-    body: "Work from wherever you do your best thinking. We have teammates across the US and Europe, and we optimize for async communication over synchronous meetings.",
+    icon: <IconUserExpert />,
+    title: "Build lasting customer trust",
+    body: "We build trust by taking action that puts customer trust first.",
   },
   {
-    title: "Async by default",
-    body: "We write things down, record loom videos, and keep meetings to a minimum. Deep work time is sacred — we protect it intentionally.",
+    icon: <IconCertificationRibbon />,
+    title: "Win together",
+    body: "We play to win, and we win as one team. Success at Kreature isn't a solo act.",
   },
   {
-    title: "Fast-paced",
-    body: "We ship real products in weeks, not quarters. You'll see your work in production regularly and learn faster than anywhere else.",
+    icon: <IconHeartHandshake />,
+    title: "Reinvent ourselves",
+    body: "We don't just improve what exists, we imagine what's possible.",
   },
   {
-    title: "Full ownership",
-    body: "Everyone owns outcomes, not tickets. You'll talk directly to founders, make decisions that matter, and see the impact of your work immediately.",
+    icon: <IconStar />,
+    title: "Deliver with speed, quality, and craft",
+    body: "We move fast because the moment demands it, and we do so without lowering the bar.",
   },
 ] as const;
 
-const BENEFITS = [
+const FEATURED_ROLES = [
   {
-    title: "Competitive salary",
-    body: "We benchmark against top-tier product companies and agencies. Compensation is transparent and tied to contribution, not negotiation.",
+    department: "Sales",
+    title: "Senior Forward Deployed Engineer",
+    link: "https://boards.greenhouse.io/kreature/jobs/7728896",
   },
   {
-    title: "Remote work",
-    body: "Work from anywhere — home office, co-working, or a cabin in the woods. As long as you have good internet and overlap with your team, you're set.",
+    department: "Engineering",
+    title: "Senior Software Engineer, Delivery Loop",
+    link: "https://boards.greenhouse.io/kreature/jobs/7866296",
   },
   {
-    title: "Flexible hours",
-    body: "We care about output, not when you clock in. Need to pick up kids, run errands, or work late because that's when you're sharp? Go for it.",
-  },
-  {
-    title: "Equipment budget",
-    body: "We'll kit you out with the tools you need — laptop, monitor, mechanical keyboard, standing desk contribution. Whatever helps you do your best work.",
-  },
-  {
-    title: "Learning stipend",
-    body: "$2,000 per year for courses, conferences, books, or whatever helps you grow. We invest in people who invest in themselves.",
-  },
-  {
-    title: "Paid time off",
-    body: "Four weeks of vacation plus local holidays. We also close the studio between Christmas and New Year's so everyone can actually unplug.",
+    department: "Engineering",
+    title: "Senior Software Engineer, Developer Productivity",
+    link: "https://boards.greenhouse.io/kreature/jobs/7802966",
   },
 ] as const;
 
-const ROLES = {
-  engineering: [
-    {
-      title: "Senior Full-Stack Engineer",
-      location: "Remote (US/EU time zones)",
-      type: "Full-time",
-      description:
-        "Own full features end-to-end across the stack. You'll build with Next.js, TypeScript, and Postgres, working directly with founders and designers.",
-    },
-    {
-      title: "Frontend Engineer",
-      location: "Remote (US/EU time zones)",
-      type: "Full-time",
-      description:
-        "Craft pixel-perfect interfaces in React and TypeScript. You have strong opinions about interaction design, accessibility, and component architecture.",
-    },
-    {
-      title: "Backend Engineer",
-      location: "Remote (US/EU time zones)",
-      type: "Full-time",
-      description:
-        "Design APIs, data models, and infrastructure that scale. Deep experience with Postgres, serverless architecture, and shipping reliable systems.",
-    },
-  ],
-  design: [
-    {
-      title: "Product Designer",
-      location: "Remote (US/EU time zones)",
-      type: "Full-time",
-      description:
-        "Design end-to-end product experiences for founders and their users. You're comfortable in Figma, can prototype in code, and think in systems.",
-    },
-    {
-      title: "Brand Designer (Contract)",
-      location: "Remote (US/EU time zones)",
-      type: "Contract",
-      description:
-        "Define visual identities for early-stage products. Brand strategy, logo systems, typography, color — you help products look like they belong.",
-    },
-  ],
-  product: [
-    {
-      title: "Technical Product Manager",
-      location: "Remote (US/EU time zones)",
-      type: "Full-time",
-      description:
-        "Bridge the gap between founder vision and engineering execution. You scope features, manage client relationships, and keep projects on track.",
-    },
-  ],
+const BENEFITS_ITEMS = [
+  {
+    title: "Pay & equity",
+    body: "Competitive base salary, RSUs, and bonus or commission eligibility depending on your role. We benchmark against top-tier companies so you're compensated fairly for your impact.",
+  },
+  {
+    title: "Health & wellness",
+    body: "Medical, dental, and vision coverage for full-time employees and their dependents. We cover most premiums. Coverage includes gender-affirming care, menopause care, and support for a wide range of family needs.",
+  },
+  {
+    title: "Remote-first flexibility",
+    body: "Work from wherever you do your best thinking. We provide localized monthly stipends for Wi-Fi and mobile, plus a one-time home office setup bonus. Any location or hybrid requirements are always called out in job descriptions.",
+  },
+  {
+    title: "Flexible time off",
+    body: "No-accrual flexible vacation policy so you can rest when you need it. Plus separate paid sick leave, local public holidays, company-wide refresh days, and a sabbatical after five years.",
+  },
+  {
+    title: "Financial wellness & retirement",
+    body: "Region-tailored plans including 401(k) with 100% employer match on the first 5% of salary (up to $6,000/year) in the U.S., and retirement support internationally.",
+  },
+  {
+    title: "Family & parental support",
+    body: "12 weeks paid leave for all parents; birthing parents get at least 6 additional weeks. Our Caregivers community provides support, plus modern family planning and new parent support for all paths to parenthood.",
+  },
+  {
+    title: "Mental wellness",
+    body: "Free access to a global mental wellness platform with up to 20 one-on-one sessions per year with licensed therapists and certified coaches, plus unlimited group sessions.",
+  },
+  {
+    title: "Kreature subscription discount",
+    body: "99% off any Kreature plan for you, plus a 50% off code to share with friends and family.",
+  },
+] as const;
+
+const AFFINITY_GROUPS = [
+  { name: "Asians @ Kreature", href: "/company/affinity-group/asians-kreature", color: "#146ef5" },
+  { name: "Blackflow", href: "/company/affinity-group/blackflow", color: "#7a3dff" },
+  { name: "Caregivers @ Kreature", href: "/company/affinity-group/caregivers-kreature", color: "#ed52cb" },
+  { name: "Disability @ Kreature", href: "/company/affinity-group/disability-kreature", color: "#ff6b00" },
+  { name: "Queerflow", href: "/company/affinity-group/queerflow", color: "#00d722" },
+  { name: "Women @ Kreature", href: "/company/affinity-group/women-kreature", color: "#146ef5" },
+  { name: "Latino Flow", href: "/company/affinity-group/latino-flow", color: "#ffae13" },
+  { name: "Vets @ Kreature", href: "/company/affinity-group/vets-kreature", color: "#006acc" },
+] as const;
+
+const PAY_ZONES = {
+  us: {
+    title: "United States",
+    zones: [
+      { name: "Zone A", cities: "New York City, San Francisco, San Jose, Seattle, Jersey City", description: "" },
+      { name: "Zone B", cities: "Boston, Washington DC, San Diego, Chicago, Los Angeles, Sacramento, Portland, Denver, Austin", description: "" },
+      { name: "Zone C", cities: "All other U.S. cities", description: "" },
+    ],
+    note: "If you live within a 75-mile/120-km radius of a major city, that city's zone applies. Within radius of two cities? The closer one counts.",
+  },
+  uk: {
+    title: "United Kingdom",
+    zones: [
+      { name: "Zone A", cities: "London", description: "" },
+      { name: "Zone B", cities: "All other U.K. cities", description: "" },
+    ],
+    note: "75-mile/120-km radius applies for London Zone A.",
+  },
+  ca: {
+    title: "Canada",
+    zones: [
+      { name: "Zone A", cities: "Vancouver, Toronto", description: "" },
+      { name: "Zone B", cities: "All other Canadian cities", description: "" },
+    ],
+    note: "75-mile/120-km radius applies for Zone A cities.",
+  },
 } as const;
+
+const AWARDS = [
+  { year: "2026", source: "BuiltIn", title: "Best Places to Work in Chicago" },
+  { year: "2026", source: "BuiltIn", title: "Best Places to Work in San Francisco" },
+  { year: "2026", source: "BuiltIn", title: "Best Remote Companies to Work for" },
+  { year: "2025", source: "Fortune", title: "Best Workplaces for Parents" },
+  { year: "2025", source: "Fortune", title: "Best Workplaces for Women" },
+  { year: "2025", source: "Fortune", title: "Best Workplaces in Technology" },
+  { year: "2025", source: "BuiltIn", title: "100 Best Places to Work in San Francisco" },
+  { year: "2025", source: "BuiltIn", title: "100 Best Remote Companies to Work For" },
+  { year: "2024", source: "Reppy Awards (RepVue)", title: "A Top 20 Sales Org For Mid-size Companies" },
+] as const;
+
+/* ─── Footer ─── */
 
 const FOOTER_LINKS = {
   Product: ["Features", "Pricing", "Changelog", "Roadmap"],
@@ -120,8 +213,6 @@ const FOOTER_LINKS = {
   Compare: ["vs Agencies", "vs Freelance", "vs In-house", "vs No-code"],
   Partners: ["Certified", "Agencies", "Affiliates", "Integrations"],
 } as const;
-
-/* ── Footer ── */
 
 function Footer() {
   return (
@@ -143,16 +234,15 @@ function Footer() {
               <img
                 src="/logo/kreature-logo-dark.png"
                 alt="Kreature"
-                className="logo-dark h-7 w-auto"
+                className="logo-dark h-[36px] w-auto"
               />
               <img
                 src="/logo/kreature-logo-light.png"
                 alt="Kreature"
-                className="logo-light h-7 w-auto"
+                className="logo-light h-[36px] w-auto"
               />
-              <span className="text-base font-semibold tracking-tight">
-                Kreature
-                <span style={{ color: V("color-accent-blue") }}>.</span>
+              <span className="font-heading font-[800] text-xl tracking-tight">
+                Kreature<span style={{ color: V("color-accent-blue") }}>.</span>
               </span>
             </a>
             <p
@@ -233,514 +323,1408 @@ function Footer() {
   );
 }
 
-/* ── Typography primitives ── */
+/* ─── Shared primitives ─── */
 
-function H1({ children }: { children: ReactNode }) {
-  return (
-    <h1
-      className="tracking-[-0.8px] m-0"
-      style={{
-        fontSize: "clamp(48px, 5.5vw, 80px)",
-        fontWeight: 600,
-        lineHeight: 1.04,
-        color: V("color-ink"),
-      }}
-    >
-      {children}
-    </h1>
-  );
-}
-
-function H2({ children }: { children: ReactNode }) {
-  return (
-    <h2
-      className="m-0"
-      style={{
-        fontSize: "clamp(36px, 4vw, 56px)",
-        fontWeight: 600,
-        lineHeight: 1.04,
-        color: V("color-ink"),
-      }}
-    >
-      {children}
-    </h2>
-  );
-}
-
-function H3({ children }: { children: ReactNode }) {
-  return (
-    <h3
-      className="m-0"
-      style={{
-        fontSize: 32,
-        fontWeight: 500,
-        lineHeight: 1.3,
-        color: V("color-ink"),
-      }}
-    >
-      {children}
-    </h3>
-  );
-}
-
-function Body({
-  children,
+function GradientImagePlaceholder({
+  gradient,
   className = "",
+  aspectRatio,
 }: {
-  children: ReactNode;
+  gradient: string;
   className?: string;
+  aspectRatio?: string;
 }) {
-  return (
-    <p
-      className={`m-0 ${className}`}
-      style={{
-        fontSize: 16,
-        fontWeight: 400,
-        lineHeight: 1.6,
-        color: V("color-body"),
-      }}
-    >
-      {children}
-    </p>
-  );
-}
-
-function BodyLarge({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <p
-      className={`m-0 ${className}`}
-      style={{
-        fontSize: "clamp(18px, 1.6vw, 20px)",
-        fontWeight: 400,
-        lineHeight: 1.6,
-        color: V("color-body"),
-      }}
-    >
-      {children}
-    </p>
-  );
-}
-
-function Caption({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <span
-      className={className}
-      style={{
-        fontSize: "12.8px",
-        fontWeight: 550,
-        lineHeight: 1.2,
-        color: V("color-mute"),
-      }}
-    >
-      {children}
-    </span>
-  );
-}
-
-/* ── Section primitives ── */
-
-function Section({
-  children,
-  className = "",
-  tight = false,
-  id,
-}: {
-  children: ReactNode;
-  className?: string;
-  tight?: boolean;
-  id?: string;
-}) {
-  return (
-    <section
-      id={id}
-      className={`w-full ${className}`}
-      style={{ paddingTop: tight ? 64 : 120, paddingBottom: tight ? 64 : 120 }}
-    >
-      <div className="mx-auto max-w-[960px] px-6">{children}</div>
-    </section>
-  );
-}
-
-/* ── Divider ── */
-
-function Divider() {
   return (
     <div
-      className="w-full"
-      style={{ borderTop: `1px solid ${V("color-hairline")}` }}
-    />
+      className={`rounded-xl overflow-hidden ${className}`}
+      style={{
+        background: gradient,
+        aspectRatio: aspectRatio || "4/3",
+      }}
+    >
+      <div
+        className="w-full h-full opacity-[0.04]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
+    </div>
   );
 }
 
-/* ── Careers Page ── */
+function SectionHeading({
+  eyebrow,
+  heading,
+  body,
+  center = false,
+}: {
+  eyebrow?: string;
+  heading: string;
+  body?: string;
+  center?: boolean;
+}) {
+  return (
+    <div className={center ? "text-center" : ""}>
+      {eyebrow && (
+        <span
+          className="inline-block mb-4 font-medium tracking-wide uppercase"
+          style={{
+            fontSize: "14px",
+            fontWeight: 600,
+            letterSpacing: "1.4px",
+            color: V("color-accent-blue"),
+          }}
+        >
+          {eyebrow}
+        </span>
+      )}
+      <h2
+        className="tracking-tight m-0"
+        style={{
+          fontSize: "clamp(36px, 4vw, 56px)",
+          fontWeight: 600,
+          lineHeight: 1.04,
+          letterSpacing: "-0.36px",
+          color: V("color-ink"),
+        }}
+      >
+        {heading}
+      </h2>
+      {body && (
+        <p
+          className="mt-5 m-0 mx-auto"
+          style={{
+            fontSize: "clamp(18px, 1.6vw, 20px)",
+            fontWeight: 400,
+            lineHeight: 1.6,
+            color: V("color-body"),
+            maxWidth: center ? "680px" : "640px",
+          }}
+        >
+          {body}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function PillLink({
+  href,
+  children,
+  primary = false,
+}: {
+  href: string;
+  children: ReactNode;
+  primary?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      className="inline-flex items-center text-sm font-medium rounded no-underline transition-all duration-200"
+      style={{
+        background: primary ? V("color-accent-blue") : "transparent",
+        color: primary ? "#ffffff" : V("color-ink"),
+        padding: "14px 24px",
+        fontSize: "15px",
+        fontWeight: 500,
+        lineHeight: "18px",
+        border: primary ? "none" : `1px solid ${V("color-hairline")}`,
+        borderRadius: "4px",
+      }}
+      onMouseEnter={(e) => {
+        if (!primary) {
+          e.currentTarget.style.borderColor = `var(--color-ink)`;
+        } else {
+          e.currentTarget.style.opacity = "0.9";
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!primary) {
+          e.currentTarget.style.borderColor = `var(--color-hairline)`;
+        } else {
+          e.currentTarget.style.opacity = "1";
+        }
+      }}
+    >
+      {children}
+      <Arrow />
+    </a>
+  );
+}
+
+/* ─── Accordion (for benefits on mobile) ─── */
+
+function AccordionItem({
+  title,
+  children,
+  defaultOpen = false,
+}: {
+  title: string;
+  children: ReactNode;
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div
+      style={{
+        borderBottom: `1px solid ${V("color-hairline")}`,
+      }}
+    >
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between py-5 text-left bg-transparent border-none cursor-pointer"
+        style={{ color: V("color-ink") }}
+      >
+        <span
+          style={{
+            fontSize: "18px",
+            fontWeight: 600,
+            lineHeight: "25.2px",
+          }}
+        >
+          {title}
+        </span>
+        <span
+          className="transition-transform duration-200"
+          style={{
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            color: V("color-mute"),
+          }}
+        >
+          <ChevronDown />
+        </span>
+      </button>
+      <div
+        className="overflow-hidden transition-all duration-200"
+        style={{
+          maxHeight: open ? "400px" : "0",
+          opacity: open ? 1 : 0,
+        }}
+      >
+        <div
+          className="pb-5"
+          style={{
+            fontSize: "16px",
+            fontWeight: 400,
+            lineHeight: "25.6px",
+            color: V("color-body"),
+          }}
+        >
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Page ─── */
 
 export default function CareersPage() {
   return (
     <>
-      <main style={{ marginTop: 68 }}>
-        {/* ── Hero ── */}
-        <Section>
-          <Caption className="block mb-4">Careers at Kreature</Caption>
-          <H1>
-            Build the future
-            <br />
-            of product creation
-          </H1>
-          <BodyLarge className="mt-6 max-w-[640px]">
-            Join a small, senior team building real products for ambitious
-            founders. No politics, no endless meetings, no &quot;we&apos;ll
-            circle back&quot; — just high-craft work that ships fast and
-            teaches you something every cycle.
-          </BodyLarge>
-          <div className="mt-10">
+      {/* ═══════════════════════════════════════════
+          SECTION 1 — HERO
+          ═══════════════════════════════════════════ */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          paddingTop: "calc(68px + 120px)",
+          paddingBottom: "120px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        {/* Subtle background glow */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div
+            className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full blur-[160px]"
+            style={{
+              background: `color-mix(in srgb, ${V("color-accent-blue")} 5%, transparent)`,
+            }}
+          />
+        </div>
+
+        <div
+          className="relative z-10 mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          {/* Hero content + images grid */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Text */}
+            <div>
+              <span
+                className="inline-block mb-6 font-medium tracking-wide uppercase"
+                style={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  letterSpacing: "1.4px",
+                  color: V("color-accent-blue"),
+                }}
+              >
+                Careers at Kreature
+              </span>
+
+              <h1
+                className="font-heading tracking-tight m-0"
+                style={{
+                  fontSize: "clamp(48px, 5.5vw, 80px)",
+                  fontWeight: 600,
+                  lineHeight: 1.04,
+                  letterSpacing: "-0.48px",
+                  color: V("color-ink"),
+                }}
+              >
+                Remote Together
+              </h1>
+
+              <p
+                className="mt-6 m-0"
+                style={{
+                  fontSize: "clamp(18px, 1.6vw, 20px)",
+                  fontWeight: 400,
+                  lineHeight: 1.6,
+                  color: V("color-body"),
+                  maxWidth: "560px",
+                }}
+              >
+                At Kreature, the only limit to what you can build is your
+                imagination. Join us on our mission to bring development
+                superpowers to everyone.
+              </p>
+
+              <div className="mt-10">
+                <a
+                  href="/company/careers/roles"
+                  className="inline-flex items-center text-sm font-medium rounded no-underline transition-all duration-200"
+                  style={{
+                    background: V("color-accent-blue"),
+                    color: "#ffffff",
+                    padding: "16px 28px",
+                    fontSize: "16px",
+                    fontWeight: 500,
+                    lineHeight: "19.2px",
+                    borderRadius: "4px",
+                  }}
+                >
+                  Explore open roles
+                  <Arrow />
+                </a>
+              </div>
+            </div>
+
+            {/* Right: Image grid */}
+            <div className="grid grid-cols-2 gap-4">
+              <GradientImagePlaceholder
+                gradient="linear-gradient(135deg, #146ef5 0%, #7a3dff 100%)"
+                aspectRatio="4/5"
+                className="row-span-2"
+              />
+              <GradientImagePlaceholder
+                gradient="linear-gradient(135deg, #ed52cb 0%, #ff6b00 100%)"
+                aspectRatio="16/9"
+              />
+              <GradientImagePlaceholder
+                gradient="linear-gradient(135deg, #00d722 0%, #146ef5 100%)"
+                aspectRatio="16/9"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 2 — FEATURED OPEN ROLES
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "80px",
+          paddingBottom: "80px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
+            <SectionHeading
+              heading="Featured open roles"
+              body="A few of the roles we're most excited about right now."
+            />
             <a
-              href="#open-roles"
-              className="inline-flex items-center text-sm font-medium rounded text-white no-underline transition-colors duration-200"
+              href="/company/careers/roles"
+              className="inline-flex items-center shrink-0 text-sm font-medium no-underline transition-all duration-200"
               style={{
-                background: V("color-accent-blue"),
-                padding: "16px 24px",
+                color: V("color-accent-blue"),
+                fontSize: "16px",
+                fontWeight: 500,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = "0.8";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = "1";
               }}
             >
-              See open roles
+              View all open roles
               <Arrow />
             </a>
           </div>
-        </Section>
 
-        <Divider />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FEATURED_ROLES.map((role, i) => (
+              <a
+                key={i}
+                href={role.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-xl p-8 no-underline transition-all duration-300 flex flex-col"
+                style={{
+                  background: V("color-canvas-soft"),
+                  border: `1px solid ${V("color-hairline")}`,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,0.06)";
+                  e.currentTarget.style.borderColor = `var(--color-mute-soft)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.style.borderColor = `var(--color-hairline)`;
+                }}
+              >
+                <span
+                  className="inline-block mb-3 text-xs font-semibold uppercase tracking-wider"
+                  style={{ color: V("color-accent-blue") }}
+                >
+                  {role.department}
+                </span>
+                <h3
+                  className="m-0 mb-12 flex-1"
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: 600,
+                    lineHeight: "28px",
+                    color: V("color-ink"),
+                  }}
+                >
+                  {role.title}
+                </h3>
+                <span
+                  className="inline-flex items-center text-sm font-medium transition-opacity group-hover:opacity-80"
+                  style={{ color: V("color-accent-blue") }}
+                >
+                  Learn more
+                  <Arrow />
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        {/* ── Culture ── */}
-        <Section>
-          <H2>How we work</H2>
-          <BodyLarge className="mt-4 max-w-[640px]">
-            We&apos;ve built a culture that trusts smart people to do great
-            work — without the overhead that slows most companies down.
-          </BodyLarge>
+      {/* ═══════════════════════════════════════════
+          SECTION 3 — WHAT MAKES KREATURE DIFFERENT
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "120px",
+          paddingBottom: "120px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          <SectionHeading
+            heading="What makes Kreature different"
+            center
+          />
 
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-8">
-            {CULTURE_ITEMS.map((c) => (
+          {/* How it started */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center mt-20">
+            <div className="grid grid-cols-3 gap-4">
+              <GradientImagePlaceholder
+                gradient="linear-gradient(135deg, #146ef5 0%, #006acc 100%)"
+                aspectRatio="9/16"
+                className="row-span-2"
+              />
+              <GradientImagePlaceholder
+                gradient="linear-gradient(135deg, #7a3dff 0%, #ed52cb 100%)"
+                aspectRatio="1/1"
+              />
+              <GradientImagePlaceholder
+                gradient="linear-gradient(135deg, #ff6b00 0%, #ffae13 100%)"
+                aspectRatio="1/1"
+              />
+              <GradientImagePlaceholder
+                gradient="linear-gradient(135deg, #00d722 0%, #146ef5 100%)"
+                aspectRatio="16/9"
+                className="col-span-2"
+              />
+            </div>
+
+            <div>
+              <h3
+                className="m-0 mb-4"
+                style={{
+                  fontSize: "32px",
+                  fontWeight: 600,
+                  lineHeight: "38.4px",
+                  color: V("color-ink"),
+                }}
+              >
+                How it started
+              </h3>
+              <p
+                className="m-0"
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 400,
+                  lineHeight: "25.6px",
+                  color: V("color-body"),
+                }}
+              >
+                Kreature started in 2012 with the idea that everyone should be
+                able to create for the web without knowing how to write code.
+                After one rejection from Y Combinator, Kreature officially took
+                off in 2013 — and we&apos;ve been reimagining what&apos;s
+                possible on the web ever since.
+              </p>
+              <div className="mt-8">
+                <PillLink href="/company/about">Learn more about us</PillLink>
+              </div>
+            </div>
+          </div>
+
+          {/* How it's going */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center mt-28">
+            <div className="order-2 lg:order-1">
+              <h3
+                className="m-0 mb-4"
+                style={{
+                  fontSize: "32px",
+                  fontWeight: 600,
+                  lineHeight: "38.4px",
+                  color: V("color-ink"),
+                }}
+              >
+                How it&apos;s going
+              </h3>
+              <p
+                className="m-0"
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 400,
+                  lineHeight: "25.6px",
+                  color: V("color-body"),
+                }}
+              >
+                Now we have the Kreature product and a thriving worldwide
+                community. Freelancers, agencies, and businesses of all sizes
+                use Kreature to build powerful, stunning web experiences on a
+                visual-first canvas — and our team keeps growing to meet the
+                moment.
+              </p>
+              <div className="mt-8">
+                <PillLink href="/webflow-clone">
+                  Learn about the Kreature platform
+                </PillLink>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4 order-1 lg:order-2">
+              <GradientImagePlaceholder
+                gradient="linear-gradient(135deg, #ed52cb 0%, #7a3dff 100%)"
+                aspectRatio="16/9"
+                className="col-span-2"
+              />
+              <GradientImagePlaceholder
+                gradient="linear-gradient(135deg, #146ef5 0%, #ed52cb 100%)"
+                aspectRatio="1/1"
+                className="col-span-1 row-span-2"
+              />
+              <GradientImagePlaceholder
+                gradient="linear-gradient(135deg, #ffae13 0%, #ff6b00 100%)"
+                aspectRatio="1/1"
+              />
+              <GradientImagePlaceholder
+                gradient="linear-gradient(135deg, #00d722 0%, #006acc 100%)"
+                aspectRatio="1/1"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 4 — AI HIRING NOTICE
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "80px",
+          paddingBottom: "80px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          <div
+            className="rounded-2xl p-10 md:p-14 flex flex-col md:flex-row md:items-center md:justify-between gap-6"
+            style={{
+              background: V("color-canvas-soft"),
+              border: `1px solid ${V("color-hairline")}`,
+            }}
+          >
+            <div>
+              <h3
+                className="m-0 mb-3"
+                style={{
+                  fontSize: "24px",
+                  fontWeight: 600,
+                  lineHeight: "31.2px",
+                  color: V("color-ink"),
+                }}
+              >
+                Every hiring decision at Kreature is made by a human
+              </h3>
+              <p
+                className="m-0"
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 400,
+                  lineHeight: "25.6px",
+                  color: V("color-body"),
+                }}
+              >
+                We use AI thoughtfully in our hiring process, but real people
+                make every decision. Learn about our principles.
+              </p>
+            </div>
+            <div className="shrink-0">
+              <PillLink href="/company/careers/ai-hiring-principles">
+                Learn more
+              </PillLink>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 5 — EMPLOYEE TESTIMONIALS
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "120px",
+          paddingBottom: "120px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          <SectionHeading
+            heading="Hear from the team"
+            body="Real Kreatures on what it's like to work here."
+            center
+          />
+
+          <div className="grid md:grid-cols-2 gap-8 mt-16">
+            {/* Testimonial 1 */}
+            <div
+              className="rounded-2xl p-10 md:p-12 flex flex-col"
+              style={{
+                background: V("color-canvas"),
+                border: `1px solid ${V("color-hairline")}`,
+              }}
+            >
+              <blockquote className="m-0 flex-1">
+                <p
+                  className="m-0 mb-8"
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: 400,
+                    lineHeight: "28.8px",
+                    fontStyle: "italic",
+                    color: V("color-body"),
+                  }}
+                >
+                  &ldquo;Being remote-first gives me more time for the things
+                  that matter. I can take my kids to school in the morning and
+                  still crush my day. The flexibility means I can be present in
+                  the ways I want to be — both for my family and for work that
+                  I genuinely love.&rdquo;
+                </p>
+                <footer>
+                  <div
+                    className="font-semibold mb-1"
+                    style={{
+                      fontSize: "16px",
+                      color: V("color-ink"),
+                    }}
+                  >
+                    Lauren Samuel
+                  </div>
+                  <div
+                    className="text-sm"
+                    style={{ color: V("color-body-mid") }}
+                  >
+                    Business Recruiting
+                  </div>
+                </footer>
+              </blockquote>
+            </div>
+
+            {/* Testimonial 2 */}
+            <div
+              className="rounded-2xl p-10 md:p-12 flex flex-col"
+              style={{
+                background: V("color-canvas"),
+                border: `1px solid ${V("color-hairline")}`,
+              }}
+            >
+              <blockquote className="m-0 flex-1">
+                <p
+                  className="m-0 mb-8"
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: 400,
+                    lineHeight: "28.8px",
+                    fontStyle: "italic",
+                    color: V("color-body"),
+                  }}
+                >
+                  &ldquo;The business is strong and growing in an exciting
+                  direction. But the thing that stands out most to me is the
+                  culture — it&apos;s almost uniquely friendly among the
+                  industry. Leadership decisions are centered on compassion,
+                  and I have total confidence in the product we&apos;re
+                  building.&rdquo;
+                </p>
+                <footer>
+                  <div
+                    className="font-semibold mb-1"
+                    style={{
+                      fontSize: "16px",
+                      color: V("color-ink"),
+                    }}
+                  >
+                    Henry Lee
+                  </div>
+                  <div
+                    className="text-sm"
+                    style={{ color: V("color-body-mid") }}
+                  >
+                    Technical Support Specialist
+                  </div>
+                </footer>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 6 — CORE VALUES BEHAVIORS
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "120px",
+          paddingBottom: "120px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          <SectionHeading
+            heading="Our core values behaviors"
+            body="These aren't just words on a wall. They're how we hire, how we
+            promote, and how we build."
+            center
+          />
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+            {CORE_BEHAVIORS.map((b, i) => (
               <div
-                key={c.title}
-                className="rounded-xl p-8"
+                key={i}
+                className="rounded-xl p-8 flex flex-col items-start text-left"
                 style={{
                   background: V("color-canvas-soft"),
                   border: `1px solid ${V("color-hairline")}`,
                 }}
               >
-                <h4
-                  className="m-0 mb-3"
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 600,
-                    lineHeight: 1.4,
-                    color: V("color-ink"),
-                  }}
-                >
-                  {c.title}
-                </h4>
-                <Body>{c.body}</Body>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        <Divider />
-
-        {/* ── Testimonial ── */}
-        <Section>
-          <div
-            className="rounded-2xl p-10 md:p-16"
-            style={{
-              background: V("color-canvas-soft"),
-              border: `1px solid ${V("color-hairline")}`,
-            }}
-          >
-            <blockquote className="m-0">
-              <p
-                className="m-0 mb-6"
-                style={{
-                  fontSize: "clamp(20px, 2vw, 24px)",
-                  fontWeight: 400,
-                  lineHeight: 1.5,
-                  fontStyle: "italic",
-                  color: V("color-ink"),
-                }}
-              >
-                &ldquo;Kreature is the first place I&apos;ve worked where
-                &apos;move fast&apos; and &apos;do great work&apos; aren&apos;t
-                in conflict. We ship real products on tight timelines, but
-                nobody cuts corners. The constraints actually make us better
-                designers and engineers.&rdquo;
-              </p>
-              <footer>
                 <div
-                  className="font-semibold mb-1"
-                  style={{ fontSize: 16, color: V("color-ink") }}
+                  className="mb-5"
+                  style={{ color: V("color-accent-blue") }}
                 >
-                  Alex Chen
+                  {b.icon}
                 </div>
-                <div className="text-sm" style={{ color: V("color-body-mid") }}>
-                  Senior Product Designer, 2 years at Kreature
-                </div>
-              </footer>
-            </blockquote>
-          </div>
-        </Section>
-
-        <Divider />
-
-        {/* ── Benefits ── */}
-        <Section>
-          <H2>What you get</H2>
-          <BodyLarge className="mt-4 max-w-[640px]">
-            We compete on quality of life, not just compensation. Here&apos;s
-            what&apos;s included.
-          </BodyLarge>
-
-          <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {BENEFITS.map((b) => (
-              <div
-                key={b.title}
-                className="rounded-xl p-6"
-                style={{
-                  border: `1px solid ${V("color-hairline")}`,
-                }}
-              >
                 <h4
-                  className="m-0 mb-2"
+                  className="m-0 mb-5"
                   style={{
-                    fontSize: 20,
-                    fontWeight: 600,
-                    lineHeight: 1.4,
+                    fontSize: "18px",
+                    fontWeight: 700,
+                    lineHeight: "23.4px",
                     color: V("color-ink"),
                   }}
                 >
                   {b.title}
                 </h4>
-                <Body>{b.body}</Body>
+                <p
+                  className="m-0"
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: 400,
+                    lineHeight: "24px",
+                    color: V("color-body"),
+                  }}
+                >
+                  {b.body}
+                </p>
               </div>
             ))}
           </div>
-        </Section>
+        </div>
+      </section>
 
-        <Divider />
+      {/* ═══════════════════════════════════════════
+          SECTION 7 — TOTAL REWARDS / BENEFITS
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "120px",
+          paddingBottom: "120px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          <SectionHeading
+            heading="Total rewards"
+            body="We invest in Kreatures at every stage. Our rewards are designed to support your whole self — at work and beyond."
+            center
+          />
 
-        {/* ── Open Roles ── */}
-        <Section id="open-roles">
-          <H2>Open roles</H2>
-          <BodyLarge className="mt-4 max-w-[640px]">
-            We&apos;re always looking for exceptional people. If you see
-            yourself here, reach out — even if there&apos;s no perfect fit
-            listed.
-          </BodyLarge>
-
-          {/* Engineering */}
-          <div className="mt-14">
-            <Caption className="block mb-6">Engineering</Caption>
-            <div className="space-y-4">
-              {ROLES.engineering.map((role) => (
-                <div
-                  key={role.title}
-                  className="rounded-xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 transition-colors duration-200 hover:border-[var(--color-body-mid)]"
-                  style={{
-                    background: V("color-canvas-soft"),
-                    border: `1px solid ${V("color-hairline")}`,
-                  }}
-                >
-                  <div className="flex-1">
-                    <h4
-                      className="m-0 mb-1"
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 600,
-                        lineHeight: 1.4,
-                        color: V("color-ink"),
-                      }}
-                    >
-                      {role.title}
-                    </h4>
-                    <div
-                      className="flex flex-wrap gap-x-5 gap-y-1 text-sm"
-                      style={{ color: V("color-body-mid") }}
-                    >
-                      <span>{role.location}</span>
-                      <span>{role.type}</span>
-                    </div>
-                    <Body className="mt-3">{role.description}</Body>
-                  </div>
-                  <a
-                    href="#apply"
-                    className="shrink-0 inline-flex items-center text-sm font-medium rounded text-white no-underline transition-colors duration-200 self-start"
-                    style={{
-                      background: V("color-accent-blue"),
-                      padding: "10px 20px",
-                    }}
-                  >
-                    Apply
-                    <Arrow />
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Design */}
-          <div className="mt-12">
-            <Caption className="block mb-6">Design</Caption>
-            <div className="space-y-4">
-              {ROLES.design.map((role) => (
-                <div
-                  key={role.title}
-                  className="rounded-xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 transition-colors duration-200 hover:border-[var(--color-body-mid)]"
-                  style={{
-                    background: V("color-canvas-soft"),
-                    border: `1px solid ${V("color-hairline")}`,
-                  }}
-                >
-                  <div className="flex-1">
-                    <h4
-                      className="m-0 mb-1"
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 600,
-                        lineHeight: 1.4,
-                        color: V("color-ink"),
-                      }}
-                    >
-                      {role.title}
-                    </h4>
-                    <div
-                      className="flex flex-wrap gap-x-5 gap-y-1 text-sm"
-                      style={{ color: V("color-body-mid") }}
-                    >
-                      <span>{role.location}</span>
-                      <span>{role.type}</span>
-                    </div>
-                    <Body className="mt-3">{role.description}</Body>
-                  </div>
-                  <a
-                    href="#apply"
-                    className="shrink-0 inline-flex items-center text-sm font-medium rounded text-white no-underline transition-colors duration-200 self-start"
-                    style={{
-                      background: V("color-accent-blue"),
-                      padding: "10px 20px",
-                    }}
-                  >
-                    Apply
-                    <Arrow />
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Product */}
-          <div className="mt-12">
-            <Caption className="block mb-6">Product</Caption>
-            <div className="space-y-4">
-              {ROLES.product.map((role) => (
-                <div
-                  key={role.title}
-                  className="rounded-xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 transition-colors duration-200 hover:border-[var(--color-body-mid)]"
-                  style={{
-                    background: V("color-canvas-soft"),
-                    border: `1px solid ${V("color-hairline")}`,
-                  }}
-                >
-                  <div className="flex-1">
-                    <h4
-                      className="m-0 mb-1"
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 600,
-                        lineHeight: 1.4,
-                        color: V("color-ink"),
-                      }}
-                    >
-                      {role.title}
-                    </h4>
-                    <div
-                      className="flex flex-wrap gap-x-5 gap-y-1 text-sm"
-                      style={{ color: V("color-body-mid") }}
-                    >
-                      <span>{role.location}</span>
-                      <span>{role.type}</span>
-                    </div>
-                    <Body className="mt-3">{role.description}</Body>
-                  </div>
-                  <a
-                    href="#apply"
-                    className="shrink-0 inline-flex items-center text-sm font-medium rounded text-white no-underline transition-colors duration-200 self-start"
-                    style={{
-                      background: V("color-accent-blue"),
-                      padding: "10px 20px",
-                    }}
-                  >
-                    Apply
-                    <Arrow />
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Section>
-
-        <Divider />
-
-        {/* ── General application CTA ── */}
-        <Section id="apply">
-          <div
-            className="rounded-2xl p-10 md:p-16 text-center"
-            style={{
-              background: V("color-canvas-soft"),
-              border: `1px solid ${V("color-hairline")}`,
-            }}
-          >
-            <H2>Don&apos;t see your role?</H2>
-            <BodyLarge className="mt-4 max-w-[560px] mx-auto">
-              We&apos;re always looking for great people. If you think
-              you&apos;d make Kreature better but none of the open roles fit,
-              send us a note anyway. We read every application.
-            </BodyLarge>
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <a
-                href="/contact-sales"
-                className="inline-flex items-center text-sm font-medium rounded text-white no-underline transition-colors duration-200"
+          {/* Desktop: grid */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+            {BENEFITS_ITEMS.map((b) => (
+              <div
+                key={b.title}
+                className="rounded-xl p-7 flex flex-col"
                 style={{
-                  background: V("color-accent-blue"),
-                  padding: "16px 24px",
+                  background: V("color-canvas"),
+                  border: `1px solid ${V("color-hairline")}`,
                 }}
               >
-                Apply generally
+                <div
+                  className="mb-3"
+                  style={{ color: V("color-accent-blue") }}
+                >
+                  <CheckIcon />
+                </div>
+                <h4
+                  className="m-0 mb-3"
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: 600,
+                    lineHeight: "23.4px",
+                    color: V("color-ink"),
+                  }}
+                >
+                  {b.title}
+                </h4>
+                <p
+                  className="m-0"
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: 400,
+                    lineHeight: "24px",
+                    color: V("color-body"),
+                  }}
+                >
+                  {b.body}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile: accordion */}
+          <div className="md:hidden mt-12 rounded-xl overflow-hidden" style={{ border: `1px solid ${V("color-hairline")}` }}>
+            <div style={{ background: V("color-canvas") }}>
+              {BENEFITS_ITEMS.map((b, i) => (
+                <AccordionItem key={b.title} title={b.title} defaultOpen={i === 0}>
+                  {b.body}
+                </AccordionItem>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 8 — DIVERSITY, EQUITY & INCLUSION
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "120px",
+          paddingBottom: "120px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <SectionHeading
+                heading="Diversity, Equity, and Inclusion"
+                body="Kreature exists so anyone can bring ideas to life on the web. Diverse perspectives drive our innovation. The web is for everyone, and so is the team building it."
+              />
+              <div className="mt-8">
+                <PillLink href="/company/diversity-equity-inclusion">
+                  Explore DEI at Kreature
+                </PillLink>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {AFFINITY_GROUPS.map((g) => (
+                <a
+                  key={g.name}
+                  href={g.href}
+                  className="rounded-xl p-4 no-underline transition-all duration-200 flex flex-col items-center justify-center text-center gap-2"
+                  style={{
+                    background: V("color-canvas-soft"),
+                    border: `1px solid ${V("color-hairline")}`,
+                    minHeight: "100px",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = g.color;
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = `var(--color-hairline)`;
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                >
+                  <div
+                    className="w-6 h-6 rounded-full"
+                    style={{ background: g.color }}
+                  />
+                  <span
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      lineHeight: "16.9px",
+                      color: V("color-ink"),
+                    }}
+                  >
+                    {g.name}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 9 — REMOTE, TOGETHER
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "120px",
+          paddingBottom: "120px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          <SectionHeading
+            heading="Remote, together"
+            center
+          />
+
+          <div className="grid md:grid-cols-2 gap-12 mt-16">
+            {/* We're remote-first */}
+            <div
+              className="rounded-2xl p-10 md:p-14 flex flex-col"
+              style={{
+                background: V("color-canvas"),
+                border: `1px solid ${V("color-hairline")}`,
+              }}
+            >
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+                style={{
+                  background: `color-mix(in srgb, ${V("color-accent-blue")} 10%, transparent)`,
+                  color: V("color-accent-blue"),
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+              </div>
+              <h3
+                className="m-0 mb-4"
+                style={{
+                  fontSize: "24px",
+                  fontWeight: 600,
+                  lineHeight: "31.2px",
+                  color: V("color-ink"),
+                }}
+              >
+                We&apos;re remote-first
+              </h3>
+              <p
+                className="m-0"
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 400,
+                  lineHeight: "25.6px",
+                  color: V("color-body"),
+                }}
+              >
+                Kreature is remote-first with flexible location and relocation
+                options. Work from anywhere — we&apos;ll never issue a
+                return-to-office mandate. We optimize for async communication
+                and give you the autonomy to structure your day around what
+                matters most.
+              </p>
+            </div>
+
+            {/* But not remote-only */}
+            <div
+              className="rounded-2xl p-10 md:p-14 flex flex-col"
+              style={{
+                background: V("color-canvas"),
+                border: `1px solid ${V("color-hairline")}`,
+              }}
+            >
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+                style={{
+                  background: `color-mix(in srgb, ${V("color-accent-purple")} 10%, transparent)`,
+                  color: V("color-accent-purple"),
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              </div>
+              <h3
+                className="m-0 mb-4"
+                style={{
+                  fontSize: "24px",
+                  fontWeight: 600,
+                  lineHeight: "31.2px",
+                  color: V("color-ink"),
+                }}
+              >
+                But not remote-only
+              </h3>
+              <p
+                className="m-0"
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 400,
+                  lineHeight: "25.6px",
+                  color: V("color-body"),
+                }}
+              >
+                We believe in the power of in-person connection too. Our global
+                mobility policy supports flexibility while offering in-person
+                opportunities at our San Francisco office and paid offsites
+                with your team, your department, and the whole company
+                throughout the year.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 10 — PAY ZONES
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "120px",
+          paddingBottom: "120px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          <SectionHeading
+            heading="Pay zones"
+            body="We're transparent about how compensation works across regions.
+            Salary ranges are based on your location relative to major metro areas."
+            center
+          />
+
+          <div className="grid md:grid-cols-3 gap-8 mt-16">
+            {/* US */}
+            <div
+              className="rounded-xl p-8"
+              style={{
+                background: V("color-canvas-soft"),
+                border: `1px solid ${V("color-hairline")}`,
+              }}
+            >
+              <h3
+                className="m-0 mb-6 pb-4"
+                style={{
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  lineHeight: "26px",
+                  color: V("color-ink"),
+                  borderBottom: `1px solid ${V("color-hairline")}`,
+                }}
+              >
+                {PAY_ZONES.us.title}
+              </h3>
+              {PAY_ZONES.us.zones.map((z) => (
+                <div key={z.name} className="mb-5 last:mb-0">
+                  <span
+                    className="inline-block mb-1.5 text-xs font-bold uppercase tracking-wider"
+                    style={{ color: V("color-accent-blue") }}
+                  >
+                    {z.name}
+                  </span>
+                  <p
+                    className="m-0"
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      lineHeight: "21px",
+                      color: V("color-body"),
+                    }}
+                  >
+                    {z.cities}
+                  </p>
+                </div>
+              ))}
+              <p
+                className="mt-5 pt-4 m-0"
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 400,
+                  lineHeight: "19.5px",
+                  color: V("color-mute"),
+                  borderTop: `1px solid ${V("color-hairline")}`,
+                }}
+              >
+                {PAY_ZONES.us.note}
+              </p>
+            </div>
+
+            {/* UK */}
+            <div
+              className="rounded-xl p-8"
+              style={{
+                background: V("color-canvas-soft"),
+                border: `1px solid ${V("color-hairline")}`,
+              }}
+            >
+              <h3
+                className="m-0 mb-6 pb-4"
+                style={{
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  lineHeight: "26px",
+                  color: V("color-ink"),
+                  borderBottom: `1px solid ${V("color-hairline")}`,
+                }}
+              >
+                {PAY_ZONES.uk.title}
+              </h3>
+              {PAY_ZONES.uk.zones.map((z) => (
+                <div key={z.name} className="mb-5 last:mb-0">
+                  <span
+                    className="inline-block mb-1.5 text-xs font-bold uppercase tracking-wider"
+                    style={{ color: V("color-accent-blue") }}
+                  >
+                    {z.name}
+                  </span>
+                  <p
+                    className="m-0"
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      lineHeight: "21px",
+                      color: V("color-body"),
+                    }}
+                  >
+                    {z.cities}
+                  </p>
+                </div>
+              ))}
+              <p
+                className="mt-5 pt-4 m-0"
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 400,
+                  lineHeight: "19.5px",
+                  color: V("color-mute"),
+                  borderTop: `1px solid ${V("color-hairline")}`,
+                }}
+              >
+                {PAY_ZONES.uk.note}
+              </p>
+            </div>
+
+            {/* Canada */}
+            <div
+              className="rounded-xl p-8"
+              style={{
+                background: V("color-canvas-soft"),
+                border: `1px solid ${V("color-hairline")}`,
+              }}
+            >
+              <h3
+                className="m-0 mb-6 pb-4"
+                style={{
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  lineHeight: "26px",
+                  color: V("color-ink"),
+                  borderBottom: `1px solid ${V("color-hairline")}`,
+                }}
+              >
+                {PAY_ZONES.ca.title}
+              </h3>
+              {PAY_ZONES.ca.zones.map((z) => (
+                <div key={z.name} className="mb-5 last:mb-0">
+                  <span
+                    className="inline-block mb-1.5 text-xs font-bold uppercase tracking-wider"
+                    style={{ color: V("color-accent-blue") }}
+                  >
+                    {z.name}
+                  </span>
+                  <p
+                    className="m-0"
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      lineHeight: "21px",
+                      color: V("color-body"),
+                    }}
+                  >
+                    {z.cities}
+                  </p>
+                </div>
+              ))}
+              <p
+                className="mt-5 pt-4 m-0"
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 400,
+                  lineHeight: "19.5px",
+                  color: V("color-mute"),
+                  borderTop: `1px solid ${V("color-hairline")}`,
+                }}
+              >
+                {PAY_ZONES.ca.note}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 11 — RECENT RECOGNITION
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "120px",
+          paddingBottom: "120px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          <SectionHeading
+            heading="Recent recognition"
+            body="We're honored to be recognized for the culture we've built
+            together."
+            center
+          />
+
+          <div className="mt-16 overflow-hidden rounded-xl" style={{ border: `1px solid ${V("color-hairline")}` }}>
+            {AWARDS.map((award, i) => (
+              <div
+                key={i}
+                className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 py-5"
+                style={{
+                  background: i % 2 === 0 ? V("color-canvas") : V("color-canvas-soft"),
+                  borderBottom: i < AWARDS.length - 1 ? `1px solid ${V("color-hairline")}` : "none",
+                }}
+              >
+                <span
+                  className="shrink-0 text-xs font-bold uppercase tracking-wider"
+                  style={{ color: V("color-accent-blue") }}
+                >
+                  {award.year}
+                </span>
+                <span
+                  className="shrink-0 text-sm font-semibold"
+                  style={{ color: V("color-body-mid") }}
+                >
+                  {award.source}
+                </span>
+                <span
+                  className="text-sm flex-1"
+                  style={{ color: V("color-ink"), fontWeight: 500 }}
+                >
+                  {award.title}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 12 — CLOSING CTA "WE'D LOVE TO HAVE YOU"
+          ═══════════════════════════════════════════ */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          paddingTop: "120px",
+          paddingBottom: "120px",
+          background: V("color-canvas"),
+        }}
+      >
+        {/* Subtle background glow */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] rounded-full blur-[140px]"
+            style={{
+              background: `color-mix(in srgb, ${V("color-accent-blue")} 6%, transparent)`,
+            }}
+          />
+        </div>
+
+        <div
+          className="relative z-10 mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1440px" }}
+        >
+          <div className="max-w-[720px] mx-auto text-center">
+            <h2
+              className="m-0 mb-6 tracking-tight"
+              style={{
+                fontSize: "clamp(36px, 4vw, 56px)",
+                fontWeight: 600,
+                lineHeight: 1.04,
+                letterSpacing: "-0.36px",
+                color: V("color-ink"),
+              }}
+            >
+              We&apos;d love to have you
+            </h2>
+            <p
+              className="m-0 mb-10 mx-auto"
+              style={{
+                fontSize: "clamp(18px, 1.6vw, 20px)",
+                fontWeight: 400,
+                lineHeight: 1.6,
+                color: V("color-body"),
+                maxWidth: "600px",
+              }}
+            >
+              Aligned with our mission and excited about the possibilities?
+              Explore our open roles to see where your superpowers can shine.
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-4">
+              <a
+                href="/company/careers/roles"
+                className="inline-flex items-center text-sm font-medium rounded no-underline transition-all duration-200"
+                style={{
+                  background: V("color-accent-blue"),
+                  color: "#ffffff",
+                  padding: "16px 28px",
+                  fontSize: "16px",
+                  fontWeight: 500,
+                  lineHeight: "19.2px",
+                  borderRadius: "4px",
+                }}
+              >
+                Explore open roles
                 <Arrow />
               </a>
               <a
                 href="/company/about"
-                className="inline-flex items-center text-sm font-medium rounded no-underline transition-colors duration-200"
+                className="inline-flex items-center text-sm font-medium rounded no-underline transition-all duration-200"
                 style={{
-                  border: `1px solid ${V("color-hairline")}`,
+                  background: "transparent",
                   color: V("color-ink"),
-                  padding: "16px 24px",
+                  padding: "16px 28px",
+                  fontSize: "16px",
+                  fontWeight: 500,
+                  lineHeight: "19.2px",
+                  borderRadius: "4px",
+                  border: `1px solid ${V("color-hairline")}`,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = `var(--color-ink)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = `var(--color-hairline)`;
                 }}
               >
                 Learn about us
               </a>
             </div>
           </div>
-        </Section>
-      </main>
+
+          {/* Community image grid below CTA */}
+          <div className="grid grid-cols-5 gap-4 mt-20">
+            <GradientImagePlaceholder
+              gradient="linear-gradient(135deg, #146ef5 0%, #006acc 100%)"
+              aspectRatio="3/4"
+            />
+            <GradientImagePlaceholder
+              gradient="linear-gradient(135deg, #7a3dff 0%, #ed52cb 100%)"
+              aspectRatio="3/4"
+            />
+            <GradientImagePlaceholder
+              gradient="linear-gradient(135deg, #ff6b00 0%, #ffae13 100%)"
+              aspectRatio="3/4"
+            />
+            <GradientImagePlaceholder
+              gradient="linear-gradient(135deg, #00d722 0%, #146ef5 100%)"
+              aspectRatio="3/4"
+            />
+            <GradientImagePlaceholder
+              gradient="linear-gradient(135deg, #ed52cb 0%, #7a3dff 100%)"
+              aspectRatio="3/4"
+            />
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </>

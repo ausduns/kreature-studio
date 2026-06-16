@@ -5,7 +5,12 @@ import { useState } from "react";
 /* ─── CSS VAR ─── */
 const V = (n: string) => `var(--${n})`;
 
-/* ─── STYLES ─── */
+/* ─── CDN ─── */
+const ICONS_CDN = "https://dhygzobemt712.cloudfront.net/Icons/Light/64px";
+const LOGOS_CDN = "https://dhygzobemt712.cloudfront.net/Web/logos/dark";
+const WF_CDN = "https://cdn.prod.website-files.com/686294e263eb7e215bd232f7";
+
+/* ─── TYPOGRAPHY ─── */
 const S = {
   h1: { fontSize: "80px", fontWeight: 600, lineHeight: "83.2px", letterSpacing: "-0.8px" } as React.CSSProperties,
   h2: { fontSize: "56px", fontWeight: 600, lineHeight: "58.24px" } as React.CSSProperties,
@@ -29,16 +34,60 @@ const COUNTRIES = [
 ];
 
 const TRUST_LOGOS = [
-  { name: "Verifone", src: "https://dhygzobemt712.cloudfront.net/Web/logos/dark/verifone.svg" },
-  { name: "NCR", src: "https://dhygzobemt712.cloudfront.net/Web/logos/dark/ncr.svg" },
-  { name: "monday.com", src: "https://dhygzobemt712.cloudfront.net/Web/logos/dark/monday.svg" },
-  { name: "Spotify", src: "https://dhygzobemt712.cloudfront.net/Web/logos/dark/spotify.svg" },
-  { name: "TED", src: "https://dhygzobemt712.cloudfront.net/Web/logos/dark/ted.svg" },
-  { name: "Dropbox", src: "https://dhygzobemt712.cloudfront.net/Web/logos/dark/dropbox.svg" },
-  { name: "Greenhouse", src: "https://dhygzobemt712.cloudfront.net/Web/logos/dark/greenhouse.svg" },
-  { name: "OrangeTheory", src: "https://dhygzobemt712.cloudfront.net/Web/logos/dark/orangetheory.svg" },
-  { name: "Checkout.com", src: "https://dhygzobemt712.cloudfront.net/Web/logos/dark/checkout.svg" },
-  { name: "SoundCloud", src: "https://dhygzobemt712.cloudfront.net/Web/logos/dark/soundcloud.svg" },
+  { name: "Verifone", src: `${LOGOS_CDN}/verifone.svg` },
+  { name: "NCR", src: `${LOGOS_CDN}/ncr.svg` },
+  { name: "monday.com", src: `${LOGOS_CDN}/monday.svg` },
+  { name: "Spotify", src: `${LOGOS_CDN}/spotify.svg` },
+  { name: "TED", src: `${LOGOS_CDN}/ted.svg` },
+  { name: "Dropbox", src: `${LOGOS_CDN}/dropbox.svg` },
+  { name: "Greenhouse", src: `${LOGOS_CDN}/greenhouse.svg` },
+  { name: "Clear", src: `${LOGOS_CDN}/clear.svg` },
+  { name: "OrangeTheory", src: `${LOGOS_CDN}/orangetheory.svg` },
+  { name: "NYT", src: `${LOGOS_CDN}/the-new-york-times.svg` },
+  { name: "Reddit", src: `${LOGOS_CDN}/reddit.svg` },
+  { name: "Checkout.com", src: `${LOGOS_CDN}/checkout.svg` },
+  { name: "Walker & Dunlop", src: `${LOGOS_CDN}/walker-dunlop.svg` },
+  { name: "Docusign", src: `${LOGOS_CDN}/docusign.svg` },
+  { name: "ABM", src: `${LOGOS_CDN}/abm.svg` },
+];
+
+const G2_BADGES = [
+  { alt: "G2 Enterprise Leader Winter 2026", src: `${WF_CDN}/695d1a83f727ce7de53a4c8c_Enterprise%20Leader%20-%20Winter%202026%20G2.svg` },
+  { alt: "G2 Overall Leader Winter 2026", src: `${WF_CDN}/695d1aeb3253f22d5bbe6aab_g2-badge_overall-leader_winter-26.svg` },
+  { alt: "G2 Regional Leader for EMEA Winter 2026", src: `${WF_CDN}/695d1aeb1bdcf54c2ba09181_g2-badge_regional-leader_emea_winter-26.svg` },
+];
+
+const WHY_FEATURES = [
+  {
+    icon: "BreakDownSilos",
+    title: "Break down silos between marketing, design, and development",
+    desc: "Give your marketing and design team greater control to add, edit, and update content and free your engineering team to focus on bigger challenges.",
+  },
+  {
+    icon: "SecurityCertified",
+    title: "Backed by enterprise-grade security",
+    desc: "Kreature Enterprise is backed by SOC-2 certification and comes with advanced security features like single sign on, custom security headers, custom SSL certificates, and much more.",
+  },
+  {
+    icon: "HeartHandshake",
+    title: "We'll partner with you to ensure success",
+    desc: "We're here to help you succeed with expert-led training through Kreature University Pro, a dedicated team for technical and strategic consulting, and tailored support available 24/7.",
+  },
+  {
+    icon: "Code",
+    title: "Harness the power of code — without writing it",
+    desc: "Kreature's visual development tool means you can build any layout for any page, visually, without having to write a single line of code.",
+  },
+  {
+    icon: "CloudUpload",
+    title: "Publish directly to world-class hosting",
+    desc: "Push your website changes live in a single click to a scalable, secure, and globally-distributed hosting network.",
+  },
+  {
+    icon: "Performance",
+    title: "World-class performance",
+    desc: "Fast page loads powered by Fastly CDN and enterprise-level uptime SLAs make for seamless hosting.",
+  },
 ];
 
 const TIMELINE_STEPS = [
@@ -65,21 +114,11 @@ const TIMELINE_STEPS = [
 ];
 
 const TESTIMONIAL = {
-  quote: "With Kreature Enterprise, we're not just keeping up — we're setting the pace. The platform's speed and reliability let us launch a complete global rebrand across 32 markets in under two weeks.",
-  name: "Rob Alfano",
-  role: "VP of Digital Marketing",
-  co: "Verifone",
-  logo: "https://dhygzobemt712.cloudfront.net/Web/logos/dark/verifone.svg",
-};
-
-const FOOTER: Record<string, string[]> = {
-  Product: ["Platform", "Design", "Edit content", "Interactions", "GSAP", "Page building", "Shared Libraries", "Collaboration", "CMS", "Hosting", "Localization", "Security", "Ecommerce", "Analyze", "Optimize", "SEO", "AEO", "Kreature Cloud", "DevLink", "Figma to Kreature", "Accessibility"],
-  Solutions: ["Enterprise", "Startups", "Global alliances", "Agencies", "Freelancers"],
-  Resources: ["University", "Blog", "Customer stories", "Webinars & ebooks", "Apps", "Libraries", "Templates", "Developers", "Made in Kreature", "Glossary", "Livestreams", "The Kreature Way"],
-  Company: ["About", "Careers", "Press", "Kreature Ventures", "Kreature Shop", "Terms of Service", "Privacy policy", "Cookie policy", "Accessibility statement"],
-  Compare: ["Contentful", "Framer", "Sitecore", "Wix", "WordPress"],
-  Community: ["Discover the community", "Partner with Kreature", "Certified Partners", "Become a template designer", "Become an affiliate", "Become a Global Leader", "Find a meetup near you"],
-  "Get help": ["Support", "Pricing", "Status", "Community Homebase", "Wishlist"],
+  quote: "Our design and development teams are much more integrated during the build process. Designers have more autonomy, and engineers can focus on the most impactful work — allowing us to deliver new web pages faster.",
+  name: "Dan Dawson",
+  role: "Sr. Manager of Digital Properties",
+  co: "NCR",
+  img: "https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7/68a44d7ba882a0014d47de2d_dan-dawson.webp",
 };
 
 /* ─── HELPERS ─── */
@@ -107,7 +146,7 @@ function Section({
 }) {
   return (
     <section
-      className={`px-5 sm:px-8 py-[clamp(3rem,8vw,9rem)] ${className ?? ""}`}
+      className={`px-5 sm:px-8 ${className ?? ""}`}
       style={{
         background:
           bg === "soft"
@@ -115,6 +154,8 @@ function Section({
             : bg === "dark"
               ? V("color-ink")
               : V("color-canvas"),
+        paddingTop: "clamp(3rem,8vw,9rem)",
+        paddingBottom: "clamp(3rem,8vw,9rem)",
       }}
     >
       <div className="max-w-[1440px] mx-auto">{children}</div>
@@ -162,10 +203,7 @@ function ContactForm() {
         }}
       >
         <div className="text-3xl mb-4">&#10003;</div>
-        <h3
-          className="mb-3"
-          style={{ ...S.h4, color: V("color-ink") }}
-        >
+        <h3 className="mb-3" style={{ ...S.h4, color: V("color-ink") }}>
           Thanks for reaching out
         </h3>
         <p style={{ ...S.body, color: V("color-body-mid") }}>
@@ -188,7 +226,9 @@ function ContactForm() {
       {/* Name row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
         <div>
-          <label htmlFor="first-name" style={labelStyle}>First name *</label>
+          <label htmlFor="first-name" style={labelStyle}>
+            First name *
+          </label>
           <input
             id="first-name"
             type="text"
@@ -199,7 +239,9 @@ function ContactForm() {
           />
         </div>
         <div>
-          <label htmlFor="last-name" style={labelStyle}>Last name *</label>
+          <label htmlFor="last-name" style={labelStyle}>
+            Last name *
+          </label>
           <input
             id="last-name"
             type="text"
@@ -213,7 +255,9 @@ function ContactForm() {
 
       {/* Email */}
       <div className="mb-5">
-        <label htmlFor="work-email" style={labelStyle}>Work email *</label>
+        <label htmlFor="work-email" style={labelStyle}>
+          Work email *
+        </label>
         <input
           id="work-email"
           type="email"
@@ -226,7 +270,9 @@ function ContactForm() {
 
       {/* Company */}
       <div className="mb-5">
-        <label htmlFor="company" style={labelStyle}>Company *</label>
+        <label htmlFor="company" style={labelStyle}>
+          Company *
+        </label>
         <input
           id="company"
           type="text"
@@ -240,7 +286,10 @@ function ContactForm() {
       {/* Phone */}
       <div className="mb-5">
         <label htmlFor="phone" style={labelStyle}>
-          Phone <span style={{ color: V("color-mute"), fontWeight: 400 }}>(optional)</span>
+          Phone{" "}
+          <span style={{ color: V("color-mute"), fontWeight: 400 }}>
+            (optional)
+          </span>
         </label>
         <input
           id="phone"
@@ -253,7 +302,9 @@ function ContactForm() {
 
       {/* Job Title */}
       <div className="mb-5">
-        <label htmlFor="job-title" style={labelStyle}>Job title *</label>
+        <label htmlFor="job-title" style={labelStyle}>
+          Job title *
+        </label>
         <input
           id="job-title"
           type="text"
@@ -266,7 +317,9 @@ function ContactForm() {
 
       {/* Country */}
       <div className="mb-5">
-        <label htmlFor="country" style={labelStyle}>Country *</label>
+        <label htmlFor="country" style={labelStyle}>
+          Country *
+        </label>
         <select
           id="country"
           required
@@ -281,9 +334,13 @@ function ContactForm() {
           }}
           className="focus:border-[var(--color-accent-blue)] transition-colors"
         >
-          <option value="" disabled>Select your country</option>
+          <option value="" disabled>
+            Select your country
+          </option>
           {COUNTRIES.map((c) => (
-            <option key={c} value={c}>{c}</option>
+            <option key={c} value={c}>
+              {c}
+            </option>
           ))}
         </select>
       </div>
@@ -291,7 +348,10 @@ function ContactForm() {
       {/* Message */}
       <div className="mb-6">
         <label htmlFor="message" style={labelStyle}>
-          Tell us about your project <span style={{ color: V("color-mute"), fontWeight: 400 }}>(optional)</span>
+          Tell us about your project{" "}
+          <span style={{ color: V("color-mute"), fontWeight: 400 }}>
+            (optional)
+          </span>
         </label>
         <textarea
           id="message"
@@ -328,7 +388,12 @@ function ContactForm() {
         style={{ ...S.bodySm, color: V("color-mute") }}
       >
         By submitting this form, you agree to our{" "}
-        <a href="#" style={{ color: V("color-ink"), textDecoration: "underline" }}>Privacy Policy</a>{" "}
+        <a
+          href="#"
+          style={{ color: V("color-ink"), textDecoration: "underline" }}
+        >
+          Privacy Policy
+        </a>{" "}
         and consent to being contacted about Kreature Enterprise.
       </p>
     </form>
@@ -346,8 +411,12 @@ export default function ContactSalesPage() {
       <main>
         {/* ═══════ HERO + FORM ═══════ */}
         <section
-          className="px-5 sm:px-8 pt-[clamp(3rem,8vw,8rem)] pb-[clamp(3rem,8vw,6rem)]"
-          style={{ background: V("color-canvas") }}
+          className="px-5 sm:px-8"
+          style={{
+            background: V("color-canvas"),
+            paddingTop: "clamp(3rem,8vw,8rem)",
+            paddingBottom: "clamp(3rem,8vw,6rem)",
+          }}
         >
           <div className="max-w-[1440px] mx-auto">
             <div className="grid lg:grid-cols-2 gap-[clamp(2rem,5vw,6rem)] items-start">
@@ -370,8 +439,8 @@ export default function ContactSalesPage() {
                   style={{ ...S.bodyLg, color: V("color-body") }}
                 >
                   Tell us about your team and goals. We&apos;ll help you
-                  evaluate whether <Kreature /> is the right fit — from
-                  security requirements to scaling strategy.
+                  evaluate whether <Kreature /> is the right fit — from security
+                  requirements to scaling strategy.
                 </p>
 
                 {/* Trust logos */}
@@ -406,7 +475,11 @@ export default function ContactSalesPage() {
                 >
                   <p
                     className="mb-3"
-                    style={{ ...S.bodySm, fontWeight: 500, color: V("color-ink") }}
+                    style={{
+                      ...S.bodySm,
+                      fontWeight: 500,
+                      color: V("color-ink"),
+                    }}
                   >
                     Prefer email?
                   </p>
@@ -433,6 +506,130 @@ export default function ContactSalesPage() {
           </div>
         </section>
 
+        {/* ═══════ LOGO MARQUEE ═══════ */}
+        <section
+          className="py-12 overflow-hidden border-y"
+          style={{
+            borderColor: V("color-hairline"),
+            background: V("color-canvas"),
+          }}
+        >
+          <div className="flex gap-10 animate-[marquee_40s_linear_infinite] w-max">
+            {[...TRUST_LOGOS, ...TRUST_LOGOS].map((l, i) => (
+              <div key={i} className="flex items-center shrink-0">
+                <img
+                  src={l.src}
+                  alt={l.name}
+                  className="h-6 w-auto opacity-50"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══════ CUSTOMERS LOVE US ═══════ */}
+        <Section bg="soft">
+          <div className="max-w-[800px] mx-auto">
+            <h2
+              className="text-center mb-4"
+              style={{ ...S.h2, color: V("color-ink") }}
+            >
+              Customers love us
+            </h2>
+            <p
+              className="text-center mb-12 max-w-[550px] mx-auto"
+              style={{ ...S.bodyLg, color: V("color-body-mid") }}
+            >
+              But don&apos;t just take our word for it — check out our latest G2
+              awards.
+            </p>
+
+            {/* G2 Badges */}
+            <div className="flex flex-wrap items-center justify-center gap-6 mb-16">
+              {G2_BADGES.map((badge) => (
+                <img
+                  key={badge.alt}
+                  src={badge.src}
+                  alt={badge.alt}
+                  className="h-[clamp(4rem,8vw,7rem)] w-auto"
+                  loading="lazy"
+                />
+              ))}
+            </div>
+
+            {/* Testimonial */}
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+              <img
+                src={TESTIMONIAL.img}
+                alt={TESTIMONIAL.name}
+                className="w-20 h-20 rounded-full object-cover shrink-0"
+                style={{ borderRadius: "50%" }}
+              />
+              <div>
+                <blockquote
+                  className="mb-6 text-[clamp(1.125rem,1.6vw,1.375rem)] leading-relaxed"
+                  style={{ color: V("color-body") }}
+                >
+                  &ldquo;{TESTIMONIAL.quote}&rdquo;
+                </blockquote>
+                <div>
+                  <div
+                    className="font-medium mb-1"
+                    style={{ ...S.body, fontWeight: 500, color: V("color-ink") }}
+                  >
+                    {TESTIMONIAL.name}
+                  </div>
+                  <div style={{ ...S.bodySm, color: V("color-mute") }}>
+                    {TESTIMONIAL.role}, {TESTIMONIAL.co}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        {/* ═══════ WHY CHOOSE KREATURE ═══════ */}
+        <Section>
+          <div className="max-w-[800px] mx-auto text-center mb-16">
+            <h2 style={{ ...S.h2, color: V("color-ink") }} className="mb-4">
+              Why choose <Kreature />?
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-[1000px] mx-auto">
+            {WHY_FEATURES.map((f) => (
+              <div
+                key={f.title}
+                className="rounded-lg p-[clamp(1.5rem,2.5vw,2.5rem)] flex gap-5 items-start"
+                style={{
+                  borderRadius: "8px",
+                  border: `1px solid ${V("color-hairline")}`,
+                  background: V("color-canvas"),
+                }}
+              >
+                <img
+                  src={`${ICONS_CDN}/${f.icon}.svg`}
+                  alt=""
+                  className="w-10 h-10 shrink-0 mt-0.5"
+                  loading="lazy"
+                />
+                <div>
+                  <h3
+                    className="mb-2"
+                    style={{ ...S.h4, color: V("color-ink") }}
+                  >
+                    {f.title}
+                  </h3>
+                  <p style={{ ...S.body, color: V("color-body-mid") }}>
+                    {f.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
         {/* ═══════ WHAT TO EXPECT ═══════ */}
         <Section bg="soft">
           <div className="max-w-[800px] mx-auto">
@@ -451,10 +648,7 @@ export default function ContactSalesPage() {
 
             <div className="space-y-0">
               {TIMELINE_STEPS.map((item, i) => (
-                <div
-                  key={item.step}
-                  className="flex gap-6 relative"
-                >
+                <div key={item.step} className="flex gap-6 relative">
                   {/* Timeline line + dot */}
                   <div className="flex flex-col items-center shrink-0">
                     <div
@@ -492,122 +686,6 @@ export default function ContactSalesPage() {
                 </div>
               ))}
             </div>
-          </div>
-        </Section>
-
-        {/* ═══════ TESTIMONIAL ═══════ */}
-        <section
-          className="px-5 sm:px-8 py-[clamp(3rem,8vw,6rem)]"
-          style={{ background: V("color-ink") }}
-        >
-          <div className="max-w-[800px] mx-auto text-center">
-            <img
-              src={TESTIMONIAL.logo}
-              alt={TESTIMONIAL.co}
-              className="h-6 w-auto mx-auto mb-8 opacity-60"
-            />
-            <blockquote
-              className="mb-8"
-              style={{
-                fontSize: "clamp(1.25rem,2.5vw,1.75rem)",
-                lineHeight: 1.6,
-                color: V("color-canvas"),
-              }}
-            >
-              &ldquo;{TESTIMONIAL.quote}&rdquo;
-            </blockquote>
-            <div
-              style={{ ...S.body, fontWeight: 500, color: V("color-canvas") }}
-            >
-              {TESTIMONIAL.name}
-            </div>
-            <div style={{ ...S.bodySm, color: V("color-mute-soft") }}>
-              {TESTIMONIAL.role}, {TESTIMONIAL.co}
-            </div>
-          </div>
-        </section>
-
-        {/* ═══════ LOGO MARQUEE ═══════ */}
-        <section
-          className="py-12 overflow-hidden border-y"
-          style={{
-            borderColor: V("color-hairline"),
-            background: V("color-canvas"),
-          }}
-        >
-          <div className="flex gap-10 animate-[scroll_40s_linear_infinite] w-max">
-            {[...TRUST_LOGOS, ...TRUST_LOGOS].map((l, i) => (
-              <div key={i} className="flex items-center shrink-0">
-                <img
-                  src={l.src}
-                  alt={l.name}
-                  className="h-6 w-auto opacity-50"
-                  loading="lazy"
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ═══════ ENTERPRISE BENEFITS ═══════ */}
-        <Section>
-          <div className="max-w-[800px] mx-auto text-center mb-16">
-            <h2 style={{ ...S.h2, color: V("color-ink") }} className="mb-4">
-              Why enterprises choose <Kreature />
-            </h2>
-            <p style={{ ...S.bodyLg, color: V("color-body-mid") }}>
-              From security to scale, everything you need to run web at the
-              enterprise level.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                title: "Enterprise security",
-                desc: "SOC 2 Type II certified, SSO, MFA, role-based access control, audit logs, and custom data residency options.",
-              },
-              {
-                title: "99.99% uptime SLA",
-                desc: "Financially backed uptime guarantee with global CDN, DDoS protection, and zero-maintenance infrastructure.",
-              },
-              {
-                title: "Dedicated support",
-                desc: "Named success manager, priority support with 1-hour response for critical issues, and custom onboarding.",
-              },
-              {
-                title: "Advanced collaboration",
-                desc: "Custom roles, multi-stage approvals, branching, staging environments, and version control for large teams.",
-              },
-              {
-                title: "Unlimited scale",
-                desc: "No traffic caps, no bandwidth limits, no CMS collection limits. Built to handle your biggest launches.",
-              },
-              {
-                title: "Flexible contracts",
-                desc: "Custom pricing, procurement-friendly invoicing, and terms that work for your organization.",
-              },
-            ].map((f) => (
-              <div
-                key={f.title}
-                className="rounded-lg p-[clamp(1.25rem,2vw,2rem)] transition-all hover:shadow-md"
-                style={{
-                  borderRadius: "8px",
-                  border: `1px solid ${V("color-hairline")}`,
-                  background: V("color-canvas"),
-                }}
-              >
-                <h4
-                  className="mb-3"
-                  style={{ ...S.h4, color: V("color-ink") }}
-                >
-                  {f.title}
-                </h4>
-                <p style={{ ...S.body, color: V("color-body-mid") }}>
-                  {f.desc}
-                </p>
-              </div>
-            ))}
           </div>
         </Section>
 
@@ -660,84 +738,13 @@ export default function ContactSalesPage() {
         </section>
       </main>
 
-      {/* ═══════ FOOTER ═══════ */}
-      <footer
-        className="py-16 px-5 sm:px-8"
-        style={{
-          borderTop: `1px solid ${V("color-hairline")}`,
-          background: V("color-canvas"),
-        }}
-      >
-        <div className="max-w-[1440px] mx-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-10 mb-16">
-            {Object.entries(FOOTER).map(([heading, items]) => (
-              <div key={heading}>
-                <h4
-                  className="font-medium mb-6"
-                  style={{
-                    fontSize: "20px",
-                    fontWeight: 500,
-                    lineHeight: "28px",
-                    color: V("color-ink"),
-                  }}
-                >
-                  {heading}
-                </h4>
-                <ul className="space-y-2.5">
-                  {items.map((item: string) => (
-                    <li key={item}>
-                      <a
-                        href="#"
-                        className="text-sm hover:underline inline-flex items-center gap-1"
-                        style={{ ...S.bodySm, color: V("color-body-mid") }}
-                      >
-                        {item}
-                        {item === "AEO" && (
-                          <span
-                            className="text-[0.6rem] font-semibold uppercase"
-                            style={{ color: V("color-accent-blue") }}
-                          >
-                            New
-                          </span>
-                        )}
-                        {item === "Careers" && (
-                          <span
-                            className="text-[0.6rem] font-semibold uppercase"
-                            style={{ color: V("color-accent-green") }}
-                          >
-                            We&apos;re hiring
-                          </span>
-                        )}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div
-            className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs"
-            style={{ borderTop: `1px solid ${V("color-hairline")}` }}
-          >
-            <p style={{ fontSize: "12px", color: V("color-mute") }}>
-              &copy; {new Date().getFullYear()} Kreature, Inc. All rights reserved
-            </p>
-            <div
-              className="flex items-center gap-4"
-              style={{ fontSize: "12px", color: V("color-mute") }}
-            >
-              <a href="#" className="hover:underline">Made in Kreature</a>
-              {["YouTube", "X", "Facebook", "LinkedIn", "Instagram", "TikTok"].map(
-                (p) => (
-                  <a key={p} href="#" className="hover:underline">
-                    {p}
-                  </a>
-                ),
-              )}
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* Marquee animation */}
+      <style jsx global>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
     </div>
   );
 }

@@ -2,164 +2,336 @@
 
 import { type ReactNode } from "react";
 
-/* ── Design token helper ── */
+/* ─── CSS Var helper ─── */
 const V = (n: string) => `var(--${n})`;
 
-/* ── Shared micro-components ── */
-
+/* ─── Helper ─── */
 function Arrow() {
   return (
     <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>
   );
 }
 
-/* ── Data constants ── */
+function ArrowUpRight() {
+  return (
+    <span className="ml-1 text-[1em] leading-none select-none" aria-hidden="true">
+      &nearr;
+    </span>
+  );
+}
 
-const VALUES = [
+/* ─── Data ─── */
+
+const TRUSTED_LOGOS = [
+  { name: "Ideo", src: "/logo/trusted/ideo.svg" },
+  { name: "Monday.com", src: "/logo/trusted/monday.svg" },
+  { name: "BBDO", src: "/logo/trusted/bbdo.svg" },
+  { name: "The New York Times", src: "/logo/trusted/nytimes.svg" },
+  { name: "Ted", src: "/logo/trusted/ted.svg" },
+  { name: "Docusign", src: "/logo/trusted/docusign.svg" },
+] as const;
+
+const CORE_BEHAVIORS = [
   {
-    title: "Speed without shortcuts",
-    body: "We move fast because we've done this before — not because we skip steps. Every project benefits from patterns refined across dozens of launches.",
+    title: "Build lasting customer trust",
+    body: "Every interaction, every feature, every decision starts with one question: does this earn and deepen trust with the people who rely on our platform?",
   },
   {
-    title: "Product thinking",
-    body: "We don't just build what you ask for. We push back, simplify, and make sure every feature earns its place in the scope.",
+    title: "Win together",
+    body: "We succeed when our customers, partners, and teammates succeed. Collaboration is not a buzzword — it is how we compound our impact.",
   },
   {
-    title: "Founder-first",
-    body: "Your constraints are our constraints. We optimize for your timeline, your budget, and your ability to iterate after we hand off.",
+    title: "Reinvent ourselves",
+    body: "Comfort is the enemy of progress. We challenge our own assumptions, embrace new technologies, and stay hungry to learn what is next.",
   },
   {
-    title: "Craft matters",
-    body: "Pixel precision, clean code, thoughtful interactions — the details compound. Users feel the difference, even when they can't name it.",
+    title: "Deliver with speed, quality, and craft",
+    body: "Speed without quality is reckless. Quality without speed is irrelevant. We hold ourselves to all three — because our customers deserve nothing less.",
   },
-  {
-    title: "Fixed scope, fixed price",
-    body: "No hourly billing. No scope creep invoices. We agree on what gets built, what it costs, and when you'll have it — before we write a single line of code.",
-  },
+] as const;
+
+const INVESTORS = [
+  { name: "Accel", src: "/logo/investors/accel.svg" },
+  { name: "Capital G", src: "/logo/investors/capitalg.svg" },
+  { name: "Y Combinator", src: "/logo/investors/yc.svg" },
+  { name: "Silver Lake", src: "/logo/investors/silverlake.svg" },
+  { name: "Rainfall", src: "/logo/investors/rainfall.svg" },
+  { name: "Draper", src: "/logo/investors/draper.svg" },
+  { name: "Funders Club", src: "/logo/investors/fundersclub.svg" },
 ] as const;
 
 const STATS = [
-  { value: "40+", label: "Products shipped" },
-  { value: "30+", label: "Founders served" },
-  { value: "6-8", label: "Weeks to launch" },
-  { value: "98%", label: "On-time delivery" },
+  { value: "900+", label: "Team members in 25 countries" },
+  { value: "2013", label: "Year Founded" },
+  { value: "3.5M", label: "Users" },
+  { value: "$335M", label: "In total funding" },
 ] as const;
 
-const FOOTER_LINKS = {
-  Product: ["Features", "Pricing", "Changelog", "Roadmap"],
-  Company: ["About", "Careers", "Blog", "Press"],
-  Resources: ["Docs", "Guides", "API", "Community"],
-  Legal: ["Privacy", "Terms", "Security", "DPA"],
-  Compare: ["vs Agencies", "vs Freelance", "vs In-house", "vs No-code"],
-  Partners: ["Certified", "Agencies", "Affiliates", "Integrations"],
-} as const;
+const PRESS_ARTICLES = [
+  {
+    publication: "Digiday",
+    headline: "WTF is Markdown for AI Agents?",
+    href: "#",
+  },
+  {
+    publication: "How I AI",
+    headline:
+      "How Kreature's CPO built an AI chief of staff to manage her calendar and drive internal AI adoption",
+    href: "#",
+  },
+  {
+    publication: "CNBC",
+    headline: "Kreature CEO Linda Tong on Optimizing for AI Search Future",
+    href: "#",
+  },
+  {
+    publication: "Bloomberg Businessweek Podcast",
+    headline: "Web Surfing in the Artificial Intelligence Era",
+    href: "#",
+  },
+  {
+    publication: "Diginomica",
+    headline:
+      "AI is reshaping developer workflows — Kreature's CTO explains how",
+    href: "#",
+  },
+  {
+    publication: "Forbes",
+    headline:
+      "Kreature CEO On Building AI-Optimized Websites In A Post-SEO World",
+    href: "#",
+  },
+  {
+    publication: "Reuters",
+    headline: "More AI bots, less human visits on the internet",
+    href: "#",
+  },
+  {
+    publication: "Axios Pro",
+    headline: "Kreature acquires JavaScript library GSAP",
+    href: "#",
+  },
+  {
+    publication: "PRWeb",
+    headline: "Craig Mestel joins Kreature as first Chief Financial Officer",
+    href: "#",
+  },
+] as const;
 
-/* ── Footer ── */
+const LEADERSHIP = [
+  {
+    name: "Adrian Rosenkranz",
+    title: "Chief Revenue Officer",
+    img: "/team/adrian-rosenkranz.jpg",
+  },
+  {
+    name: "Craig Mestel",
+    title: "Chief Financial Officer",
+    img: "/team/craig-mestel.jpg",
+  },
+  {
+    name: "Dave Steer",
+    title: "Chief Marketing Officer",
+    img: "/team/dave-steer.jpg",
+  },
+  {
+    name: "George Karamanos",
+    title: "Chief Legal Officer",
+    img: "/team/george-karamanos.jpg",
+  },
+  {
+    name: "Katie Chisam",
+    title: "Chief of Staff",
+    img: "/team/katie-chisam.jpg",
+  },
+  {
+    name: "Linda Tong",
+    title: "Chief Executive Officer",
+    img: "/team/linda-tong.jpg",
+  },
+  {
+    name: "Mike Podobnik",
+    title: "SVP of People",
+    img: "/team/mike-podobnik.jpg",
+  },
+  {
+    name: "Rachel Wolan",
+    title: "Chief Product Officer",
+    img: "/team/rachel-wolan.jpg",
+  },
+] as const;
+
+const FOUNDERS = [
+  {
+    name: "Bryant Chou",
+    title: "Co-founder",
+    img: "/team/bryant-chou.jpg",
+  },
+  {
+    name: "Sergie Magdalin",
+    title: "Co-founder & Design Fellow",
+    img: "/team/sergie-magdalin.jpg",
+  },
+  {
+    name: "Vlad Magdalin",
+    title: "Co-founder & Chief Innovation Officer",
+    img: "/team/vlad-magdalin.jpg",
+  },
+] as const;
+
+const FOOTER_LINKS: Record<string, string[]> = {
+  Product: [
+    "Platform",
+    "Design",
+    "CMS",
+    "Interactions",
+    "GSAP",
+    "Hosting",
+    "Localization",
+    "Security",
+    "Analyze",
+    "Optimize",
+    "SEO",
+    "AEO",
+    "AI",
+  ],
+  Solutions: [
+    "Enterprise",
+    "Startups",
+    "Global Alliances",
+    "Agencies",
+    "Freelancers",
+  ],
+  Resources: [
+    "University",
+    "Blog",
+    "Customer Stories",
+    "Webinars & Ebooks",
+    "Apps",
+    "Libraries",
+    "Templates",
+    "Made in Kreature",
+    "Glossary",
+  ],
+  Company: [
+    "About",
+    "Careers",
+    "Press",
+    "Kreature Shop",
+    "Terms of Service",
+    "Privacy Policy",
+    "Accessibility Statement",
+  ],
+  Community: [
+    "Discover the Community",
+    "Partner with Kreature",
+    "Certified Partners",
+    "Find a Meetup",
+  ],
+  "Get Help": ["Support", "Pricing", "Status", "Community Homebase", "Wishlist"],
+};
+
+/* ─── Footer ─── */
 
 function Footer() {
   return (
     <footer
       className="w-full"
       style={{
-        background: V("color-canvas-soft"),
+        background: V("color-canvas"),
         borderTop: `1px solid ${V("color-hairline")}`,
       }}
     >
-      <div className="mx-auto max-w-[1280px] px-6 py-20">
-        {/* 7-column grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-8">
+      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 py-20">
+        {/* Brand column + links grid */}
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-20 mb-16">
           {/* Brand column */}
-          <div className="col-span-2 sm:col-span-2 md:col-span-4 lg:col-span-2">
+          <div className="shrink-0 lg:w-[240px]">
             <a
               href="/"
-              className="flex items-center gap-2 no-underline mb-4"
+              className="flex items-center gap-2 no-underline mb-3"
               style={{ color: V("color-ink") }}
             >
               <img
                 src="/logo/kreature-logo-dark.png"
                 alt="Kreature"
-                className="logo-dark h-7 w-auto"
+                className="logo-dark h-[28px] w-auto"
               />
               <img
                 src="/logo/kreature-logo-light.png"
                 alt="Kreature"
-                className="logo-light h-7 w-auto"
+                className="logo-light h-[28px] w-auto"
               />
-              <span className="text-base font-semibold tracking-tight">
+              <span className="font-heading font-[800] text-xl tracking-tight">
                 Kreature
                 <span style={{ color: V("color-accent-blue") }}>.</span>
               </span>
             </a>
-            <p className="text-sm leading-relaxed max-w-[280px]" style={{ color: V("color-body-mid") }}>
-              A product studio for founders who want to ship without building an
-              engineering team.
+            <p
+              className="text-sm leading-relaxed max-w-[280px]"
+              style={{ color: V("color-body-mid") }}
+            >
+              The all-in-one platform for building, launching, and growing
+              websites.
             </p>
           </div>
 
           {/* Link columns */}
-          {Object.entries(FOOTER_LINKS).map(([heading, links]) => (
-            <div key={heading}>
-              <h4
-                className="text-xs font-semibold uppercase tracking-wider mb-4"
-                style={{ color: V("color-mute") }}
-              >
-                {heading}
-              </h4>
-              <ul className="list-none p-0 m-0 space-y-2.5">
-                {links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="text-sm no-underline transition-colors duration-200 hover:opacity-70"
-                      style={{ color: V("color-body") }}
-                    >
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 flex-1">
+            {Object.entries(FOOTER_LINKS).map(([heading, links]) => (
+              <div key={heading}>
+                <h4
+                  className="text-xs font-semibold uppercase tracking-wider mb-4"
+                  style={{ color: V("color-mute") }}
+                >
+                  {heading}
+                </h4>
+                <ul className="list-none p-0 m-0 space-y-2.5">
+                  {links.map((link) => (
+                    <li key={link}>
+                      <a
+                        href="#"
+                        className="text-sm no-underline transition-colors duration-200 hover:opacity-70"
+                        style={{ color: V("color-body") }}
+                      >
+                        {link}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Bottom bar */}
         <div
-          className="mt-16 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4"
+          className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
           style={{ borderTop: `1px solid ${V("color-hairline")}` }}
         >
           <span className="text-xs" style={{ color: V("color-mute") }}>
-            &copy; {new Date().getFullYear()} Kreature Studio. All rights
+            &copy; {new Date().getFullYear()} Kreature, Inc. All rights
             reserved.
           </span>
-          <div className="flex items-center gap-6">
-            <a
-              href="#"
-              className="text-xs no-underline transition-colors duration-200 hover:opacity-70"
-              style={{ color: V("color-mute") }}
-            >
-              Twitter
-            </a>
-            <a
-              href="#"
-              className="text-xs no-underline transition-colors duration-200 hover:opacity-70"
-              style={{ color: V("color-mute") }}
-            >
-              LinkedIn
-            </a>
-            <a
-              href="#"
-              className="text-xs no-underline transition-colors duration-200 hover:opacity-70"
-              style={{ color: V("color-mute") }}
-            >
-              Dribbble
-            </a>
-            <a
-              href="#"
-              className="text-xs no-underline transition-colors duration-200 hover:opacity-70"
-              style={{ color: V("color-mute") }}
-            >
-              GitHub
-            </a>
+          <div className="flex items-center gap-4 text-xs">
+            {[
+              "Made in Kreature",
+              "YouTube",
+              "X",
+              "Facebook",
+              "LinkedIn",
+              "Instagram",
+              "TikTok",
+            ].map((p) => (
+              <a
+                key={p}
+                href="#"
+                className="no-underline transition-colors duration-200 hover:opacity-70"
+                style={{ color: V("color-mute") }}
+              >
+                {p}
+              </a>
+            ))}
           </div>
         </div>
       </div>
@@ -167,12 +339,12 @@ function Footer() {
   );
 }
 
-/* ── Typography primitives ── */
+/* ─── Typography primitives ─── */
 
 function H1({ children }: { children: ReactNode }) {
   return (
     <h1
-      className="tracking-[-0.8px] m-0"
+      className="font-heading tracking-[-0.8px] m-0"
       style={{
         fontSize: "clamp(48px, 5.5vw, 80px)",
         fontWeight: 600,
@@ -188,7 +360,7 @@ function H1({ children }: { children: ReactNode }) {
 function H2({ children }: { children: ReactNode }) {
   return (
     <h2
-      className="m-0"
+      className="font-heading m-0"
       style={{
         fontSize: "clamp(36px, 4vw, 56px)",
         fontWeight: 600,
@@ -204,10 +376,10 @@ function H2({ children }: { children: ReactNode }) {
 function H3({ children }: { children: ReactNode }) {
   return (
     <h3
-      className="m-0"
+      className="font-heading m-0"
       style={{
-        fontSize: 32,
-        fontWeight: 500,
+        fontSize: 24,
+        fontWeight: 600,
         lineHeight: 1.3,
         color: V("color-ink"),
       }}
@@ -283,174 +455,323 @@ function Caption({
   );
 }
 
-/* ── Section primitives ── */
+/* ─── Section primitives ─── */
 
 function Section({
   children,
   className = "",
-  tight = false,
+  bg,
   id,
 }: {
   children: ReactNode;
   className?: string;
-  tight?: boolean;
+  bg?: "soft" | "dark";
   id?: string;
 }) {
   return (
     <section
       id={id}
       className={`w-full ${className}`}
-      style={{ paddingTop: tight ? 64 : 120, paddingBottom: tight ? 64 : 120 }}
+      style={{
+        paddingTop: bg === "dark" ? undefined : 120,
+        paddingBottom: bg === "dark" ? undefined : 120,
+        background: bg === "soft"
+          ? V("color-canvas-soft")
+          : bg === "dark"
+            ? V("color-ink")
+            : V("color-canvas"),
+      }}
+    >
+      <div className="mx-auto max-w-[1440px] px-5 sm:px-8">{children}</div>
+    </section>
+  );
+}
+
+function SectionNarrow({
+  children,
+  className = "",
+  id,
+}: {
+  children: ReactNode;
+  className?: string;
+  id?: string;
+}) {
+  return (
+    <section
+      id={id}
+      className={`w-full ${className}`}
+      style={{ paddingTop: 120, paddingBottom: 120 }}
     >
       <div className="mx-auto max-w-[960px] px-6">{children}</div>
     </section>
   );
 }
 
-function SectionWide({
-  children,
-  className = "",
-  tight = false,
-}: {
-  children: ReactNode;
-  className?: string;
-  tight?: boolean;
-}) {
-  return (
-    <section
-      className={`w-full ${className}`}
-      style={{ paddingTop: tight ? 64 : 120, paddingBottom: tight ? 64 : 120 }}
-    >
-      <div className="mx-auto max-w-[1280px] px-6">{children}</div>
-    </section>
-  );
-}
-
-/* ── Decorative divider ── */
-
 function Divider() {
   return (
-    <div className="w-full" style={{ borderTop: `1px solid ${V("color-hairline")}` }} />
+    <div
+      className="w-full"
+      style={{ borderTop: `1px solid ${V("color-hairline")}` }}
+    />
   );
 }
 
-/* ── About Us Page ── */
+/* ─── Person Card ─── */
+
+function PersonCard({
+  name,
+  title,
+  img,
+}: {
+  name: string;
+  title: string;
+  img: string;
+}) {
+  return (
+    <div className="text-center">
+      <div
+        className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-4"
+        style={{ background: V("color-canvas-mid") }}
+      >
+        <img
+          src={img}
+          alt={name}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+      <h4
+        className="m-0 mb-1"
+        style={{
+          fontSize: 20,
+          fontWeight: 600,
+          lineHeight: 1.3,
+          color: V("color-ink"),
+        }}
+      >
+        {name}
+      </h4>
+      <Caption>{title}</Caption>
+    </div>
+  );
+}
+
+/* ─── Press Card ─── */
+
+function PressCard({
+  publication,
+  headline,
+  href,
+}: {
+  publication: string;
+  headline: string;
+  href: string;
+}) {
+  return (
+    <a
+      href={href}
+      className="block no-underline rounded-xl p-6 transition-all duration-200 group"
+      style={{
+        background: V("color-canvas"),
+        border: `1px solid ${V("color-hairline")}`,
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = `var(--color-ink)`;
+        e.currentTarget.style.boxShadow = `var(--shadow-card-strong)`;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = `var(--color-hairline)`;
+        e.currentTarget.style.boxShadow = "none";
+      }}
+    >
+      <Caption className="block mb-2">{publication}</Caption>
+      <p
+        className="m-0 font-medium group-hover:underline"
+        style={{
+          fontSize: 16,
+          fontWeight: 500,
+          lineHeight: 1.5,
+          color: V("color-ink"),
+        }}
+      >
+        {headline}
+      </p>
+    </a>
+  );
+}
+
+/* ─── About Page ─── */
 
 export default function AboutPage() {
   return (
     <>
       <main style={{ marginTop: 68 }}>
-        {/* ── Hero ── */}
-        <Section>
-          <Caption className="block mb-4">About Kreature</Caption>
-          <H1>
-            We build products.
-            <br />
-            You ship fast.
-          </H1>
-          <BodyLarge className="mt-6 max-w-[640px]">
-            Kreature is a product studio built for founders who want to launch
-            real software — without hiring an engineering team, burning runway
-            on freelancers, or waiting months for an agency to kick off.
-          </BodyLarge>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <a
-              href="/contact-sales"
-              className="inline-flex items-center text-sm font-medium rounded text-white no-underline transition-colors duration-200"
+        {/* ═══════════════════════════════════════════
+            SECTION 1 — HERO
+            ═══════════════════════════════════════════ */}
+        <section
+          className="relative overflow-hidden text-center"
+          style={{
+            paddingTop: 104,
+            paddingBottom: 104,
+            background: V("color-canvas"),
+          }}
+        >
+          {/* Subtle background glow */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div
+              className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] rounded-full blur-[140px]"
               style={{
-                background: V("color-accent-blue"),
-                padding: "16px 24px",
+                background: `color-mix(in srgb, ${V("color-accent-blue")} 6%, transparent)`,
               }}
-            >
-              Work with us
-              <Arrow />
-            </a>
-            <a
-              href="#mission"
-              className="inline-flex items-center text-sm font-medium rounded no-underline transition-colors duration-200"
-              style={{
-                border: `1px solid ${V("color-hairline")}`,
-                color: V("color-ink"),
-                padding: "16px 24px",
-              }}
-            >
-              Our mission
-            </a>
+            />
           </div>
-        </Section>
 
-        <Divider />
-
-        {/* ── Mission ── */}
-        <Section id="mission">
           <div
-            className="rounded-2xl p-10 md:p-16"
-            style={{
-              background: V("color-canvas-soft"),
-              border: `1px solid ${V("color-hairline")}`,
-            }}
+            className="relative z-10 mx-auto px-5 sm:px-8"
+            style={{ maxWidth: "960px" }}
           >
-            <Caption className="block mb-3">Our mission</Caption>
-            <BodyLarge className="max-w-[720px]">
-              Kreature exists because non-technical founders deserve to ship
-              without the pain of building an engineering team. We&apos;re a
-              product studio that delivers fixed-scope, fixed-timeline products
-              — not hourly estimates or vague promises. You know exactly what
-              you&apos;re getting, exactly what it costs, and exactly when
-              it&apos;ll be in your users&apos; hands.
+            {/* Section label */}
+            <Caption className="block mb-4 text-center">
+              About Kreature
+            </Caption>
+
+            <H1>
+              We&apos;re bringing development superpowers to everyone
+            </H1>
+
+            <BodyLarge
+              className="mt-6 mx-auto text-center"
+              style={{ maxWidth: "640px" }}
+            >
+              A visual development platform that empowers designers, marketers,
+              and entrepreneurs to build professional websites without writing
+              code — while giving developers the tools they need to extend and
+              scale.
             </BodyLarge>
-          </div>
-        </Section>
 
-        <Divider />
+            {/* CTA buttons */}
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
+              <a
+                href="/company/careers"
+                className="inline-flex items-center text-sm font-medium rounded text-white no-underline transition-opacity hover:opacity-90"
+                style={{
+                  background: V("color-accent-blue"),
+                  fontSize: 16,
+                  fontWeight: 500,
+                  lineHeight: "19.2px",
+                  padding: "16px 24px",
+                  borderRadius: "4px",
+                }}
+              >
+                Careers
+                <Arrow />
+              </a>
+              <a
+                href="/company/media"
+                className="inline-flex items-center text-sm font-medium rounded no-underline transition-colors duration-200"
+                style={{
+                  border: `1px solid ${V("color-hairline")}`,
+                  color: V("color-ink"),
+                  fontSize: 16,
+                  fontWeight: 500,
+                  lineHeight: "19.2px",
+                  padding: "16px 24px",
+                  borderRadius: "4px",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = `var(--color-ink)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = `var(--color-hairline)`;
+                }}
+              >
+                Press
+              </a>
+            </div>
 
-        {/* ── How we're different ── */}
-        <Section>
-          <H2>How we&apos;re different</H2>
-          <BodyLarge className="mt-4 max-w-[640px]">
-            Traditional agencies bill by the hour and win when projects drag
-            on. Freelance marketplaces give you talent without process. We
-            combine the quality of an elite team with the predictability of a
-            product company.
-          </BodyLarge>
-
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Fixed scope",
-                body: "We spec every project in detail before we start. You approve the scope, and that's what gets built — no surprises, no scope creep.",
-              },
-              {
-                title: "Fixed timeline",
-                body: "Most products ship in 6-8 weeks. We work in focused cycles with clear milestones so you always know where things stand.",
-              },
-              {
-                title: "Fixed price",
-                body: "You know the cost before day one. No hourly billing, no retainer burn, no invoices you didn't see coming.",
-              },
-            ].map((d) => (
-              <div key={d.title}>
-                <H3>{d.title}</H3>
-                <Body className="mt-3">{d.body}</Body>
+            {/* Trusted by logo bar */}
+            <div
+              className="mt-16 pt-12"
+              style={{ borderTop: `1px solid ${V("color-hairline")}` }}
+            >
+              <Caption className="block mb-8 text-center">
+                Trusted by teams at
+              </Caption>
+              <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
+                {TRUSTED_LOGOS.map((logo) => (
+                  <div
+                    key={logo.name}
+                    className="flex items-center justify-center h-8"
+                    style={{ opacity: 0.6 }}
+                  >
+                    <img
+                      src={logo.src}
+                      alt={logo.name}
+                      className="max-h-6 w-auto"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ═══════════════════════════════════════════
+            SECTION 2 — VISION
+            ═══════════════════════════════════════════ */}
+        <Section bg="soft">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            {/* Image */}
+            <div
+              className="rounded-xl overflow-hidden aspect-[4/3]"
+              style={{ background: V("color-canvas-mid") }}
+            >
+              <img
+                src="/about/vision.jpg"
+                alt="Kreature vision"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+
+            {/* Text */}
+            <div>
+              <Caption className="block mb-4">Vision</Caption>
+              <H2>
+                Our vision is to build the world&apos;s most powerful agentic
+                marketing platform.
+              </H2>
+              <BodyLarge className="mt-6 max-w-[560px]">
+                We believe that when creative people have direct access to the
+                power of code — without needing to become developers — the
+                entire internet gets better. Our platform combines visual
+                development with agentic AI to give everyone development
+                superpowers.
+              </BodyLarge>
+            </div>
           </div>
         </Section>
 
         <Divider />
 
-        {/* ── Values ── */}
-        <Section>
-          <H2>What we believe</H2>
+        {/* ═══════════════════════════════════════════
+            SECTION 3 — CORE VALUES BEHAVIORS
+            ═══════════════════════════════════════════ */}
+        <SectionNarrow>
+          <H2>Core values behaviors</H2>
           <BodyLarge className="mt-4 max-w-[640px]">
-            These are the principles that guide every product decision, every
-            line of code, and every client conversation.
+            We see every day as an opportunity to turn values into action through
+            our 4 core behaviors.
           </BodyLarge>
 
           <div className="mt-14 space-y-10">
-            {VALUES.map((v, i) => (
+            {CORE_BEHAVIORS.map((b, i) => (
               <div
-                key={v.title}
+                key={b.title}
                 className="flex flex-col sm:flex-row gap-6 sm:gap-12"
               >
                 <div className="shrink-0">
@@ -465,89 +786,49 @@ export default function AboutPage() {
                   </span>
                 </div>
                 <div>
-                  <h4
-                    className="m-0 mb-2"
-                    style={{
-                      fontSize: 20,
-                      fontWeight: 600,
-                      lineHeight: 1.4,
-                      color: V("color-ink"),
-                    }}
-                  >
-                    {v.title}
-                  </h4>
-                  <Body>{v.body}</Body>
+                  <H3>{b.title}</H3>
+                  <Body className="mt-3">{b.body}</Body>
                 </div>
               </div>
             ))}
           </div>
-        </Section>
+        </SectionNarrow>
 
         <Divider />
 
-        {/* ── The team approach ── */}
-        <Section>
-          <H2>The people behind it</H2>
-          <BodyLarge className="mt-4 max-w-[640px]">
-            We&apos;re a small, senior team of product designers and engineers
-            who&apos;ve built products at startups, scale-ups, and agencies. We
-            don&apos;t have junior tiers to bill out — every person touching
-            your product has shipped dozens of projects before.
-          </BodyLarge>
-
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              {
-                title: "Flat and focused",
-                body: "No account managers, no layers between you and the people building your product. You talk directly to your designer and engineer.",
-              },
-              {
-                title: "Scrappy by design",
-                body: "We operate lean because we believe constraints produce better work. Every team member owns outcomes, not just tasks.",
-              },
-              {
-                title: "Remote, always",
-                body: "We work across time zones and hire for talent — not proximity to an office. Async communication keeps us productive and flexible.",
-              },
-              {
-                title: "Founder empathy",
-                body: "Several of us have been founders ourselves. We understand the pressure, the tradeoffs, and what it means to bet on a product.",
-              },
-            ].map((d) => (
-              <div
-                key={d.title}
-                className="rounded-xl p-8"
-                style={{
-                  background: V("color-canvas-soft"),
-                  border: `1px solid ${V("color-hairline")}`,
-                }}
-              >
-                <h4
-                  className="m-0 mb-3"
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 600,
-                    lineHeight: 1.4,
-                    color: V("color-ink"),
-                  }}
+        {/* ═══════════════════════════════════════════
+            SECTION 4 — BACKED BY
+            ═══════════════════════════════════════════ */}
+        <Section bg="soft">
+          <div className="text-center">
+            <H2>Backed by</H2>
+            <div className="mt-14 flex flex-wrap items-center justify-center gap-x-14 gap-y-8">
+              {INVESTORS.map((inv) => (
+                <div
+                  key={inv.name}
+                  className="flex items-center justify-center h-10"
+                  style={{ opacity: 0.7 }}
                 >
-                  {d.title}
-                </h4>
-                <Body>{d.body}</Body>
-              </div>
-            ))}
+                  <img
+                    src={inv.src}
+                    alt={inv.name}
+                    className="max-h-8 w-auto"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </Section>
 
         <Divider />
 
-        {/* ── Stats ── */}
+        {/* ═══════════════════════════════════════════
+            SECTION 5 — BY THE NUMBERS
+            ═══════════════════════════════════════════ */}
         <Section>
           <div className="text-center">
             <H2>By the numbers</H2>
-            <BodyLarge className="mt-4 max-w-[560px] mx-auto">
-              We measure ourselves by what we deliver — not by hours logged.
-            </BodyLarge>
           </div>
 
           <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -572,42 +853,213 @@ export default function AboutPage() {
 
         <Divider />
 
-        {/* ── CTA ── */}
+        {/* ═══════════════════════════════════════════
+            SECTION 6 — IN THE PRESS
+            ═══════════════════════════════════════════ */}
+        <Section bg="soft">
+          <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-14">
+            <div>
+              <H2>In the press</H2>
+            </div>
+            <a
+              href="/company/media"
+              className="inline-flex items-center text-sm font-medium no-underline transition-colors hover:opacity-70 shrink-0"
+              style={{
+                fontSize: 16,
+                fontWeight: 500,
+                lineHeight: "19.2px",
+                color: V("color-ink"),
+              }}
+            >
+              View all press
+              <ArrowUpRight />
+            </a>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {PRESS_ARTICLES.map((article) => (
+              <PressCard
+                key={article.headline}
+                publication={article.publication}
+                headline={article.headline}
+                href={article.href}
+              />
+            ))}
+          </div>
+        </Section>
+
+        <Divider />
+
+        {/* ═══════════════════════════════════════════
+            SECTION 7 — LEADERSHIP
+            ═══════════════════════════════════════════ */}
         <Section>
-          <div
-            className="rounded-2xl p-10 md:p-16 text-center"
-            style={{
-              background: V("color-canvas-soft"),
-              border: `1px solid ${V("color-hairline")}`,
-            }}
-          >
-            <H2>Work with us</H2>
-            <BodyLarge className="mt-4 max-w-[560px] mx-auto">
-              You bring the vision. We bring the team, the process, and the
-              track record. In 6-8 weeks, your product is live.
+          <div className="text-center mb-14">
+            <H2>Leadership</H2>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {LEADERSHIP.map((person) => (
+              <PersonCard
+                key={person.name}
+                name={person.name}
+                title={person.title}
+                img={person.img}
+              />
+            ))}
+          </div>
+        </Section>
+
+        <Divider />
+
+        {/* ═══════════════════════════════════════════
+            SECTION 8 — FOUNDERS
+            ═══════════════════════════════════════════ */}
+        <Section bg="soft">
+          <div className="text-center mb-14">
+            <H2>Founders</H2>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-8 max-w-[900px] mx-auto">
+            {FOUNDERS.map((person) => (
+              <PersonCard
+                key={person.name}
+                name={person.name}
+                title={person.title}
+                img={person.img}
+              />
+            ))}
+          </div>
+        </Section>
+
+        <Divider />
+
+        {/* ═══════════════════════════════════════════
+            SECTION 9 — REVIEWS
+            ═══════════════════════════════════════════ */}
+        <Section>
+          <div className="text-center mb-14">
+            <H2>Reviews</H2>
+            <BodyLarge className="mt-4 max-w-[560px] mx-auto text-center">
+              See what our customers and employees think about Kreature.
             </BodyLarge>
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <a
-                href="/contact-sales"
-                className="inline-flex items-center text-sm font-medium rounded text-white no-underline transition-colors duration-200"
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-8 max-w-[720px] mx-auto">
+            {/* G2 */}
+            <div
+              className="rounded-xl p-10 text-center"
+              style={{
+                background: V("color-canvas-soft"),
+                border: `1px solid ${V("color-hairline")}`,
+              }}
+            >
+              <div
+                className="mb-3"
                 style={{
-                  background: V("color-accent-blue"),
-                  padding: "16px 24px",
+                  fontSize: "clamp(40px, 5vw, 64px)",
+                  fontWeight: 600,
+                  lineHeight: 1,
+                  color: V("color-accent-blue"),
                 }}
               >
-                Start a project
+                4.4
+              </div>
+              <Caption className="block mb-1">G2 Rating</Caption>
+              <Body className="text-center">As of January 2025</Body>
+            </div>
+
+            {/* Glassdoor */}
+            <div
+              className="rounded-xl p-10 text-center"
+              style={{
+                background: V("color-canvas-soft"),
+                border: `1px solid ${V("color-hairline")}`,
+              }}
+            >
+              <div
+                className="mb-3"
+                style={{
+                  fontSize: "clamp(40px, 5vw, 64px)",
+                  fontWeight: 600,
+                  lineHeight: 1,
+                  color: V("color-accent-blue"),
+                }}
+              >
+                3.9
+              </div>
+              <Caption className="block mb-1">Glassdoor Rating</Caption>
+              <Body className="text-center">As of January 2025</Body>
+            </div>
+          </div>
+        </Section>
+
+        <Divider />
+
+        {/* ═══════════════════════════════════════════
+            SECTION 10 — CTA
+            ═══════════════════════════════════════════ */}
+        <Section bg="dark">
+          <div className="text-center max-w-[840px] mx-auto">
+            <h2
+              className="font-heading m-0 mb-6"
+              style={{
+                fontSize: "clamp(36px, 4vw, 56px)",
+                fontWeight: 600,
+                lineHeight: 1.04,
+                color: V("color-canvas"),
+              }}
+            >
+              Join the team bringing development superpowers to everyone
+            </h2>
+            <BodyLarge
+              className="mb-8 mx-auto text-center"
+              style={{
+                color: V("color-mute-soft"),
+                maxWidth: "600px",
+              }}
+            >
+              We are building the future of how websites get made — and we are
+              looking for people who care deeply about craft, speed, and impact.
+            </BodyLarge>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a
+                href="/company/careers"
+                className="inline-flex items-center text-sm font-medium rounded text-white no-underline transition-opacity hover:opacity-90"
+                style={{
+                  background: V("color-accent-blue"),
+                  fontSize: 16,
+                  fontWeight: 500,
+                  lineHeight: "19.2px",
+                  padding: "16px 24px",
+                  borderRadius: "4px",
+                }}
+              >
+                View open roles
                 <Arrow />
               </a>
               <a
-                href="/pricing"
-                className="inline-flex items-center text-sm font-medium rounded no-underline transition-colors duration-200"
+                href="/company/media"
+                className="inline-flex items-center text-sm font-medium rounded no-underline transition-colors"
                 style={{
-                  border: `1px solid ${V("color-hairline")}`,
-                  color: V("color-ink"),
+                  fontSize: 16,
+                  fontWeight: 500,
+                  lineHeight: "19.2px",
                   padding: "16px 24px",
+                  borderRadius: "4px",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                  color: "#ffffff",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor =
+                    "rgba(255,255,255,0.5)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor =
+                    "rgba(255,255,255,0.2)";
                 }}
               >
-                See pricing
+                Press &amp; media
               </a>
             </div>
           </div>

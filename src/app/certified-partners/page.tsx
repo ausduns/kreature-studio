@@ -1,940 +1,893 @@
 "use client";
 
-import { useState } from "react";
-
-/* ─── CSS VAR ─── */
+/* ─── Helpers ─── */
 const V = (n: string) => `var(--${n})`;
 
-/* ─── STYLES ─── */
-const S = {
-  h1: { fontSize: "80px", fontWeight: 600, lineHeight: "83.2px", letterSpacing: "-0.8px" } as React.CSSProperties,
-  h2: { fontSize: "56px", fontWeight: 600, lineHeight: "58.24px" } as React.CSSProperties,
-  h3: { fontSize: "32px", fontWeight: 500, lineHeight: "41.6px" } as React.CSSProperties,
-  h4: { fontSize: "20px", fontWeight: 600, lineHeight: "28px" } as React.CSSProperties,
-  body: { fontSize: "16px", fontWeight: 400, lineHeight: "25.6px" } as React.CSSProperties,
-  bodySm: { fontSize: "14px", lineHeight: "22.4px" } as React.CSSProperties,
-  bodyLg: { fontSize: "20px", lineHeight: 1.5 } as React.CSSProperties,
-  caption: { fontSize: "12.8px", fontWeight: 550, lineHeight: "15.36px" } as React.CSSProperties,
-  eyebrow: { fontSize: "15px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em" } as React.CSSProperties,
-  btn: { fontSize: "16px", fontWeight: 500, padding: "16px 24px", borderRadius: "4px" } as React.CSSProperties,
-};
-
-/* ─── DATA ─── */
-
-const PARTNER_TIERS = [
-  {
-    id: "certified",
-    name: "Certified Partner",
-    accent: "green",
-    description: "Proven expertise delivering Kreature projects. Vetted for quality, reliability, and customer satisfaction.",
-    badge: "Certified",
-    requirements: [
-      "Complete Kreature Partner Certification program",
-      "Minimum 3 completed Kreature projects",
-      "95%+ customer satisfaction score",
-      "Active Kreature agency plan subscription",
-    ],
-    benefits: [
-      "Listed in the Kreature Partner Directory",
-      "Partner badge on your profile",
-      "Access to partner Slack community",
-      "Early access to new features",
-      "Co-marketing opportunities",
-    ],
-  },
-  {
-    id: "premier",
-    name: "Premier Partner",
-    accent: "blue",
-    description: "Elite partners with deep platform expertise and a track record of delivering exceptional results at scale.",
-    badge: "Premier",
-    requirements: [
-      "All Certified Partner requirements",
-      "Minimum 15 completed Kreature projects",
-      "Dedicated Kreature practice lead on staff",
-      "Case studies demonstrating measurable client results",
-      "Annual partner business review",
-    ],
-    benefits: [
-      "Everything in Certified, plus:",
-      "Priority placement in Partner Directory",
-      "Direct referral pipeline from Kreature sales",
-      "Dedicated partner success manager",
-      "Co-branded case studies and PR",
-      "Invitation to Premier Partner Summit",
-      "Revenue sharing on referred clients",
-    ],
-  },
-  {
-    id: "global",
-    name: "Global Partner",
-    accent: "purple",
-    description: "Strategic partners operating at worldwide scale. Trusted to drive the Kreature ecosystem across regions and industries.",
-    badge: "Global",
-    requirements: [
-      "All Premier Partner requirements",
-      "Presence in 3+ geographic regions",
-      "50+ certified Kreature practitioners on staff",
-      "Significant annual Kreature revenue commitment",
-      "Executive-level relationship with Kreature leadership",
-    ],
-    benefits: [
-      "Everything in Premier, plus:",
-      "Exclusive territory and industry rights",
-      "Joint go-to-market strategy with Kreature",
-      "Custom integrations and API access",
-      "Co-development of platform features",
-      "Executive sponsor from Kreature leadership",
-      "Global Partner Summit speaking opportunities",
-    ],
-  },
-];
-
-const BENEFITS = [
-  {
-    title: "Accelerate delivery",
-    description: "Certified partners bring battle-tested playbooks and deep platform expertise. They ship Kreature projects 3x faster than internal teams learning the platform from scratch.",
-    accent: "green",
-  },
-  {
-    title: "Strategic guidance",
-    description: "Partners don't just build — they advise. From content architecture to SEO strategy to conversion optimization, they bring strategic expertise that elevates every project.",
-    accent: "blue",
-  },
-  {
-    title: "Enterprise scale",
-    description: "Global partners have managed Kreature deployments with hundreds of sites, thousands of pages, and millions of visitors. They know how to operate at enterprise scale.",
-    accent: "purple",
-  },
-  {
-    title: "Deep specialization",
-    description: "Whether you need ecommerce, localization, accessibility compliance, or custom integrations — there's a partner with exactly the expertise your project demands.",
-    accent: "orange",
-  },
-  {
-    title: "Ongoing support",
-    description: "Partners provide long-term maintenance, optimization, and evolution of your Kreature investment. They're your extended team, not just a one-time build shop.",
-    accent: "pink",
-  },
-  {
-    title: "Vetted quality",
-    description: "Every certified partner has passed Kreature's rigorous qualification process. You get proven expertise, not a gamble on an unknown agency.",
-    accent: "green",
-  },
-];
-
-const REGIONS = ["All regions", "North America", "Europe", "Asia Pacific", "Latin America", "Middle East & Africa"];
-const EXPERTISE_AREAS = [
-  "All expertise",
-  "Enterprise deployments",
-  "Ecommerce",
-  "Localization",
-  "SEO & AEO",
-  "Accessibility",
-  "Design systems",
-  "Custom integrations",
-  "Migration",
-];
-
-const SAMPLE_PARTNERS = [
-  {
-    name: "Digital Velocity",
-    region: "North America",
-    tier: "Premier",
-    expertise: ["Enterprise deployments", "Migration", "Design systems"],
-    projects: 120,
-    description: "Full-service digital agency specializing in enterprise Kreature migrations and design system implementation.",
-    accent: "blue",
-  },
-  {
-    name: "Atlas Interactive",
-    region: "Europe",
-    tier: "Global",
-    expertise: ["Ecommerce", "Localization", "Enterprise deployments"],
-    projects: 350,
-    description: "Global digital consultancy with deep ecommerce expertise. Launched 50+ localized Kreature storefronts across EMEA.",
-    accent: "purple",
-  },
-  {
-    name: "Prism Studio",
-    region: "North America",
-    tier: "Certified",
-    expertise: ["SEO & AEO", "Design systems", "Accessibility"],
-    projects: 45,
-    description: "Boutique studio focused on accessible, performant Kreature builds with best-in-class SEO outcomes.",
-    accent: "green",
-  },
-  {
-    name: "Meridian Labs",
-    region: "Asia Pacific",
-    tier: "Premier",
-    expertise: ["Localization", "Custom integrations", "Enterprise deployments"],
-    projects: 200,
-    description: "APAC-based partner with deep localization expertise. Manages multi-language Kreature deployments across 12 markets.",
-    accent: "blue",
-  },
-  {
-    name: "Forge Digital",
-    region: "Europe",
-    tier: "Certified",
-    expertise: ["Custom integrations", "Migration", "Design systems"],
-    projects: 60,
-    description: "Technical agency specializing in complex Kreature integrations with existing enterprise tech stacks.",
-    accent: "green",
-  },
-  {
-    name: "Latitude Agency",
-    region: "Latin America",
-    tier: "Premier",
-    expertise: ["Ecommerce", "Localization", "SEO & AEO"],
-    projects: 150,
-    description: "Leading LATAM digital agency. Drove 300% growth for regional ecommerce brands on Kreature.",
-    accent: "blue",
-  },
-  {
-    name: "Vector Creative",
-    region: "North America",
-    tier: "Premier",
-    expertise: ["Design systems", "Accessibility", "Enterprise deployments"],
-    projects: 180,
-    description: "Design-led agency that built design systems powering 200+ Kreature sites for Fortune 500 clients.",
-    accent: "blue",
-  },
-  {
-    name: "Zenith Partners",
-    region: "Middle East & Africa",
-    tier: "Certified",
-    expertise: ["Enterprise deployments", "Localization", "Migration"],
-    projects: 35,
-    description: "MEA regional partner with deep knowledge of RTL localization and regional compliance requirements.",
-    accent: "green",
-  },
-  {
-    name: "Nexus Digital",
-    region: "Europe",
-    tier: "Global",
-    expertise: ["Enterprise deployments", "Ecommerce", "Custom integrations"],
-    projects: 500,
-    description: "One of Kreature's largest global partners. Powers digital experiences for major brands across 40+ countries.",
-    accent: "purple",
-  },
-];
-
-const FOOTER: Record<string, string[]> = {
-  Product: ["Platform", "Design", "Edit content", "Interactions", "GSAP", "Page building", "Shared Libraries", "Collaboration", "CMS", "Hosting", "Localization", "Security", "Ecommerce", "Analyze", "Optimize", "SEO", "AEO", "Kreature Cloud", "DevLink", "Figma to Kreature", "Accessibility", "AI"],
-  Solutions: ["Enterprise", "Startups", "Global alliances", "Agencies", "Freelancers"],
-  Resources: ["University", "Blog", "Customer stories", "Webinars & ebooks", "Apps", "Libraries", "Templates", "Developers", "Made in Kreature", "Glossary", "Livestreams", "The Kreature Way"],
-  Company: ["About", "Careers", "Press", "Kreature Ventures", "Kreature Shop", "Terms of Service", "Privacy policy", "Cookie policy", "Accessibility statement"],
-  Compare: ["Contentful", "Framer", "Sitecore", "Wix", "WordPress"],
-  Community: ["Discover the community", "Partner with Kreature", "Certified Partners", "Become a template designer", "Become an affiliate", "Become a Global Leader", "Find a meetup near you"],
-  "Get help": ["Support", "Pricing", "Status", "Community Homebase", "Wishlist"],
-};
-
-/* ─── SHARED COMPONENTS ─── */
 function Arrow() {
-  return <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>;
-}
-
-function Section({
-  bg,
-  children,
-  className,
-}: {
-  bg?: "soft" | "dark";
-  children: React.ReactNode;
-  className?: string;
-}) {
   return (
-    <section
-      className={`px-5 sm:px-8 py-[clamp(3rem,8vw,7rem)] ${className || ""}`}
-      style={{
-        background:
-          bg === "soft"
-            ? V("color-canvas-soft")
-            : bg === "dark"
-            ? V("color-ink")
-            : V("color-canvas"),
-      }}
-    >
-      <div className="max-w-[1440px] mx-auto">{children}</div>
-    </section>
+    <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>
   );
 }
 
-export default function CertifiedPartnersPage() {
-  const [activeTier, setActiveTier] = useState(1); // Premier default
-  const [selectedRegion, setSelectedRegion] = useState("All regions");
-  const [selectedExpertise, setSelectedExpertise] = useState("All expertise");
+/* ─── Data ─── */
 
-  const filteredPartners = SAMPLE_PARTNERS.filter((p) => {
-    const regionMatch = selectedRegion === "All regions" || p.region === selectedRegion;
-    const expertiseMatch = selectedExpertise === "All expertise" || p.expertise.includes(selectedExpertise);
-    return regionMatch && expertiseMatch;
-  });
+const WHY_PARTNER_CARDS = [
+  {
+    title: "Build and launch faster",
+    desc: "Whether you're migrating to Kreature or managing existing sites, certified partners help you launch faster while setting you up with a scalable foundation.",
+  },
+  {
+    title: "Give your team superpowers",
+    desc: "Partners help with rebrands, SEO projects, migrations, content management, animations, and more -- extending what your team can accomplish.",
+  },
+  {
+    title: "Fully vetted help",
+    desc: "Every certified partner is thoroughly vetted and qualified by the Kreature team so you can find expert help you can trust.",
+  },
+];
 
+const FIND_PARTNER_CARDS = [
+  {
+    title: "Get matched",
+    desc: "Tell us a bit about your project, and we'll recommend partners who'd be the best fit.",
+    cta: "Get matched",
+    primary: true,
+  },
+  {
+    title: "Browse directory",
+    desc: "Filter by services offered, budget, location, and more to find the perfect partner for your needs.",
+    cta: "Browse partners",
+    primary: false,
+  },
+];
+
+const MARKETING_CARDS = [
+  {
+    title: "Full power of code",
+    desc: "Kreature hosting meets HTTP/2 standards out of the box and is compatible with HTTP/3.",
+  },
+  {
+    title: "Creativity unleashed",
+    desc: "The visual canvas gives complete creative control over every detail, from structure to pixel-perfect execution.",
+  },
+  {
+    title: "Speed to market",
+    desc: "Eliminate the lengthy back and forth associated with traditional dev so you can ship exactly what you want, faster.",
+  },
+  {
+    title: "Improved collaboration",
+    desc: "Marketing can easily add and update site content while engineering and design can focus on bigger challenges.",
+  },
+];
+
+const FEATURED_PARTNERS = [
+  "8020",
+  "Brix",
+  "BX Studio",
+  "Flow Ninja",
+  "Funsize",
+  "Outliant",
+  "Ramotion",
+  "Refokus",
+  "Shadow",
+  "Social Driver",
+  "Zabal Media",
+];
+
+const TRUSTED_BY_LOGOS = [
+  "IDEO",
+  "Monday.com",
+  "BBDO",
+  "The New York Times",
+  "TED",
+  "Philips",
+];
+
+const FOOTER_COLS = [
+  {
+    heading: "Product",
+    links: [
+      { label: "Overview", href: "/webflow-clone" },
+      { label: "Designer", href: "#" },
+      { label: "CMS", href: "#" },
+      { label: "Hosting", href: "#" },
+      { label: "AI Features", href: "#" },
+    ],
+  },
+  {
+    heading: "Ecosystem",
+    links: [
+      { label: "Apps", href: "/apps" },
+      { label: "Libraries", href: "/libraries" },
+      { label: "Templates", href: "/templates" },
+      { label: "Integrations", href: "/integrations" },
+      { label: "Showcase", href: "/made-in-webflow" },
+    ],
+  },
+  {
+    heading: "Solutions",
+    links: [
+      { label: "Marketing Teams", href: "#" },
+      { label: "Agencies", href: "#" },
+      { label: "Startups", href: "#" },
+      { label: "Enterprise", href: "/enterprise" },
+      { label: "Freelancers", href: "#" },
+    ],
+  },
+  {
+    heading: "Resources",
+    links: [
+      { label: "Blog", href: "/blog" },
+      { label: "Glossary", href: "/glossary" },
+      { label: "Community", href: "/community" },
+      { label: "Documentation", href: "#" },
+      { label: "Kreature Way", href: "/webflow-way" },
+    ],
+  },
+  {
+    heading: "Company",
+    links: [
+      { label: "About", href: "/company/about" },
+      { label: "Customers", href: "/customers" },
+      { label: "Partners", href: "/certified-partners" },
+      { label: "Careers", href: "/company/careers" },
+      { label: "Contact", href: "/contact-sales" },
+    ],
+  },
+  {
+    heading: "Compare",
+    links: [
+      { label: "vs WordPress", href: "#" },
+      { label: "vs Framer", href: "#" },
+      { label: "vs Wix", href: "#" },
+      { label: "vs Squarespace", href: "#" },
+      { label: "vs Bubble", href: "#" },
+    ],
+  },
+  {
+    heading: "Connect",
+    links: [
+      { label: "Twitter", href: "https://twitter.com" },
+      { label: "LinkedIn", href: "https://linkedin.com" },
+      { label: "YouTube", href: "https://youtube.com" },
+      { label: "Instagram", href: "https://instagram.com" },
+      { label: "Discord", href: "https://discord.com" },
+    ],
+  },
+];
+
+const SOCIAL_LINKS = [
+  { label: "Webflow Discover", href: "#" },
+  { label: "YouTube", href: "#" },
+  { label: "Twitter", href: "https://twitter.com" },
+  { label: "Facebook", href: "#" },
+  { label: "Instagram", href: "https://instagram.com" },
+  { label: "TikTok", href: "#" },
+];
+
+/* ─── Footer ─── */
+function Footer() {
   return (
-    <div className="page-wrapper" style={{ background: V("color-canvas"), color: V("color-body") }}>
-      <main>
-        {/* ═══════ HERO ═══════ */}
-        <section
-          className="relative overflow-hidden px-5 sm:px-8 pt-[clamp(4rem,10vw,8rem)] pb-[clamp(3rem,6vw,5rem)]"
-          style={{ background: V("color-ink") }}
-        >
-          {/* Subtle grid texture */}
-          <div
-            className="absolute inset-0 pointer-events-none z-0 opacity-10"
-            style={{
-              backgroundImage: "radial-gradient(circle, rgba(59,137,255,0.3) 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
-            }}
-          />
-          {/* Glow orbs */}
-          <div
-            className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full pointer-events-none z-0 opacity-25"
-            style={{
-              background: `radial-gradient(circle, ${V("color-accent-blue")} 0%, transparent 70%)`,
-              transform: "translate(30%, -30%)",
-            }}
-          />
-          <div
-            className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none z-0 opacity-15"
-            style={{
-              background: `radial-gradient(circle, ${V("color-accent-purple")} 0%, transparent 70%)`,
-              transform: "translate(-20%, 30%)",
-            }}
-          />
-
-          <div className="max-w-[1440px] mx-auto relative z-10">
-            <div className="max-w-[800px]">
-              {/* Eyebrow */}
-              <p
-                className="mb-4"
-                style={{ ...S.eyebrow, color: V("color-accent-blue"), textTransform: "uppercase" as const }}
+    <footer
+      className="border-t"
+      style={{ borderColor: V("color-hairline"), background: V("color-canvas") }}
+    >
+      <div
+        className="mx-auto px-5 sm:px-8 py-14 sm:py-16"
+        style={{ maxWidth: "1440px" }}
+      >
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-8">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
+            <div className="flex items-center gap-2.5 mb-3">
+              <img
+                src="/logo/kreature-logo-dark.png"
+                alt="Kreature"
+                className="logo-dark h-[36px] w-auto"
+              />
+              <img
+                src="/logo/kreature-logo-light.png"
+                alt="Kreature"
+                className="logo-light h-[36px] w-auto"
+              />
+              <span
+                className="font-heading font-[800] text-xl tracking-tight"
+                style={{ color: V("color-ink") }}
               >
-                Partner ecosystem
-              </p>
-
-              {/* H1 */}
-              <h1
-                className="font-semibold leading-[1.04] tracking-[-0.01em] mb-6"
-                style={{ ...S.h1, color: V("color-canvas") }}
-              >
-                Find the perfect partner
-              </h1>
-
-              {/* Subtext */}
-              <p className="max-w-[650px] mb-10" style={{ ...S.bodyLg, color: V("color-mute-soft") }}>
-                Kreature&apos;s certified partner network connects you with vetted agencies and consultants
-                who deliver exceptional results. From strategy to build to ongoing optimization — there&apos;s
-                a partner ready to help.
-              </p>
-
-              {/* Hero metrics */}
-              <div className="flex flex-wrap gap-8 lg:gap-16">
-                {[
-                  { value: "500+", label: "certified partners worldwide" },
-                  { value: "60+", label: "countries served" },
-                  { value: "50K+", label: "projects delivered" },
-                ].map((m) => (
-                  <div key={m.label}>
-                    <div
-                      className="font-semibold leading-none mb-1"
-                      style={{ fontSize: "clamp(1.5rem,3vw,2rem)", color: V("color-canvas") }}
-                    >
-                      {m.value}
-                    </div>
-                    <p style={{ ...S.bodySm, color: V("color-mute-soft") }}>{m.label}</p>
-                  </div>
-                ))}
-              </div>
+                Kreature
+                <span style={{ color: V("color-accent-blue") }}>.</span>
+              </span>
             </div>
-          </div>
-        </section>
-
-        {/* ═══════ PARTNER DIRECTORY / SEARCH ═══════ */}
-        <Section>
-          <div className="mb-14">
             <p
-              className="mb-4"
-              style={{ ...S.eyebrow, color: V("color-accent-blue"), textTransform: "uppercase" as const }}
+              className="text-sm leading-relaxed max-w-xs"
+              style={{ color: V("color-mute") }}
             >
-              Partner directory
-            </p>
-            <h2 className="font-semibold leading-[1.04] mb-4" style={{ ...S.h2, color: V("color-ink") }}>
-              Find a partner by region or expertise
-            </h2>
-            <p className="max-w-[650px]" style={{ ...S.bodyLg, color: V("color-body-mid") }}>
-              Filter our global partner network by region and specialization to find the right team for your project.
+              Hire certified Kreature designers and agencies. Expert help for
+              your next project.
             </p>
           </div>
 
-          {/* Filters */}
-          <div
-            className="rounded-lg p-6 mb-10"
-            style={{
-              borderRadius: "8px",
-              border: `1px solid ${V("color-hairline")}`,
-              background: V("color-canvas-soft"),
-            }}
-          >
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Region filter */}
-              <div>
-                <p className="mb-3 font-semibold" style={{ ...S.bodySm, color: V("color-ink") }}>
-                  Region
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {REGIONS.map((r) => (
-                    <button
-                      key={r}
-                      onClick={() => setSelectedRegion(r)}
-                      className="transition-all"
-                      style={{
-                        ...S.bodySm,
-                        fontWeight: 500,
-                        padding: "6px 14px",
-                        borderRadius: "100px",
-                        border: `1px solid ${r === selectedRegion ? V("color-accent-blue") : V("color-hairline")}`,
-                        background: r === selectedRegion ? V("color-accent-blue") : "transparent",
-                        color: r === selectedRegion ? "#fff" : V("color-body-mid"),
-                      }}
-                    >
-                      {r}
-                    </button>
-                  ))}
-                </div>
+          {FOOTER_COLS.map((col) => (
+            <div key={col.heading}>
+              <div
+                className="text-xs uppercase tracking-wider mb-4"
+                style={{ color: V("color-mute-soft"), fontWeight: 550 }}
+              >
+                {col.heading}
               </div>
-
-              {/* Expertise filter */}
-              <div>
-                <p className="mb-3 font-semibold" style={{ ...S.bodySm, color: V("color-ink") }}>
-                  Expertise
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {EXPERTISE_AREAS.map((e) => (
-                    <button
-                      key={e}
-                      onClick={() => setSelectedExpertise(e)}
-                      className="transition-all"
-                      style={{
-                        ...S.bodySm,
-                        fontWeight: 500,
-                        padding: "6px 14px",
-                        borderRadius: "100px",
-                        border: `1px solid ${e === selectedExpertise ? V("color-accent-blue") : V("color-hairline")}`,
-                        background: e === selectedExpertise ? V("color-accent-blue") : "transparent",
-                        color: e === selectedExpertise ? "#fff" : V("color-body-mid"),
-                      }}
-                    >
-                      {e}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Filtered results */}
-          {filteredPartners.length === 0 ? (
-            <div className="text-center py-16">
-              <p style={{ ...S.bodyLg, color: V("color-mute") }}>
-                No partners found matching your criteria. Try adjusting your filters.
-              </p>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPartners.map((partner) => (
-                <div
-                  key={partner.name}
-                  className="rounded-lg p-[clamp(1.5rem,2.5vw,2rem)] transition-all hover:shadow-lg group"
-                  style={{
-                    borderRadius: "8px",
-                    border: `1px solid ${V("color-hairline")}`,
-                    background: V("color-canvas"),
-                  }}
-                >
-                  {/* Partner avatar + tier badge */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm shrink-0"
-                        style={{ background: V("color-canvas-soft"), color: V("color-ink") }}
-                      >
-                        {partner.name.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="font-semibold" style={{ ...S.bodySm, color: V("color-ink") }}>
-                          {partner.name}
-                        </p>
-                        <p style={{ fontSize: "11px", color: V("color-mute") }}>{partner.region}</p>
-                      </div>
-                    </div>
-                    <span
-                      className="shrink-0"
-                      style={{
-                        ...S.caption,
-                        fontWeight: 600,
-                        padding: "3px 10px",
-                        borderRadius: "100px",
-                        background: V(`color-accent-${partner.accent}`),
-                        color: "#fff",
-                      }}
-                    >
-                      {partner.tier}
-                    </span>
-                  </div>
-
-                  {/* Description */}
-                  <p className="mb-4" style={{ ...S.bodySm, color: V("color-body-mid") }}>
-                    {partner.description}
-                  </p>
-
-                  {/* Expertise tags */}
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {partner.expertise.map((exp) => (
-                      <span
-                        key={exp}
-                        style={{
-                          ...S.caption,
-                          padding: "2px 8px",
-                          borderRadius: "4px",
-                          background: V("color-canvas-soft"),
-                          color: V("color-body-mid"),
-                        }}
-                      >
-                        {exp}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Projects count + CTA */}
-                  <div className="flex items-center justify-between">
-                    <p style={{ ...S.caption, color: V("color-mute") }}>
-                      {partner.projects}+ projects delivered
-                    </p>
+              <ul className="space-y-2.5">
+                {col.links.map((link) => (
+                  <li key={link.label}>
                     <a
-                      href="#"
-                      className="inline-flex items-center transition-colors hover:gap-2"
-                      style={{ ...S.bodySm, fontWeight: 500, color: V("color-accent-blue") }}
+                      href={link.href}
+                      className="text-sm transition-colors"
+                      style={{ color: V("color-body-mid") }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.color = V("color-ink"))
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.color = V("color-body-mid"))
+                      }
                     >
-                      View profile <Arrow />
+                      {link.label}
                     </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Results count */}
-          <div className="text-center mt-8">
-            <p style={{ ...S.bodySm, color: V("color-mute") }}>
-              Showing {filteredPartners.length} of {SAMPLE_PARTNERS.length} partners
-            </p>
-          </div>
-        </Section>
-
-        {/* ═══════ PARTNER TIERS ═══════ */}
-        <Section bg="soft">
-          <div className="mb-14">
-            <p
-              className="mb-4"
-              style={{ ...S.eyebrow, color: V("color-accent-blue"), textTransform: "uppercase" as const }}
-            >
-              Partner tiers
-            </p>
-            <h2 className="font-semibold leading-[1.04] mb-4" style={{ ...S.h2, color: V("color-ink") }}>
-              Three levels of partnership
-            </h2>
-            <p className="max-w-[650px]" style={{ ...S.bodyLg, color: V("color-body-mid") }}>
-              Every Kreature partner is vetted for quality. Our tiered system helps you find partners
-              matched to your project&apos;s scale and complexity.
-            </p>
-          </div>
-
-          {/* Tier tabs */}
-          <div className="flex flex-wrap gap-3 mb-12">
-            {PARTNER_TIERS.map((tier, i) => (
-              <button
-                key={tier.id}
-                onClick={() => setActiveTier(i)}
-                className="transition-all"
-                style={{
-                  ...S.bodySm,
-                  fontWeight: 500,
-                  padding: "10px 24px",
-                  borderRadius: "100px",
-                  border: `1px solid ${i === activeTier ? V(`color-accent-${tier.accent}`) : V("color-hairline")}`,
-                  background: i === activeTier ? V(`color-accent-${tier.accent}`) : "transparent",
-                  color: i === activeTier ? "#fff" : V("color-body-mid"),
-                }}
-              >
-                {tier.name}
-              </button>
-            ))}
-          </div>
-
-          {/* Active tier detail */}
-          {PARTNER_TIERS.map((tier, i) => (
-            <div key={tier.id} className={i === activeTier ? "block" : "hidden"}>
-              <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
-                {/* Left: Description + badge */}
-                <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <div
-                      className="w-12 h-12 rounded-lg flex items-center justify-center font-bold text-sm shrink-0"
-                      style={{ background: V(`color-accent-${tier.accent}`), color: "#fff" }}
-                    >
-                      {tier.badge.charAt(0)}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold" style={{ ...S.h3, color: V("color-ink") }}>
-                        {tier.name}
-                      </h3>
-                      <span
-                        style={{
-                          ...S.caption,
-                          fontWeight: 600,
-                          padding: "2px 10px",
-                          borderRadius: "100px",
-                          background: V(`color-accent-${tier.accent}`),
-                          color: "#fff",
-                        }}
-                      >
-                        {tier.badge}
-                      </span>
-                    </div>
-                  </div>
-
-                  <p className="mb-8" style={{ ...S.bodyLg, color: V("color-body") }}>
-                    {tier.description}
-                  </p>
-
-                  {/* Requirements */}
-                  <div className="mb-8">
-                    <h4 className="font-semibold mb-4" style={{ ...S.h4, color: V("color-ink") }}>
-                      Requirements
-                    </h4>
-                    <ul className="space-y-3">
-                      {tier.requirements.map((req) => (
-                        <li key={req} className="flex items-start gap-3">
-                          <span
-                            className="shrink-0 mt-[3px] w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"
-                            style={{ background: V(`color-accent-${tier.accent}`), color: "#fff" }}
-                          >
-                            ✓
-                          </span>
-                          <span style={{ ...S.body, color: V("color-body-mid") }}>{req}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Right: Benefits */}
-                <div
-                  className="rounded-lg p-[clamp(1.5rem,2.5vw,2rem)]"
-                  style={{
-                    borderRadius: "8px",
-                    border: `1px solid ${V("color-hairline")}`,
-                    background: V("color-canvas"),
-                  }}
-                >
-                  <h4 className="font-semibold mb-4" style={{ ...S.h4, color: V("color-ink") }}>
-                    Partner benefits
-                  </h4>
-                  <ul className="space-y-3">
-                    {tier.benefits.map((benefit) => (
-                      <li key={benefit} className="flex items-start gap-3">
-                        <span
-                          className="shrink-0 mt-[3px] w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"
-                          style={{ background: V(`color-accent-${tier.accent}`), color: "#fff" }}
-                        >
-                          ✓
-                        </span>
-                        <span
-                          style={{
-                            ...S.body,
-                            color: V("color-body"),
-                            fontWeight: benefit.startsWith("Everything in") ? 600 : 400,
-                          }}
-                        >
-                          {benefit}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
-        </Section>
+        </div>
 
-        {/* ═══════ BENEFITS OF WORKING WITH A PARTNER ═══════ */}
-        <Section>
-          <div className="mb-14">
-            <p
-              className="mb-4"
-              style={{ ...S.eyebrow, color: V("color-accent-blue"), textTransform: "uppercase" as const }}
-            >
-              Why work with a partner
-            </p>
-            <h2 className="font-semibold leading-[1.04]" style={{ ...S.h2, color: V("color-ink") }}>
-              Experts who accelerate your success
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {BENEFITS.map((benefit) => (
-              <div
-                key={benefit.title}
-                className="rounded-lg p-[clamp(1.5rem,2.5vw,2rem)] transition-all hover:shadow-lg group"
-                style={{
-                  borderRadius: "8px",
-                  border: `1px solid ${V("color-hairline")}`,
-                  background: V("color-canvas"),
-                }}
-              >
-                {/* Accent bar */}
-                <div
-                  className="w-8 h-1 rounded-full mb-4"
-                  style={{ background: V(`color-accent-${benefit.accent}`) }}
-                />
-
-                <h3 className="font-semibold mb-3" style={{ ...S.h4, color: V("color-ink") }}>
-                  {benefit.title}
-                </h3>
-                <p style={{ ...S.body, color: V("color-body-mid") }}>
-                  {benefit.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {/* ═══════ HOW TO GET STARTED ═══════ */}
-        <Section bg="soft">
-          <div className="mb-14 text-center">
-            <p
-              className="mb-4"
-              style={{ ...S.eyebrow, color: V("color-accent-blue"), textTransform: "uppercase" as const }}
-            >
-              How it works
-            </p>
-            <h2 className="font-semibold leading-[1.04] mb-4" style={{ ...S.h2, color: V("color-ink") }}>
-              From search to launch in four steps
-            </h2>
-            <p className="max-w-[650px] mx-auto" style={{ ...S.bodyLg, color: V("color-body-mid") }}>
-              Working with a Kreature certified partner is straightforward. Here&apos;s what to expect.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { step: "01", title: "Browse & filter", desc: "Search our partner directory by region, expertise, and tier. Review partner profiles, case studies, and client reviews." },
-              { step: "02", title: "Connect & scope", desc: "Reach out to partners that match your needs. They'll assess your project and provide a detailed scope and timeline." },
-              { step: "03", title: "Build & iterate", desc: "Your partner leads the build on Kreature while you stay involved through shared workspaces and regular reviews." },
-              { step: "04", title: "Launch & optimize", desc: "Go live with confidence. Your partner provides ongoing support, optimization, and evolution of your Kreature investment." },
-            ].map((step) => (
-              <div key={step.step} className="relative">
-                {/* Step number */}
-                <div
-                  className="text-[clamp(2.5rem,5vw,4rem)] font-semibold leading-none mb-4"
-                  style={{ color: V("color-accent-blue"), opacity: 0.2 }}
-                >
-                  {step.step}
-                </div>
-                <h3 className="font-semibold mb-3" style={{ ...S.h4, color: V("color-ink") }}>
-                  {step.title}
-                </h3>
-                <p style={{ ...S.bodySm, color: V("color-body-mid") }}>{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {/* ═══════ BECOME A PARTNER CTA ═══════ */}
-        <section
-          className="relative overflow-hidden px-5 sm:px-8 py-[clamp(4rem,10vw,8rem)]"
-          style={{ background: V("color-ink") }}
+        <div
+          className="mt-14 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4"
+          style={{ borderColor: V("color-hairline") }}
         >
-          {/* Blue + purple glow */}
+          <p className="text-xs" style={{ color: V("color-mute") }}>
+            &copy; {new Date().getFullYear()} Kreature Studio. All rights
+            reserved.
+          </p>
+          <div className="flex items-center gap-5">
+            {SOCIAL_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.label}
+                className="text-xs transition-colors"
+                style={{ color: V("color-mute") }}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ─── Page ─── */
+export default function CertifiedPartnersPage() {
+  return (
+    <>
+      {/* Hero */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          paddingTop: "calc(68px + 100px)",
+          paddingBottom: "100px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div className="absolute inset-0 pointer-events-none">
           <div
-            className="absolute top-1/2 left-1/2 w-[800px] h-[800px] rounded-full pointer-events-none z-0 opacity-25"
+            className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full blur-[130px]"
             style={{
-              background: `radial-gradient(circle, ${V("color-accent-blue")} 0%, transparent 70%)`,
-              transform: "translate(-50%, -50%)",
+              background: `color-mix(in srgb, ${V("color-accent-purple")} 6%, transparent)`,
             }}
           />
-          <div
-            className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full pointer-events-none z-0 opacity-15"
-            style={{
-              background: `radial-gradient(circle, ${V("color-accent-purple")} 0%, transparent 70%)`,
-              transform: "translate(30%, -20%)",
-            }}
-          />
+        </div>
 
-          <div className="max-w-[1440px] mx-auto relative z-10">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-              {/* Left: Content */}
-              <div>
-                <h2
-                  className="font-semibold leading-[1.04] mb-6"
-                  style={{ ...S.h2, color: V("color-canvas") }}
-                >
-                  Become a partner
-                </h2>
-                <p className="mb-8" style={{ ...S.bodyLg, color: V("color-mute-soft") }}>
-                  Join a global network of 500+ agencies and consultants building the future of the web
-                  on Kreature. Get certified, get listed, and grow your business with access to
-                  Kreature&apos;s customer base, co-marketing, and referral programs.
-                </p>
-
-                {/* Partner stats */}
-                <div className="grid grid-cols-3 gap-6 mb-8">
-                  {[
-                    { value: "500+", label: "partners worldwide" },
-                    { value: "3x", label: "average revenue growth" },
-                    { value: "50K+", label: "projects delivered" },
-                  ].map((s) => (
-                    <div key={s.label}>
-                      <div
-                        className="font-semibold leading-none mb-1"
-                        style={{ fontSize: "clamp(1.2rem,2vw,1.6rem)", color: V("color-canvas") }}
-                      >
-                        {s.value}
-                      </div>
-                      <p style={{ ...S.caption, color: V("color-mute-soft") }}>{s.label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <a
-                    href="#"
-                    className="inline-flex items-center transition-colors"
-                    style={{ ...S.btn, background: V("color-accent-blue"), color: "#fff" }}
-                  >
-                    Apply to become a partner <Arrow />
-                  </a>
-                  <a
-                    href="#"
-                    className="inline-flex items-center transition-colors"
-                    style={{
-                      ...S.btn,
-                      background: "transparent",
-                      color: V("color-canvas"),
-                      border: `1px solid rgba(255,255,255,0.2)`,
-                    }}
-                  >
-                    Learn about the program
-                  </a>
-                </div>
-              </div>
-
-              {/* Right: Testimonial card */}
+        <div
+          className="relative z-10 mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
+        >
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: text */}
+            <div>
+              {/* Badge */}
               <div
-                className="rounded-lg p-[clamp(2rem,3vw,2.5rem)]"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6"
                 style={{
-                  borderRadius: "12px",
                   background: V("color-canvas-soft"),
-                  border: `1px solid rgba(255,255,255,0.08)`,
+                  border: `1px solid ${V("color-hairline")}`,
                 }}
               >
                 <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm mb-6"
-                  style={{ background: V("color-accent-blue"), color: "#fff" }}
+                  className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{ background: V("color-accent-purple") }}
                 >
-                  D
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#fff"
+                    strokeWidth="3"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
                 </div>
-                <blockquote className="mb-6">
-                  <p className="mb-4 italic" style={{ ...S.bodyLg, color: V("color-canvas") }}>
-                    &ldquo;Becoming a Kreature Premier Partner transformed our agency. The referral pipeline
-                    alone has driven 40% of our new business this year. The platform expertise we&apos;ve built
-                    gives us a genuine competitive advantage in every pitch.&rdquo;
-                  </p>
-                </blockquote>
-                <div>
-                  <p className="font-semibold" style={{ ...S.bodySm, color: V("color-canvas") }}>
-                    Marcus Rivera
-                  </p>
-                  <p style={{ ...S.caption, color: V("color-mute-soft") }}>
-                    CEO, Digital Velocity — Premier Partner since 2024
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* ═══════ FOOTER ═══════ */}
-      <footer
-        className="py-16 px-5 sm:px-8"
-        style={{ borderTop: `1px solid ${V("color-hairline")}`, background: V("color-canvas") }}
-      >
-        <div className="max-w-[1440px] mx-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-10 mb-16">
-            {Object.entries(FOOTER).map(([heading, items]) => (
-              <div key={heading}>
-                <h4
-                  className="font-semibold mb-6"
-                  style={{ fontSize: "20px", fontWeight: 500, lineHeight: "28px", color: V("color-ink") }}
+                <span
+                  className="text-xs font-semibold"
+                  style={{ color: V("color-body-mid") }}
                 >
-                  {heading}
-                </h4>
-                <ul className="space-y-2.5">
-                  {items.map((item: string) => (
-                    <li key={item}>
-                      <a
-                        href="#"
-                        className="text-sm hover:underline inline-flex items-center gap-1"
-                        style={{ ...S.bodySm, color: V("color-body-mid") }}
-                      >
-                        {item}
-                        {item === "AEO" && (
-                          <span
-                            className="text-[0.6rem] font-semibold uppercase"
-                            style={{ color: V("color-accent-blue") }}
-                          >
-                            New
-                          </span>
-                        )}
-                        {item === "Careers" && (
-                          <span
-                            className="text-[0.6rem] font-semibold uppercase"
-                            style={{ color: V("color-accent-green") }}
-                          >
-                            We&apos;re hiring
-                          </span>
-                        )}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                  Certified Partner
+                </span>
               </div>
-            ))}
-          </div>
 
-          <div
-            className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs"
-            style={{ borderTop: `1px solid ${V("color-hairline")}` }}
-          >
-            <p style={{ fontSize: "12px", color: V("color-mute") }}>
-              &copy; {new Date().getFullYear()} Kreature, Inc. All rights reserved
-            </p>
-            <div className="flex items-center gap-4" style={{ fontSize: "12px", color: V("color-mute") }}>
-              <a href="#" className="hover:underline">
-                Made in Kreature
-              </a>
-              {["YouTube", "X", "Facebook", "LinkedIn", "Instagram", "TikTok"].map((p) => (
-                <a key={p} href="#" className="hover:underline">
-                  {p}
+              <h1
+                className="font-heading tracking-tight mb-6"
+                style={{
+                  fontSize: "56px",
+                  fontWeight: 600,
+                  lineHeight: "60px",
+                  letterSpacing: "-0.8px",
+                  color: V("color-ink"),
+                }}
+              >
+                Hire a Certified Kreature Partner
+              </h1>
+              <p
+                className="mb-8"
+                style={{
+                  fontSize: "20px",
+                  lineHeight: 1.5,
+                  color: V("color-body"),
+                  maxWidth: "520px",
+                }}
+              >
+                Whether you need a freelancer or an agency, Kreature can match
+                you with the perfect certified partner -- or browse our directory
+                of over 1,200 vetted experts yourself.
+              </p>
+              <div className="flex flex-col sm:flex-row items-start gap-4">
+                <a
+                  href="#"
+                  className="font-medium transition-colors inline-flex items-center"
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: 500,
+                    padding: "16px 24px",
+                    borderRadius: "4px",
+                    background: V("color-accent-purple"),
+                    color: "#fff",
+                  }}
+                >
+                  Get matched <Arrow />
                 </a>
-              ))}
+                <a
+                  href="/certified-partners/browse"
+                  className="font-medium transition-colors inline-flex items-center"
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: 500,
+                    padding: "16px 24px",
+                    borderRadius: "4px",
+                    border: `1px solid ${V("color-hairline")}`,
+                    color: V("color-ink"),
+                  }}
+                >
+                  Browse partners
+                </a>
+              </div>
+              <p
+                className="mt-3 text-sm"
+                style={{ color: V("color-mute") }}
+              >
+                Choose from over 1,200 certified partners
+              </p>
+            </div>
+
+            {/* Right: illustration placeholder */}
+            <div
+              className="hidden lg:flex items-center justify-center rounded-xl overflow-hidden"
+              style={{
+                background: V("color-canvas-soft"),
+                border: `1px solid ${V("color-hairline")}`,
+                height: "400px",
+              }}
+            >
+              <p style={{ color: V("color-mute") }}>
+                Kreature Certified Partner illustration
+              </p>
             </div>
           </div>
         </div>
-      </footer>
-    </div>
+      </section>
+
+      {/* Trusted by bar */}
+      <section
+        style={{
+          paddingTop: "40px",
+          paddingBottom: "40px",
+          background: V("color-canvas"),
+          borderTop: `1px solid ${V("color-hairline")}`,
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8 text-center"
+          style={{ maxWidth: "1200px" }}
+        >
+          <p
+            className="text-sm mb-5"
+            style={{
+              color: V("color-mute"),
+              fontWeight: 500,
+              letterSpacing: "0.5px",
+            }}
+          >
+            Trusted by teams at
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-10">
+            {TRUSTED_BY_LOGOS.map((logo) => (
+              <span
+                key={logo}
+                className="text-base font-semibold whitespace-nowrap"
+                style={{ color: V("color-mute-soft") }}
+              >
+                {logo}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Partner Logo Carousel */}
+      <section
+        className="overflow-hidden"
+        style={{
+          paddingTop: "60px",
+          paddingBottom: "60px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
+        >
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
+            {FEATURED_PARTNERS.map((partner) => (
+              <span
+                key={partner}
+                className="text-base font-semibold whitespace-nowrap"
+                style={{ color: V("color-body-mid") }}
+              >
+                {partner}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why work with a Certified Partner */}
+      <section
+        style={{
+          paddingTop: "100px",
+          paddingBottom: "100px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
+        >
+          <h2
+            className="font-heading tracking-tight mb-14 text-center"
+            style={{
+              fontSize: "48px",
+              fontWeight: 600,
+              lineHeight: "52px",
+              color: V("color-ink"),
+            }}
+          >
+            Why work with a Certified Kreature Partner?
+          </h2>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {WHY_PARTNER_CARDS.map((card) => (
+              <div
+                key={card.title}
+                className="rounded-xl p-8"
+                style={{
+                  background: V("color-canvas-soft"),
+                  border: `1px solid ${V("color-hairline")}`,
+                }}
+              >
+                <div
+                  className="w-12 h-12 rounded-lg flex items-center justify-center mb-5"
+                  style={{ background: V("color-accent-purple") }}
+                >
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#fff"
+                    strokeWidth="2.5"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+                <h3
+                  className="font-heading mb-3"
+                  style={{
+                    fontSize: "22px",
+                    fontWeight: 600,
+                    lineHeight: "28px",
+                    color: V("color-ink"),
+                  }}
+                >
+                  {card.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: "16px",
+                    lineHeight: "25.6px",
+                    color: V("color-body"),
+                  }}
+                >
+                  {card.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How to find the right partner */}
+      <section
+        style={{
+          paddingTop: "100px",
+          paddingBottom: "100px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
+        >
+          <h2
+            className="font-heading tracking-tight mb-14 text-center"
+            style={{
+              fontSize: "48px",
+              fontWeight: 600,
+              lineHeight: "52px",
+              color: V("color-ink"),
+            }}
+          >
+            How to find the right partner
+          </h2>
+
+          <div className="grid sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
+            {FIND_PARTNER_CARDS.map((card) => (
+              <div
+                key={card.title}
+                className="rounded-xl p-10 flex flex-col items-center text-center"
+                style={{
+                  background: V("color-canvas"),
+                  border: `1px solid ${V("color-hairline")}`,
+                }}
+              >
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center mb-6"
+                  style={{ background: V("color-canvas-soft") }}
+                >
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke={V("color-accent-purple")}
+                    strokeWidth="2"
+                  >
+                    {card.primary ? (
+                      <>
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                      </>
+                    ) : (
+                      <>
+                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                      </>
+                    )}
+                  </svg>
+                </div>
+                <h3
+                  className="font-heading mb-3"
+                  style={{
+                    fontSize: "24px",
+                    fontWeight: 600,
+                    lineHeight: "30px",
+                    color: V("color-ink"),
+                  }}
+                >
+                  {card.title}
+                </h3>
+                <p
+                  className="mb-6"
+                  style={{
+                    fontSize: "16px",
+                    lineHeight: "25.6px",
+                    color: V("color-body"),
+                  }}
+                >
+                  {card.desc}
+                </p>
+                <a
+                  href="#"
+                  className="font-medium transition-colors inline-flex items-center"
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: 500,
+                    padding: "12px 22px",
+                    borderRadius: "4px",
+                    background: card.primary
+                      ? V("color-accent-purple")
+                      : "transparent",
+                    color: card.primary ? "#fff" : V("color-accent-purple"),
+                    border: card.primary
+                      ? "none"
+                      : `1px solid ${V("color-accent-purple")}`,
+                  }}
+                >
+                  {card.cta} <Arrow />
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why marketers choose Kreature */}
+      <section
+        style={{
+          paddingTop: "100px",
+          paddingBottom: "100px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
+        >
+          <h2
+            className="font-heading tracking-tight mb-4 text-center"
+            style={{
+              fontSize: "48px",
+              fontWeight: 600,
+              lineHeight: "52px",
+              color: V("color-ink"),
+            }}
+          >
+            Why marketers choose Kreature
+          </h2>
+          <p
+            className="mx-auto mb-14 text-center"
+            style={{
+              fontSize: "18px",
+              lineHeight: 1.6,
+              color: V("color-body"),
+              maxWidth: "600px",
+            }}
+          >
+            Whether you&apos;re working with a Certified Partner or tackling a
+            project in-house, Kreature gives you everything you need for
+            high-performance web experiences.
+          </p>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {MARKETING_CARDS.map((card) => (
+              <div key={card.title}>
+                <div
+                  className="w-12 h-12 rounded-lg flex items-center justify-center mb-5"
+                  style={{ background: V("color-canvas-soft") }}
+                >
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke={V("color-accent-purple")}
+                    strokeWidth="2"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+                <h3
+                  className="font-heading mb-3"
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: 600,
+                    lineHeight: "26px",
+                    color: V("color-ink"),
+                  }}
+                >
+                  {card.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: "15px",
+                    lineHeight: "24px",
+                    color: V("color-body"),
+                  }}
+                >
+                  {card.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonial / Case Study */}
+      <section
+        style={{
+          paddingTop: "100px",
+          paddingBottom: "100px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
+        >
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: image placeholder */}
+            <div
+              className="rounded-xl overflow-hidden"
+              style={{
+                background: V("color-canvas"),
+                border: `1px solid ${V("color-hairline")}`,
+                height: "360px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <p style={{ color: V("color-mute") }}>Case study preview</p>
+            </div>
+
+            {/* Right: testimonial */}
+            <div>
+              <div
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-6 text-xs font-semibold"
+                style={{
+                  background: V("color-canvas"),
+                  border: `1px solid ${V("color-hairline")}`,
+                  color: V("color-body-mid"),
+                }}
+              >
+                Wondersauce x Grubhub
+              </div>
+              <blockquote
+                className="mb-6"
+                style={{
+                  fontSize: "22px",
+                  fontWeight: 400,
+                  lineHeight: "33px",
+                  color: V("color-ink"),
+                  fontStyle: "italic",
+                }}
+              >
+                Wondersauce was the ultimate complementary partner. They built a
+                web experience that aligned perfectly with our goals and brought
+                our vision to life quickly. We&apos;re thrilled with the overall
+                execution.
+              </blockquote>
+              <div className="flex items-center gap-3 mb-6">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{ background: V("color-canvas") }}
+                >
+                  <span
+                    className="text-sm font-bold"
+                    style={{ color: V("color-body-mid") }}
+                  >
+                    CS
+                  </span>
+                </div>
+                <div>
+                  <div
+                    className="text-sm font-semibold"
+                    style={{ color: V("color-ink") }}
+                  >
+                    Charlie Streit
+                  </div>
+                  <div className="text-xs" style={{ color: V("color-mute") }}>
+                    Senior Associate Producer, Grubhub
+                  </div>
+                </div>
+              </div>
+              <a
+                href="#"
+                className="text-sm font-medium inline-flex items-center hover:underline"
+                style={{ color: V("color-accent-purple") }}
+              >
+                Read story <Arrow />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Become a Certified Partner CTA */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          paddingTop: "100px",
+          paddingBottom: "100px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] rounded-full blur-[100px]"
+            style={{
+              background: `color-mix(in srgb, ${V("color-accent-purple")} 10%, transparent)`,
+            }}
+          />
+        </div>
+        <div
+          className="relative z-10 mx-auto px-5 sm:px-8 text-center"
+          style={{ maxWidth: "650px" }}
+        >
+          <h2
+            className="font-heading tracking-tight mb-4"
+            style={{
+              fontSize: "56px",
+              fontWeight: 600,
+              lineHeight: "58.24px",
+              color: V("color-ink"),
+            }}
+          >
+            Become a Certified Partner
+          </h2>
+          <p
+            className="mx-auto mb-10"
+            style={{
+              fontSize: "20px",
+              lineHeight: 1.5,
+              color: V("color-body"),
+            }}
+          >
+            Join a growing network of Certified Kreature Partners. Get matched
+            with new clients, connect with the community, access exclusive events
+            and training, and get listed in our partner directory.
+          </p>
+          <a
+            href="#"
+            className="font-medium transition-colors inline-flex items-center"
+            style={{
+              fontSize: "16px",
+              fontWeight: 500,
+              padding: "16px 24px",
+              borderRadius: "4px",
+              background: V("color-accent-purple"),
+              color: "#fff",
+            }}
+          >
+            Apply now <Arrow />
+          </a>
+        </div>
+      </section>
+
+      <Footer />
+    </>
   );
 }

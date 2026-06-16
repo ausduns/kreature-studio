@@ -1,313 +1,709 @@
 "use client";
 
-// ─── Design token accessor ───
+/* ─── Design token helper ─── */
 const V = (n: string) => `var(--${n})`;
 
-// ─── Ecommerce feature cards ───
-const ECOM_FEATURES = [
-  {
-    icon: "▤",
-    title: "Product pages",
-    description:
-      "Build rich product pages with variants, image galleries, size guides, and custom fields. Drag-and-drop product blocks let you lay out specs, reviews, and recommendations exactly how you want.",
-    accent: "color-accent-blue",
-  },
-  {
-    icon: "◈",
-    title: "Shopping cart",
-    description:
-      "Slide-out cart, cart page, or embedded checkout — your choice. Persistent carts across sessions, abandoned cart recovery emails, and real-time stock validation before checkout.",
-    accent: "color-accent-purple",
-  },
-  {
-    icon: "◎",
-    title: "Checkout",
-    description:
-      "Stripe and PayPal integrated natively. One-page checkout with address autocomplete, saved payment methods, Apple Pay, and Google Pay. No redirects, no extra steps.",
-    accent: "color-accent-green",
-  },
-  {
-    icon: "▥",
-    title: "Inventory management",
-    description:
-      "Track stock across variants and locations. Set low-stock alerts, auto-hide out-of-stock products, and sync inventory in real time. CSV import/export for bulk operations.",
-    accent: "color-accent-orange",
-  },
-  {
-    icon: "☰",
-    title: "Order management",
-    description:
-      "Dashboard with order status flow: pending, confirmed, shipped, delivered, refunded. Print packing slips, send tracking numbers, and manage returns from a single view.",
-    accent: "color-accent-pink",
-  },
-  {
-    icon: "⇅",
-    title: "Tax calculation",
-    description:
-      "Automatic sales tax by address with TaxJar integration. VAT support for EU, GST for AU/NZ. Tax-exempt customers and B2B invoicing with manual override when needed.",
-    accent: "color-accent-red",
-  },
-  {
-    icon: "↗",
-    title: "Shipping",
-    description:
-      "Real-time carrier rates from USPS, UPS, FedEx, and DHL. Flat rate, free shipping thresholds, and weight-based rules. Print labels directly from the order dashboard.",
-    accent: "color-accent-yellow",
-  },
-  {
-    icon: "⬡",
-    title: "Coupons & discounts",
-    description:
-      "Percentage, fixed amount, free shipping, and BOGO discounts. Usage limits, minimum purchase rules, date scheduling, and per-product or per-collection targeting built in.",
-    accent: "color-accent-blue",
-  },
-];
+/* ─── Styles ─── */
+const S = {
+  h1: { fontSize: "80px", fontWeight: 600, lineHeight: "83.2px", letterSpacing: "-0.8px" } as React.CSSProperties,
+  h2: { fontSize: "56px", fontWeight: 600, lineHeight: "58.24px" } as React.CSSProperties,
+  h3: { fontSize: "32px", fontWeight: 500, lineHeight: "41.6px" } as React.CSSProperties,
+  h4: { fontSize: "20px", fontWeight: 600, lineHeight: "28px" } as React.CSSProperties,
+  body: { fontSize: "16px", fontWeight: 400, lineHeight: "25.6px" } as React.CSSProperties,
+  bodyLg: { fontSize: "20px", lineHeight: 1.5 } as React.CSSProperties,
+  bodySm: { fontSize: "14px", lineHeight: "22.4px" } as React.CSSProperties,
+  caption: { fontSize: "12.8px", fontWeight: 550, lineHeight: "15.36px" } as React.CSSProperties,
+  eyebrow: { fontSize: "15px", fontWeight: 500, letterSpacing: "0.05em", textTransform: "uppercase" as const } as React.CSSProperties,
+  btn: { fontSize: "16px", fontWeight: 500, lineHeight: "19.2px", padding: "16px 24px", borderRadius: "4px" } as React.CSSProperties,
+};
 
-// ─── Storefront examples ───
-const STOREFRONTS = [
-  {
-    name: "Minimal Fashion",
-    description: "Clean product grids, editorial lookbooks, and a slide-out cart for a luxury apparel brand.",
-    tags: ["Fashion", "Grid layout", "Lookbooks"],
-    accent: "color-accent-purple",
-  },
-  {
-    name: "Tech Gadgets",
-    description: "Comparison tables, spec sheets, and bundle builder for a DTC electronics startup.",
-    tags: ["Electronics", "Compare", "Bundles"],
-    accent: "color-accent-blue",
-  },
-  {
-    name: "Home Goods",
-    description: "Room-by-room shopping, AR preview, and subscription refill flow for sustainable home products.",
-    tags: ["Home", "Subscription", "AR"],
-    accent: "color-accent-green",
-  },
-];
-
-// ─── Payment integrations ───
-const PAYMENTS = [
-  {
-    name: "Stripe",
-    features: "Cards, Apple Pay, Google Pay, SEPA, iDEAL, Affirm, Klarna, Afterpay",
-    description:
-      "Full Stripe Elements integration. Accept 135+ currencies with automatic payment method detection by region.",
-    accent: "color-accent-blue",
-  },
-  {
-    name: "PayPal",
-    features: "PayPal Checkout, Venmo, Pay Later, credit/debit cards",
-    description:
-      "Native PayPal Smart Buttons with dynamic funding source selection. Venmo support for US merchants.",
-    accent: "color-accent-purple",
-  },
-  {
-    name: "Manual Payments",
-    features: "Bank transfer, COD, invoice, purchase order",
-    description:
-      "Custom payment methods for B2B, wholesale, and international orders. Manual review and approval workflows.",
-    accent: "color-accent-green",
-  },
-];
-
-// ─── Plan tiers ───
-const PLAN_TIERS = [
-  {
-    name: "Starter",
-    price: "$29",
-    period: "/mo",
-    description: "For creators selling their first products.",
-    features: [
-      "Up to 100 products",
-      "2% transaction fee",
-      "Stripe + PayPal",
-      "Basic inventory",
-      "Standard shipping",
-      "Email support",
-    ],
-    cta: "Start free trial",
-    highlight: false,
-  },
-  {
-    name: "Business",
-    price: "$79",
-    period: "/mo",
-    description: "For growing brands scaling their store.",
-    features: [
-      "Up to 1,000 products",
-      "0% transaction fee",
-      "All payment methods",
-      "Advanced inventory",
-      "Real-time carrier rates",
-      "Coupons & discounts",
-      "Abandoned cart recovery",
-      "Priority support",
-    ],
-    cta: "Start free trial",
-    highlight: true,
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    period: "",
-    description: "For high-volume merchants with custom needs.",
-    features: [
-      "Unlimited products",
-      "0% transaction fee",
-      "Custom checkout flow",
-      "Multi-warehouse inventory",
-      "Custom shipping rules",
-      "API access",
-      "Dedicated account manager",
-      "SLA guarantee",
-    ],
-    cta: "Contact sales",
-    highlight: false,
-  },
-];
-
-// ─── Footer data ───
-const FOOTER_COLUMNS = [
-  {
-    heading: "Platform",
-    links: [
-      { label: "Design", href: "/feature/design" },
-      { label: "CMS", href: "/feature/cms" },
-      { label: "Hosting", href: "/feature/hosting" },
-      { label: "SEO", href: "/feature/seo" },
-      { label: "Ecommerce", href: "/feature/ecommerce" },
-      { label: "Analytics", href: "/feature/analyze" },
-    ],
-  },
-  {
-    heading: "Solutions",
-    links: [
-      { label: "Startups", href: "/solutions/startups" },
-      { label: "Agencies", href: "/solutions/agencies" },
-      { label: "Enterprise", href: "/enterprise" },
-      { label: "Ecommerce", href: "/solutions/ecommerce" },
-      { label: "SaaS", href: "/solutions/saas" },
-    ],
-  },
-  {
-    heading: "Resources",
-    links: [
-      { label: "Blog", href: "/blog" },
-      { label: "Templates", href: "/templates" },
-      { label: "Integrations", href: "/integrations" },
-      { label: "Glossary", href: "/glossary" },
-      { label: "Documentation", href: "/docs" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "About", href: "/company" },
-      { label: "Customers", href: "/customers" },
-      { label: "Partners", href: "/certified-partners" },
-      { label: "Careers", href: "/company/careers" },
-      { label: "Contact", href: "/contact-sales" },
-    ],
-  },
-  {
-    heading: "Compare",
-    links: [
-      { label: "vs Shopify", href: "/feature/ecommerce" },
-      { label: "vs WooCommerce", href: "/webflow-way" },
-      { label: "vs BigCommerce", href: "/made-in-webflow" },
-      { label: "vs Squarespace", href: "/webflow-clone" },
-    ],
-  },
-  {
-    heading: "Legal",
-    links: [
-      { label: "Privacy Policy", href: "/legal/privacy" },
-      { label: "Terms of Service", href: "/legal/terms" },
-      { label: "Refund Policy", href: "/legal/refunds" },
-      { label: "GDPR", href: "/legal/gdpr" },
-    ],
-  },
-  {
-    heading: "Social",
-    links: [
-      { label: "Twitter / X", href: "https://twitter.com" },
-      { label: "LinkedIn", href: "https://linkedin.com" },
-      { label: "YouTube", href: "https://youtube.com" },
-      { label: "Discord", href: "https://discord.com" },
-    ],
-  },
-];
-
-// ─── Sub-components ───
-
+/* ─── Shared components ─── */
 function Arrow() {
+  return <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>;
+}
+
+function Wordmark({ className = "" }: { className?: string }) {
   return (
-    <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>
+    <span className={`font-heading font-[800] text-xl tracking-tight ${className}`} style={{ color: V("color-ink") }}>
+      Kreature<span style={{ color: V("color-accent-blue") }}>.</span>
+    </span>
   );
 }
 
-// ─── Footer ───
-
-function Footer() {
+function Section({
+  bg,
+  children,
+  className,
+  id,
+}: {
+  bg?: "soft" | "dark" | "blue";
+  children: React.ReactNode;
+  className?: string;
+  id?: string;
+}) {
   return (
-    <footer
-      className="border-t"
+    <section
+      id={id}
+      className={`px-5 sm:px-8 py-[clamp(3rem,8vw,7rem)] ${className || ""}`}
       style={{
-        borderColor: V("color-hairline"),
-        backgroundColor: V("color-canvas"),
+        background:
+          bg === "soft"
+            ? V("color-canvas-soft")
+            : bg === "dark"
+              ? V("color-ink")
+              : bg === "blue"
+                ? V("color-accent-blue")
+                : V("color-canvas"),
       }}
     >
-      <div
-        className="mx-auto px-5 sm:px-8 py-16"
-        style={{ maxWidth: "1440px" }}
-      >
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-8">
-          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-            <div className="flex items-center gap-2.5 mb-3">
-              <img
-                src="/logo/kreature-logo-dark.png"
-                alt="Kreature"
-                className="logo-dark h-[32px] w-auto"
-              />
-              <img
-                src="/logo/kreature-logo-light.png"
-                alt="Kreature"
-                className="logo-light h-[32px] w-auto"
-              />
-              <span
-                className="font-heading font-[800] text-lg tracking-tight"
-                style={{ color: V("color-ink") }}
+      <div className="max-w-[1440px] mx-auto">{children}</div>
+    </section>
+  );
+}
+
+/* ─── Testimonial card ─── */
+function Testimonial({
+  quote,
+  name,
+  role,
+  img,
+}: {
+  quote: string;
+  name: string;
+  role: string;
+  img?: string;
+}) {
+  return (
+    <div className="flex flex-col gap-4">
+      <p className="italic text-lg leading-relaxed" style={{ color: V("color-body-mid") }}>
+        &ldquo;{quote}&rdquo;
+      </p>
+      <div className="flex items-center gap-3">
+        {img && (
+          <div className="w-10 h-10 rounded-full overflow-hidden shrink-0" style={{ background: V("color-canvas-mid") }}>
+            <img src={img} alt={name} className="w-full h-full object-cover" />
+          </div>
+        )}
+        <div>
+          <div className="font-semibold" style={{ ...S.bodySm, color: V("color-ink") }}>{name}</div>
+          <div style={{ ...S.caption, color: V("color-mute") }}>{role}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── DESIGN SECTION DATA ─── */
+const DESIGN_FEATURES = [
+  {
+    title: "Create end-to-end customer experiences",
+    desc: "Create pixel-perfect, branded purchase flows for your customers.",
+    testimonial: {
+      quote: "We are a design-led brand, and we strive to deliver an ecommerce experience that reflects that. Webflow allows us to do that.",
+      name: "Jameel Mohammed",
+      role: "Founder, Khiry",
+    },
+  },
+  {
+    title: "Design around your unique products",
+    desc: "Feature the product details that matter most. Highlight specific product features, images, and other information with customizable product fields.",
+  },
+  {
+    title: "Customize your cart and checkout",
+    desc: "Make the sale with cart and checkout experiences that match the rest of your store.",
+  },
+  {
+    title: "Complete layout control — without coding",
+    desc: "Customize the layout of your homepage and gallery pages to make an impression on visitors.",
+    testimonial: {
+      quote: "As a designer, Webflow allows me to create a stunning and unique Ecommerce site with almost anything: animations, effects and a full responsive layout without having to dive deep into the code.",
+      name: "Maximilian Muesgens",
+      role: "Designer, Format.otf",
+    },
+  },
+  {
+    title: "Customize transactional emails",
+    desc: "Upload your own logo and tweak colors to keep your receipt and order notification emails on brand.",
+    cta: { label: "Learn more about ecommerce email", href: "#" },
+  },
+  {
+    title: "Craft custom interactions and animations",
+    desc: "Take your store beyond the typical with completely customizable interactions and animations.",
+    cta: { label: "Learn more about interactions", href: "/feature/interactions-animations" },
+  },
+];
+
+/* ─── SELL SECTION DATA ─── */
+const SELL_FEATURES = [
+  {
+    title: "Sell physical or digital goods",
+    desc: "T-shirts, prints, classes, stock photos — sell any physical product, digital good or service.",
+    bullets: [
+      "Add custom fields to display the right product information",
+      "Easily add unique product variants",
+      "Create a checkout flow that's tailored to your product types",
+    ],
+    testimonial: {
+      quote: "As someone who's experienced selling physical products, it's just so much easier creating digital ones. It's just nice to see orders coming through for this font and know that the system's all doing it for me.",
+      name: "Charli Marie",
+      role: "Designer, vlogger, and podcaster",
+    },
+  },
+  {
+    title: "Offer custom delivery options",
+    desc: "Ship it. Offer takeout. Email deliver it. Tailor your delivery methods to your products.",
+    bullets: [
+      "Simplify checkout for orders that don't require shipping",
+      "Add download links to order confirmation pages and emails",
+    ],
+  },
+  {
+    title: "Streamline your shipping process",
+    desc: "Effortlessly manage shipping settings and fulfillment.",
+    bullets: [
+      "Customize shipping regions and rules",
+      "Keep your orders synced with shipping software to create shipping labels, and automate order tracking",
+    ],
+  },
+  {
+    title: "Let your customers pay — their way",
+    desc: "Secure payments powered by Stripe, Apple Pay, Google Pay, and PayPal.",
+    testimonial: {
+      quote: "Setting up a Stripe integration with our marketplace is something that has been on our roadmap for years, but Webflow allowed us to quickly (and beautifully) put together an online store selling a few of our newest virtual games in just a few days!",
+      name: "Lee Rubin",
+      role: "Founder, Confetti",
+    },
+  },
+  {
+    title: "Stay on top of orders",
+    desc: "View order details, update order status, and issue refunds.",
+    bullets: [
+      "Client-friendly order management dashboard",
+      "Customer accounts and order history",
+    ],
+    note: "(Coming soon)",
+  },
+  {
+    title: "Put taxes on autopilot",
+    desc: "Automatically calculate sales tax and VAT for customers in the United States, Canada, the European Union, and Australia.",
+  },
+  {
+    title: "Extend your store with integrations",
+    desc: "Connect your store with native integrations or hundreds of apps on Zapier to automate shipping processes, accounting, notifications, and other operational chores.",
+    bullets: [
+      "Dropship products with Printful",
+      "Manage fulfillment with Shippo",
+      "Send order details to QuickBooks",
+      "Get a text when new orders come in",
+      "Collect customer emails in MailChimp",
+      "Plus thousands of other possibilities",
+    ],
+    testimonial: {
+      quote: "My Ecommerce clients can manage their customer base with ease thanks to a wealth of third-party integrations through Zapier.",
+      name: "George Kerridge",
+      role: "Freelance designer and developer",
+    },
+  },
+];
+
+/* ─── GROW SECTION DATA ─── */
+const GROW_FEATURES = [
+  {
+    title: "Build a complete website",
+    desc: "Create a full experience around your store.",
+    subItems: [
+      { title: "Blog smarter", desc: "Build a lifestyle blog around your brand — then feature products directly within posts to drive sales on your store." },
+      { title: "Convert with custom landing pages", desc: "Create immersive pages for product launches, seasonal campaigns, coming soon previews, or advertisements." },
+    ],
+  },
+  {
+    title: "Automate your on-page SEO",
+    desc: "With dynamic embeds, you can automatically generate search-friendly meta titles and descriptions from product page names, blog post titles, case studies, and more.",
+  },
+  {
+    title: "Run impactful campaigns",
+    desc: "Use discounts and listed sale prices to run promotions for your customers.",
+  },
+  {
+    title: "Integrate any analytics and optimization tools",
+    desc: "Connect your site to Google Analytics with our built-in integration, or easily add code to connect marketing tools for pulling insights or running experiments.",
+    testimonial: {
+      quote: "Webflow made it really easy to connect our shop with marketing tools like Facebook, Google Analytics, Hotjar and Autopilot so we have a complete end-to-end view of how our customers browse and buy from us.",
+      name: "Kane Baker",
+      role: "Owner, Self-Made",
+    },
+  },
+  {
+    title: "Build and nurture your lead list",
+    desc: "Connect your forms to your favorite email platform to build an audience and promote new products, sales, and other promotions.",
+  },
+  {
+    title: "Connect your products to social",
+    desc: "Built-in integrations let you connect your product catalog to Facebook, Instagram, and Google, and to run smarter ad campaigns and create more interactive, shoppable social posts.",
+  },
+];
+
+/* ─── COMPARISONS ─── */
+const COMPARISONS = [
+  {
+    name: "Shopify",
+    desc: "A robust platform — but with limited options for site customization, beyond custom development.",
+    href: "#",
+  },
+  {
+    name: "WordPress",
+    desc: "Open-source, but needs extensive customization, plugins, custom development work, and ongoing maintenance.",
+    href: "#",
+  },
+];
+
+/* ─── CUSTOMER STORIES ─── */
+const STORIES = [
+  { metric: "10x", label: "In cost savings annually", logo: "Verifone" },
+  { metric: "67%", label: "decrease in dev ticketing", logo: "Dropbox" },
+  { metric: "$6M", label: "in cost savings annually", logo: "Orangetheory Fitness" },
+  { metric: "56%", label: "increase in form fills", logo: "Walker & Dunlop" },
+  { metric: "1,170%", label: "increase in traffic YoY", logo: "DocuSign" },
+  { metric: "$200M", label: "in new pipeline generated post-site launch", logo: "ABM" },
+  { metric: "+20%", label: "increase in site-wide conversion", logo: "Lattice" },
+];
+
+/* ─── ALL FEATURES NAV ─── */
+const ALL_FEATURES = [
+  { group: "Build and Design", items: ["Design", "Edit content", "Interactions", "Page Building", "Collaboration", "Shared Libraries"] },
+  { group: "Manage", items: ["CMS", "Hosting", "Security", "Localization"] },
+  { group: "Optimize", items: ["Analyze", "Optimize", "SEO", "AEO"] },
+  { group: "Extend", items: ["Apps", "Figma to Kreature", "DevLink", "Code Generation", "Ecommerce", "Headless CMS APIs"] },
+];
+
+/* ─── PAGE ─── */
+export default function EcommerceFeaturePage() {
+  return (
+    <div className="page-wrapper" style={{ background: V("color-canvas"), color: V("color-body") }}>
+      <main>
+        {/* ═══════ HERO ═══════ */}
+        <section
+          className="relative overflow-hidden px-5 sm:px-8 pt-[clamp(4rem,10vw,8rem)] pb-[clamp(3rem,6vw,5rem)]"
+          style={{ background: V("color-ink") }}
+        >
+          <div className="max-w-[1440px] mx-auto relative z-10">
+            <div className="max-w-[800px]">
+              <h1
+                className="font-semibold leading-[1.04] tracking-[-0.01em] mb-6"
+                style={{ ...S.h1, color: V("color-canvas") }}
               >
-                Kreature
-                <span style={{ color: V("color-accent-blue") }}>.</span>
-              </span>
+                Your products are unique. Your store should be too.
+              </h1>
+
+              <p className="max-w-[650px] mb-10" style={{ ...S.bodyLg, color: V("color-mute-soft") }}>
+                Push the limits of web design and create unique commerce experiences for your
+                customers — all while building a business, creating a new revenue stream, and
+                strengthening your brand.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a
+                  href="/signup"
+                  className="inline-flex items-center transition-colors"
+                  style={{ ...S.btn, background: V("color-accent-blue"), color: "#fff" }}
+                >
+                  Get started — it&apos;s free
+                </a>
+                <a
+                  href="#intro"
+                  className="inline-flex items-center transition-colors"
+                  style={{
+                    ...S.btn,
+                    background: "transparent",
+                    color: V("color-canvas"),
+                    border: `1px solid rgba(255,255,255,0.2)`,
+                  }}
+                >
+                  Learn more about ecommerce
+                </a>
+              </div>
             </div>
-            <p
-              className="text-sm leading-relaxed max-w-xs"
-              style={{ color: V("color-mute") }}
-            >
-              Sell anything, anywhere — with the only platform that gives you
-              complete design control over your storefront.
-            </p>
+          </div>
+        </section>
+
+        {/* ═══════ DESIGN YOUR STORE ═══════ */}
+        <Section id="intro">
+          <div className="mb-14 max-w-[750px]">
+            <h2 className="font-semibold leading-[1.04] mb-4" style={{ ...S.h2, color: V("color-ink") }}>
+              Design your store, your way — without coding
+            </h2>
           </div>
 
-          {FOOTER_COLUMNS.map((col) => (
-            <div key={col.heading}>
+          <div className="space-y-16">
+            {DESIGN_FEATURES.map((feat, i) => (
+              <div key={feat.title} className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+                <div className="order-2 lg:order-1">
+                  <h3 className="font-semibold mb-3" style={{ ...S.h3, color: V("color-ink") }}>
+                    {feat.title}
+                  </h3>
+                  <p className="mb-6" style={{ ...S.bodyLg, color: V("color-body-mid") }}>
+                    {feat.desc}
+                  </p>
+                  {feat.testimonial && (
+                    <Testimonial
+                      quote={feat.testimonial.quote}
+                      name={feat.testimonial.name}
+                      role={feat.testimonial.role}
+                    />
+                  )}
+                  {feat.cta && (
+                    <a
+                      href={feat.cta.href}
+                      className="inline-flex items-center transition-colors mt-4"
+                      style={{ ...S.body, fontWeight: 500, color: V("color-accent-blue") }}
+                    >
+                      {feat.cta.label} <Arrow />
+                    </a>
+                  )}
+                </div>
+                <div className="order-1 lg:order-2">
+                  <div
+                    className="rounded-xl w-full aspect-[4/3]"
+                    style={{
+                      background: `linear-gradient(135deg, ${V("color-canvas-soft")}, ${V("color-canvas-mid")})`,
+                      border: `1px solid ${V("color-hairline")}`,
+                    }}
+                  >
+                    {/* Placeholder for source images — decorative product UI */}
+                    <div className="w-full h-full flex items-center justify-center" style={{ color: V("color-mute-soft") }}>
+                      <span className="text-sm">Product UI preview</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ═══════ SELL ALL TYPES ═══════ */}
+        <Section bg="soft">
+          <div className="mb-14 max-w-[750px]">
+            <h2 className="font-semibold leading-[1.04] mb-4" style={{ ...S.h2, color: V("color-ink") }}>
+              Sell all types of products
+            </h2>
+          </div>
+
+          <div className="space-y-16">
+            {SELL_FEATURES.map((feat) => (
+              <div key={feat.title} className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+                <div>
+                  <h3 className="font-semibold mb-3" style={{ ...S.h3, color: V("color-ink") }}>
+                    {feat.title}
+                  </h3>
+                  <p className="mb-4" style={{ ...S.bodyLg, color: V("color-body-mid") }}>
+                    {feat.desc}
+                  </p>
+                  {feat.bullets && (
+                    <ul className="space-y-2 mb-6">
+                      {feat.bullets.map((b) => (
+                        <li key={b} className="flex items-start gap-2" style={{ ...S.body, color: V("color-body-mid") }}>
+                          <span style={{ color: V("color-accent-blue") }}>&#x2022;</span>
+                          {b}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {feat.note && (
+                    <p className="italic" style={{ ...S.bodySm, color: V("color-mute") }}>
+                      {feat.note}
+                    </p>
+                  )}
+                  {feat.testimonial && (
+                    <div className="mt-6">
+                      <Testimonial
+                        quote={feat.testimonial.quote}
+                        name={feat.testimonial.name}
+                        role={feat.testimonial.role}
+                      />
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div
+                    className="rounded-xl w-full aspect-[4/3]"
+                    style={{
+                      background: `linear-gradient(135deg, ${V("color-canvas-soft")}, ${V("color-canvas-mid")})`,
+                      border: `1px solid ${V("color-hairline")}`,
+                    }}
+                  >
+                    <div className="w-full h-full flex items-center justify-center" style={{ color: V("color-mute-soft") }}>
+                      <span className="text-sm">Feature UI preview</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ═══════ GROW YOUR BUSINESS ═══════ */}
+        <Section>
+          <div className="mb-14 max-w-[750px]">
+            <h2 className="font-semibold leading-[1.04] mb-4" style={{ ...S.h2, color: V("color-ink") }}>
+              Grow your business
+            </h2>
+          </div>
+
+          <div className="space-y-16">
+            {GROW_FEATURES.map((feat) => (
+              <div key={feat.title} className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+                <div>
+                  <h3 className="font-semibold mb-3" style={{ ...S.h3, color: V("color-ink") }}>
+                    {feat.title}
+                  </h3>
+                  <p className="mb-6" style={{ ...S.bodyLg, color: V("color-body-mid") }}>
+                    {feat.desc}
+                  </p>
+
+                  {feat.subItems && (
+                    <div className="space-y-4 mb-6">
+                      {feat.subItems.map((sub) => (
+                        <div key={sub.title}>
+                          <h4 className="font-semibold mb-2" style={{ ...S.h4, color: V("color-ink") }}>
+                            {sub.title}
+                          </h4>
+                          <p style={{ ...S.body, color: V("color-body-mid") }}>{sub.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {feat.testimonial && (
+                    <Testimonial
+                      quote={feat.testimonial.quote}
+                      name={feat.testimonial.name}
+                      role={feat.testimonial.role}
+                    />
+                  )}
+                </div>
+                <div>
+                  <div
+                    className="rounded-xl w-full aspect-[4/3]"
+                    style={{
+                      background: `linear-gradient(135deg, ${V("color-canvas-soft")}, ${V("color-canvas-mid")})`,
+                      border: `1px solid ${V("color-hairline")}`,
+                    }}
+                  >
+                    <div className="w-full h-full flex items-center justify-center" style={{ color: V("color-mute-soft") }}>
+                      <span className="text-sm">Feature UI preview</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ═══════ COMPARE WITH ═══════ */}
+        <Section bg="soft">
+          <div className="mb-14">
+            <h2 className="font-semibold leading-[1.04] mb-4" style={{ ...S.h2, color: V("color-ink") }}>
+              Compare Kreature with
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {COMPARISONS.map((comp) => (
               <div
-                className="text-xs uppercase tracking-wider mb-4 font-medium"
-                style={{ color: V("color-mute-soft") }}
+                key={comp.name}
+                className="rounded-lg p-[clamp(1.5rem,2.5vw,2rem)]"
+                style={{ borderRadius: "8px", border: `1px solid ${V("color-hairline")}`, background: V("color-canvas") }}
               >
-                {col.heading}
+                <h3 className="font-semibold mb-3" style={{ ...S.h3, color: V("color-ink") }}>
+                  {comp.name}
+                </h3>
+                <p className="mb-6" style={{ ...S.body, color: V("color-body-mid") }}>
+                  {comp.desc}
+                </p>
+                <a
+                  href={comp.href}
+                  className="inline-flex items-center transition-colors"
+                  style={{ ...S.bodySm, fontWeight: 500, color: V("color-accent-blue") }}
+                >
+                  Learn more <Arrow />
+                </a>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ═══════ SUPPORT + HOSTING CARDS ═══════ */}
+        <Section>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div
+              className="rounded-lg p-[clamp(1.5rem,2.5vw,2rem)]"
+              style={{ borderRadius: "8px", border: `1px solid ${V("color-hairline")}`, background: V("color-canvas") }}
+            >
+              <div className="text-5xl mb-5" style={{ color: V("color-accent-blue") }}>{"♥"}</div>
+              <h3 className="font-semibold mb-3" style={{ ...S.h3, color: V("color-ink") }}>
+                Support from real (nice) people
+              </h3>
+              <p style={{ ...S.body, color: V("color-body-mid") }}>
+                Webflow&apos;s customer support team is all around the globe, so we&apos;re always
+                available to point you in the right direction and answer questions. And we&apos;ve
+                all been using Webflow for years.
+              </p>
+            </div>
+            <div
+              className="rounded-lg p-[clamp(1.5rem,2.5vw,2rem)]"
+              style={{ borderRadius: "8px", border: `1px solid ${V("color-hairline")}`, background: V("color-canvas") }}
+            >
+              <div className="text-5xl mb-5" style={{ color: V("color-accent-blue") }}>{"☁"}</div>
+              <h3 className="font-semibold mb-3" style={{ ...S.h3, color: V("color-ink") }}>
+                Host on a world-class platform
+              </h3>
+              <ul className="space-y-2" style={{ ...S.body, color: V("color-body-mid") }}>
+                <li>&#x2022; Super-fast page loads</li>
+                <li>&#x2022; Enhanced security &amp; 99.99% uptime</li>
+                <li>&#x2022; Immediate scaling</li>
+              </ul>
+            </div>
+          </div>
+        </Section>
+
+        {/* ═══════ ALL FEATURES ═══════ */}
+        <Section bg="soft">
+          <div className="mb-14">
+            <h2 className="font-semibold leading-[1.04]" style={{ ...S.h2, color: V("color-ink") }}>
+              All features
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {ALL_FEATURES.map((group) => (
+              <div key={group.group}>
+                <h3 className="font-semibold mb-4 uppercase tracking-wider" style={{ ...S.eyebrow, color: V("color-mute") }}>
+                  {group.group}
+                </h3>
+                <ul className="space-y-2">
+                  {group.items.map((item) => (
+                    <li key={item}>
+                      <a
+                        href={`/feature/${item.toLowerCase().replace(/\s+/g, "-")}`}
+                        className="inline-flex items-center transition-colors"
+                        style={{ ...S.body, color: V("color-body-mid") }}
+                      >
+                        {item} <Arrow />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ═══════ CUSTOMER STORIES ═══════ */}
+        <Section>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {STORIES.slice(0, 4).map((story) => (
+              <div
+                key={story.logo}
+                className="rounded-lg p-6 flex flex-col"
+                style={{ borderRadius: "8px", background: V("color-canvas"), border: `1px solid ${V("color-hairline")}` }}
+              >
+                <div className="text-xs uppercase tracking-wider mb-3" style={{ color: V("color-mute") }}>
+                  {story.logo}
+                </div>
+                <div className="text-4xl font-bold mb-2 leading-none" style={{ color: V("color-ink") }}>
+                  {story.metric}
+                </div>
+                <p className="mb-4" style={{ ...S.bodySm, color: V("color-body-mid") }}>{story.label}</p>
+                <a
+                  href="/customers"
+                  className="inline-flex items-center mt-auto transition-colors"
+                  style={{ ...S.bodySm, fontWeight: 500, color: V("color-accent-blue") }}
+                >
+                  Read story <Arrow />
+                </a>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ═══════ GET STARTED CTA ═══════ */}
+        <Section bg="dark">
+          <div className="text-center max-w-[700px] mx-auto">
+            <h2 className="font-semibold leading-[1.04] mb-6" style={{ ...S.h2, color: V("color-canvas") }}>
+              Get started for free
+            </h2>
+            <p className="mb-10" style={{ ...S.bodyLg, color: V("color-mute-soft") }}>
+              Try Webflow for as long as you like with our free Starter plan. Purchase a paid Site
+              plan to publish, host, and unlock additional features.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="/signup"
+                className="inline-flex items-center transition-colors"
+                style={{ ...S.btn, background: V("color-accent-blue"), color: "#fff" }}
+              >
+                Get started — it&apos;s free
+              </a>
+              <a
+                href="/product-tour"
+                className="inline-flex items-center transition-colors"
+                style={{
+                  ...S.btn,
+                  background: "transparent",
+                  color: V("color-canvas"),
+                  border: `1px solid rgba(255,255,255,0.2)`,
+                }}
+              >
+                Watch demo
+              </a>
+            </div>
+          </div>
+        </Section>
+
+        {/* ═══════ FOOTER ═══════ */}
+        <FooterSection />
+      </main>
+    </div>
+  );
+}
+
+/* ─── FOOTER ─── */
+function FooterSection() {
+  const columns: Record<string, string[]> = {
+    Product: ["Platform", "Design", "Edit content", "Interactions", "GSAP", "Page building", "Shared Libraries", "Collaboration", "CMS", "Hosting", "Localization", "Security", "Ecommerce", "Analyze", "Optimize", "SEO", "AEO", "Kreature Cloud", "DevLink", "Figma to Kreature", "Accessibility", "AI"],
+    Solutions: ["Enterprise", "Startups", "Global alliances", "Agencies", "Freelancers"],
+    Resources: ["University", "Blog", "Customer stories", "Webinars & ebooks", "Apps", "Libraries", "Templates", "Developers", "Made in Kreature", "Glossary", "Livestreams", "The Kreature Way"],
+    Company: ["About", "Careers", "Press", "Kreature Ventures", "Kreature Shop", "Terms of Service", "Privacy policy", "Cookie policy", "Accessibility statement"],
+    Compare: ["Contentful", "Framer", "Sitecore", "Wix", "WordPress"],
+    Community: ["Discover the community", "Partner with Kreature", "Certified Partners", "Become a template designer", "Become an affiliate", "Become a Global Leader", "Find a meetup near you"],
+    "Get help": ["Support", "Pricing", "Status", "Community Homebase", "Wishlist"],
+  };
+
+  return (
+    <footer
+      className="border-t px-5 sm:px-8 py-16"
+      style={{ borderColor: V("color-hairline"), background: V("color-canvas") }}
+    >
+      <div className="max-w-[1440px] mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-8 mb-16">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
+            <div className="flex items-center gap-2.5 mb-3">
+              <img src="/logo/kreature-logo-dark.png" alt="Kreature" className="logo-dark h-[32px] w-auto" />
+              <img src="/logo/kreature-logo-light.png" alt="Kreature" className="logo-light h-[32px] w-auto" />
+              <Wordmark />
+            </div>
+            <p className="text-sm leading-relaxed max-w-xs" style={{ color: V("color-mute") }}>
+              Push the limits of web design and create unique commerce experiences.
+            </p>
+          </div>
+          {Object.entries(columns).map(([heading, links]) => (
+            <div key={heading}>
+              <div className="text-xs uppercase tracking-wider mb-4 font-medium" style={{ color: V("color-mute-soft") }}>
+                {heading}
               </div>
               <ul className="space-y-2.5">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-sm transition-colors hover:opacity-80"
-                      style={{ color: V("color-body-mid") }}
-                    >
-                      {link.label}
+                {links.map((label) => (
+                  <li key={label}>
+                    <a href="#" className="text-sm transition-colors hover:underline" style={{ color: V("color-body-mid") }}>
+                      {label}
                     </a>
                   </li>
                 ))}
@@ -315,715 +711,19 @@ function Footer() {
             </div>
           ))}
         </div>
-
-        <div
-          className="mt-14 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t"
-          style={{ borderColor: V("color-hairline") }}
-        >
-          <p className="text-xs" style={{ color: V("color-mute") }}>
-            &copy; {new Date().getFullYear()} Kreature Studio. All rights
-            reserved.
+        <div className="border-t pt-8 flex flex-col sm:flex-row justify-between items-center gap-4" style={{ borderColor: V("color-hairline") }}>
+          <p style={{ ...S.caption, color: V("color-mute") }}>
+            &copy; 2026 Kreature, Inc. All rights reserved.
           </p>
-          <div className="flex items-center gap-5">
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Twitter"
-              className="transition-colors hover:opacity-80"
-              style={{ color: V("color-mute") }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="transition-colors hover:opacity-80"
-              style={{ color: V("color-mute") }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
-            </a>
+          <div className="flex gap-6">
+            {["YouTube", "X", "Facebook", "LinkedIn", "Instagram", "TikTok"].map((s) => (
+              <a key={s} href="#" className="text-sm transition-colors" style={{ color: V("color-mute") }}>
+                {s}
+              </a>
+            ))}
           </div>
         </div>
       </div>
     </footer>
-  );
-}
-
-// ─── Page ───
-
-export default function EcommerceFeaturePage() {
-  return (
-    <main>
-      {/* ─── Hero ─── */}
-      <section
-        className="relative overflow-hidden"
-        style={{
-          backgroundColor: V("color-canvas"),
-          paddingTop: "140px",
-          paddingBottom: "80px",
-        }}
-      >
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div
-            className="absolute top-0 right-1/4 w-[600px] h-[400px] rounded-full blur-[120px] opacity-20"
-            style={{ backgroundColor: V("color-accent-green") }}
-          />
-          <div
-            className="absolute bottom-0 left-1/4 w-[500px] h-[350px] rounded-full blur-[120px] opacity-10"
-            style={{ backgroundColor: V("color-accent-blue") }}
-          />
-        </div>
-
-        <div
-          className="mx-auto px-5 sm:px-8 text-center relative z-10"
-          style={{ maxWidth: "900px" }}
-        >
-          <div
-            className="inline-block mb-6 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider"
-            style={{
-              color: V("color-accent-green"),
-              backgroundColor: `color-mix(in srgb, ${V("color-accent-green")} 10%, transparent)`,
-              border: `1px solid ${V("color-accent-green")}20`,
-            }}
-          >
-            Ecommerce Features
-          </div>
-
-          <h1
-            className="font-heading font-semibold tracking-tight mb-6"
-            style={{
-              fontSize: "80px",
-              lineHeight: "83.2px",
-              letterSpacing: "-0.8px",
-              color: V("color-ink"),
-            }}
-          >
-            Sell anything, anywhere
-          </h1>
-
-          <p
-            className="text-lg mx-auto mb-10"
-            style={{
-              color: V("color-body-mid"),
-              maxWidth: "640px",
-              fontSize: "18px",
-              lineHeight: "28.8px",
-            }}
-          >
-            A full ecommerce engine inside the platform you already use to
-            design. Products, cart, checkout, inventory, shipping, and taxes
-            — all native, all connected, no plugins.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="/signup"
-              className="text-base font-medium px-8 py-4 rounded text-white transition-opacity hover:opacity-90"
-              style={{
-                backgroundColor: V("color-accent-blue"),
-                borderRadius: "4px",
-              }}
-            >
-              Start selling
-              <Arrow />
-            </a>
-            <a
-              href="/feature/ecommerce#features"
-              className="text-base font-medium px-8 py-4 rounded transition-colors border"
-              style={{
-                color: V("color-ink"),
-                borderColor: V("color-hairline"),
-                borderRadius: "4px",
-              }}
-            >
-              Explore features
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Feature Grid ─── */}
-      <section
-        id="features"
-        style={{
-          backgroundColor: V("color-canvas-soft"),
-          paddingTop: "100px",
-          paddingBottom: "100px",
-        }}
-      >
-        <div className="mx-auto px-5 sm:px-8" style={{ maxWidth: "1200px" }}>
-          <div className="text-center mb-16">
-            <div
-              className="text-sm font-semibold uppercase tracking-wider mb-3"
-              style={{ color: V("color-accent-green") }}
-            >
-              Everything your store needs
-            </div>
-            <h2
-              className="font-heading font-semibold tracking-tight mb-4"
-              style={{
-                fontSize: "56px",
-                lineHeight: "58.24px",
-                color: V("color-ink"),
-              }}
-            >
-              Ecommerce without the duct tape
-            </h2>
-            <p
-              className="text-base mx-auto"
-              style={{
-                color: V("color-body-mid"),
-                maxWidth: "560px",
-                fontSize: "16px",
-                lineHeight: "25.6px",
-              }}
-            >
-              No stitching together plugins, themes, and third-party services.
-              Every tool you need to sell online is native to the platform.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {ECOM_FEATURES.map((feature) => (
-              <div
-                key={feature.title}
-                className="group rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 border"
-                style={{
-                  backgroundColor: V("color-canvas"),
-                  borderColor: V("color-hairline"),
-                  boxShadow: `0 1px 2px ${V("color-hairline")}`,
-                }}
-              >
-                <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center text-lg mb-4"
-                  style={{
-                    backgroundColor: `color-mix(in srgb, ${V(feature.accent)} 12%, transparent)`,
-                    color: V(feature.accent),
-                  }}
-                >
-                  {feature.icon}
-                </div>
-                <h4
-                  className="font-semibold mb-2"
-                  style={{
-                    fontSize: "20px",
-                    lineHeight: "28px",
-                    color: V("color-ink"),
-                  }}
-                >
-                  {feature.title}
-                </h4>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: V("color-body-mid") }}
-                >
-                  {feature.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Storefront Gallery ─── */}
-      <section
-        style={{
-          backgroundColor: V("color-canvas"),
-          paddingTop: "100px",
-          paddingBottom: "100px",
-        }}
-      >
-        <div className="mx-auto px-5 sm:px-8" style={{ maxWidth: "1200px" }}>
-          <div className="text-center mb-16">
-            <div
-              className="text-sm font-semibold uppercase tracking-wider mb-3"
-              style={{ color: V("color-accent-purple") }}
-            >
-              Storefront examples
-            </div>
-            <h2
-              className="font-heading font-semibold tracking-tight mb-4"
-              style={{
-                fontSize: "48px",
-                lineHeight: "52px",
-                color: V("color-ink"),
-              }}
-            >
-              Stores that feel custom-built
-            </h2>
-            <p
-              className="text-base mx-auto"
-              style={{
-                color: V("color-body-mid"),
-                maxWidth: "560px",
-                fontSize: "16px",
-                lineHeight: "25.6px",
-              }}
-            >
-              Every storefront is designed in Kreature&apos;s visual editor — no
-              templates, no same-as-everyone-else layouts.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {STOREFRONTS.map((s) => (
-              <div
-                key={s.name}
-                className="group rounded-xl overflow-hidden border transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-                style={{
-                  backgroundColor: V("color-canvas-soft"),
-                  borderColor: V("color-hairline"),
-                }}
-              >
-                {/* Storefront preview placeholder */}
-                <div
-                  className="h-48 flex items-center justify-center relative overflow-hidden"
-                  style={{
-                    backgroundColor: `color-mix(in srgb, ${V(s.accent)} 8%, transparent)`,
-                  }}
-                >
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div
-                      className="w-24 h-24 rounded-2xl flex items-center justify-center text-3xl"
-                      style={{
-                        backgroundColor: `color-mix(in srgb, ${V(s.accent)} 18%, transparent)`,
-                        color: V(s.accent),
-                      }}
-                    >
-                      &#9733;
-                    </div>
-                  </div>
-                  <div
-                    className="absolute bottom-3 left-3 right-3 h-6 rounded flex items-center px-3"
-                    style={{
-                      backgroundColor: `color-mix(in srgb, ${V("color-canvas")} 80%, transparent)`,
-                      backdropFilter: "blur(8px)",
-                    }}
-                  >
-                    <div
-                      className="w-16 h-1 rounded-full"
-                      style={{ backgroundColor: V(s.accent) }}
-                    />
-                  </div>
-                </div>
-
-                <div className="p-5">
-                  <h4
-                    className="font-semibold mb-1.5"
-                    style={{
-                      fontSize: "18px",
-                      color: V("color-ink"),
-                    }}
-                  >
-                    {s.name}
-                  </h4>
-                  <p
-                    className="text-sm mb-3"
-                    style={{ color: V("color-body-mid") }}
-                  >
-                    {s.description}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {s.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[11px] px-2 py-0.5 rounded-full font-medium"
-                        style={{
-                          color: V("color-mute"),
-                          backgroundColor: `color-mix(in srgb, ${V("color-canvas-mid")} 60%, transparent)`,
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <a
-              href="/templates"
-              className="inline-flex items-center text-sm font-medium transition-opacity hover:opacity-80"
-              style={{ color: V("color-accent-blue") }}
-            >
-              Browse all storefront templates
-              <Arrow />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Payment Integrations ─── */}
-      <section
-        style={{
-          backgroundColor: V("color-canvas-soft"),
-          paddingTop: "100px",
-          paddingBottom: "100px",
-        }}
-      >
-        <div className="mx-auto px-5 sm:px-8" style={{ maxWidth: "1200px" }}>
-          <div className="text-center mb-16">
-            <div
-              className="text-sm font-semibold uppercase tracking-wider mb-3"
-              style={{ color: V("color-accent-blue") }}
-            >
-              Payments
-            </div>
-            <h2
-              className="font-heading font-semibold tracking-tight mb-4"
-              style={{
-                fontSize: "48px",
-                lineHeight: "52px",
-                color: V("color-ink"),
-              }}
-            >
-              Accept payments however your customers pay
-            </h2>
-            <p
-              className="text-base mx-auto"
-              style={{
-                color: V("color-body-mid"),
-                maxWidth: "560px",
-                fontSize: "16px",
-                lineHeight: "25.6px",
-              }}
-            >
-              Kreature connects directly to Stripe and PayPal with no
-              additional fees beyond what the payment processors charge.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PAYMENTS.map((p) => (
-              <div
-                key={p.name}
-                className="rounded-xl p-7 border transition-all duration-300 hover:-translate-y-1"
-                style={{
-                  backgroundColor: V("color-canvas"),
-                  borderColor: V("color-hairline"),
-                }}
-              >
-                <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center text-lg font-bold mb-4"
-                  style={{
-                    backgroundColor: `color-mix(in srgb, ${V(p.accent)} 12%, transparent)`,
-                    color: V(p.accent),
-                  }}
-                >
-                  {p.name.charAt(0)}
-                </div>
-                <h4
-                  className="font-semibold mb-2"
-                  style={{
-                    fontSize: "20px",
-                    lineHeight: "28px",
-                    color: V("color-ink"),
-                  }}
-                >
-                  {p.name}
-                </h4>
-                <div
-                  className="text-xs font-semibold uppercase tracking-wider mb-2"
-                  style={{ color: V("color-accent-blue") }}
-                >
-                  {p.features}
-                </div>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: V("color-body-mid") }}
-                >
-                  {p.description}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Trust strip */}
-          <div
-            className="mt-16 pt-12 flex flex-wrap items-center justify-center gap-10 border-t"
-            style={{ borderColor: V("color-hairline") }}
-          >
-            <div
-              className="flex items-center gap-2 text-sm font-medium"
-              style={{ color: V("color-mute") }}
-            >
-              <span
-                className="w-8 h-8 rounded-full flex items-center justify-center text-xs"
-                style={{
-                  backgroundColor: V("color-accent-green"),
-                  color: "#fff",
-                }}
-              >
-                &#10003;
-              </span>
-              PCI compliant
-            </div>
-            <div
-              className="flex items-center gap-2 text-sm font-medium"
-              style={{ color: V("color-mute") }}
-            >
-              <span
-                className="w-8 h-8 rounded-full flex items-center justify-center text-xs"
-                style={{
-                  backgroundColor: V("color-accent-green"),
-                  color: "#fff",
-                }}
-              >
-                &#10003;
-              </span>
-              SSL everywhere
-            </div>
-            <div
-              className="flex items-center gap-2 text-sm font-medium"
-              style={{ color: V("color-mute") }}
-            >
-              <span
-                className="w-8 h-8 rounded-full flex items-center justify-center text-xs"
-                style={{
-                  backgroundColor: V("color-accent-green"),
-                  color: "#fff",
-                }}
-              >
-                &#10003;
-              </span>
-              SOC 2 Type II
-            </div>
-            <div
-              className="flex items-center gap-2 text-sm font-medium"
-              style={{ color: V("color-mute") }}
-            >
-              <span
-                className="w-8 h-8 rounded-full flex items-center justify-center text-xs"
-                style={{
-                  backgroundColor: V("color-accent-green"),
-                  color: "#fff",
-                }}
-              >
-                &#10003;
-              </span>
-              3D Secure
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Plan Tiers ─── */}
-      <section
-        style={{
-          backgroundColor: V("color-canvas"),
-          paddingTop: "100px",
-          paddingBottom: "100px",
-        }}
-      >
-        <div className="mx-auto px-5 sm:px-8" style={{ maxWidth: "1200px" }}>
-          <div className="text-center mb-16">
-            <div
-              className="text-sm font-semibold uppercase tracking-wider mb-3"
-              style={{ color: V("color-accent-orange") }}
-            >
-              Pricing
-            </div>
-            <h2
-              className="font-heading font-semibold tracking-tight mb-4"
-              style={{
-                fontSize: "48px",
-                lineHeight: "52px",
-                color: V("color-ink"),
-              }}
-            >
-              Plans for every stage of growth
-            </h2>
-            <p
-              className="text-base mx-auto"
-              style={{
-                color: V("color-body-mid"),
-                maxWidth: "500px",
-                fontSize: "16px",
-                lineHeight: "25.6px",
-              }}
-            >
-              Start free, upgrade when you&apos;re ready. No transaction fees on
-              Business and Enterprise plans.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-            {PLAN_TIERS.map((plan) => (
-              <div
-                key={plan.name}
-                className="rounded-xl p-7 border relative"
-                style={{
-                  backgroundColor: plan.highlight
-                    ? `color-mix(in srgb, ${V("color-accent-blue")} 4%, ${V("color-canvas")})`
-                    : V("color-canvas"),
-                  borderColor: plan.highlight
-                    ? V("color-accent-blue")
-                    : V("color-hairline"),
-                  borderWidth: plan.highlight ? "2px" : "1px",
-                  boxShadow: plan.highlight
-                    ? `0 8px 30px ${V("color-accent-blue")}15`
-                    : "none",
-                }}
-              >
-                {plan.highlight && (
-                  <div
-                    className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-semibold text-white"
-                    style={{ backgroundColor: V("color-accent-blue") }}
-                  >
-                    Most popular
-                  </div>
-                )}
-
-                <h4
-                  className="font-semibold mb-1"
-                  style={{ fontSize: "20px", color: V("color-ink") }}
-                >
-                  {plan.name}
-                </h4>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span
-                    className="font-heading font-semibold tracking-tight"
-                    style={{
-                      fontSize: "44px",
-                      lineHeight: "1",
-                      color: V("color-ink"),
-                    }}
-                  >
-                    {plan.price}
-                  </span>
-                  <span style={{ color: V("color-mute"), fontSize: "16px" }}>
-                    {plan.period}
-                  </span>
-                </div>
-                <p
-                  className="text-sm mb-6"
-                  style={{ color: V("color-body-mid") }}
-                >
-                  {plan.description}
-                </p>
-
-                <ul className="space-y-3 mb-7">
-                  {plan.features.map((f) => (
-                    <li
-                      key={f}
-                      className="flex items-start gap-2.5 text-sm"
-                      style={{ color: V("color-body") }}
-                    >
-                      <span
-                        className="shrink-0 mt-0.5"
-                        style={{ color: V("color-accent-green") }}
-                      >
-                        &#10003;
-                      </span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-
-                <a
-                  href={plan.name === "Enterprise" ? "/contact-sales" : "/signup"}
-                  className="block w-full text-center text-sm font-medium py-3 rounded transition-opacity hover:opacity-90"
-                  style={{
-                    backgroundColor: plan.highlight
-                      ? V("color-accent-blue")
-                      : "transparent",
-                    color: plan.highlight ? "#fff" : V("color-ink"),
-                    border: plan.highlight
-                      ? "none"
-                      : `1px solid ${V("color-hairline")}`,
-                    borderRadius: "4px",
-                  }}
-                >
-                  {plan.cta}
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── CTA ─── */}
-      <section
-        className="relative overflow-hidden"
-        style={{
-          backgroundColor: V("color-canvas-soft"),
-          paddingTop: "100px",
-          paddingBottom: "100px",
-        }}
-      >
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full blur-[120px] opacity-15"
-            style={{ backgroundColor: V("color-accent-green") }}
-          />
-        </div>
-
-        <div
-          className="mx-auto px-5 sm:px-8 text-center relative z-10"
-          style={{ maxWidth: "700px" }}
-        >
-          <h2
-            className="font-heading font-semibold tracking-tight mb-5"
-            style={{
-              fontSize: "56px",
-              lineHeight: "58.24px",
-              color: V("color-ink"),
-            }}
-          >
-            Start selling
-          </h2>
-          <p
-            className="text-lg mb-8 mx-auto"
-            style={{
-              color: V("color-body-mid"),
-              maxWidth: "540px",
-              fontSize: "18px",
-              lineHeight: "28.8px",
-            }}
-          >
-            The only ecommerce platform that gives you complete design freedom
-            with zero transaction fees. Build your store today.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="/signup"
-              className="text-base font-medium px-8 py-4 rounded text-white transition-opacity hover:opacity-90"
-              style={{
-                backgroundColor: V("color-accent-blue"),
-                borderRadius: "4px",
-              }}
-            >
-              Start free trial
-              <Arrow />
-            </a>
-            <a
-              href="/contact-sales"
-              className="text-base font-medium px-8 py-4 rounded transition-colors border"
-              style={{
-                color: V("color-ink"),
-                borderColor: V("color-hairline"),
-                borderRadius: "4px",
-              }}
-            >
-              Talk to sales
-            </a>
-          </div>
-          <p className="text-xs mt-5" style={{ color: V("color-mute") }}>
-            No credit card required. 14-day free trial on all plans.
-          </p>
-        </div>
-      </section>
-
-      <Footer />
-    </main>
   );
 }

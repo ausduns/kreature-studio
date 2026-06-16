@@ -2,18 +2,73 @@
 
 import { useState } from "react";
 
+/* ─── CSS VAR ─── */
 const V = (n: string) => `var(--${n})`;
 
+/* ─── TYPOGRAPHY ─── */
+const T = {
+  h1: { fontSize: "28px", fontWeight: 600, lineHeight: 1.2, letterSpacing: "-0.01em" } as React.CSSProperties,
+  body: { fontSize: "16px", fontWeight: 400, lineHeight: "24px" } as React.CSSProperties,
+  bodySm: { fontSize: "14px", fontWeight: 400, lineHeight: "22.4px" } as React.CSSProperties,
+  caption: { fontSize: "12px", fontWeight: 550, lineHeight: "15.6px", letterSpacing: "0.04em", textTransform: "uppercase" } as React.CSSProperties,
+  label: { fontSize: "14px", fontWeight: 500, lineHeight: "22.4px" } as React.CSSProperties,
+  input: { fontSize: "16px", fontWeight: 400, lineHeight: "24px", padding: "12px 16px", borderRadius: "6px" } as React.CSSProperties,
+  btn: { fontSize: "15px", fontWeight: 500, padding: "14px 24px", borderRadius: "6px", lineHeight: "22px" } as React.CSSProperties,
+  socialBtn: { fontSize: "15px", fontWeight: 500, padding: "12px 20px", borderRadius: "6px", lineHeight: "22px" } as React.CSSProperties,
+  stat: { fontSize: "clamp(1.5rem,3vw,2.5rem)", fontWeight: 600, lineHeight: 1.1 } as React.CSSProperties,
+};
+
+/* ─── HELPERS ─── */
 function Arrow() {
+  return <span className="ml-1.5 text-[1.1em] leading-none select-none">&rarr;</span>;
+}
+
+/* ─── WORDMARK ─── */
+function Kreature() {
   return (
-    <span className="ml-1 text-[1.1em] leading-none select-none">→</span>
+    <>
+      Kreature<span style={{ color: V("color-accent-blue") }}>.</span>
+    </>
   );
 }
 
+/* ─── PROMO SLIDES ─── */
+const PROMO_SLIDES = [
+  {
+    stat: "$500K",
+    label: "reduction in dev costs",
+    img: "https://webflow-assets.s3.us-east-1.amazonaws.com/signup/ncr_ss.avif",
+    co: "NCR",
+  },
+  {
+    stat: "120%",
+    label: "increase in site-wide conversion",
+    img: "https://webflow-assets.s3.us-east-1.amazonaws.com/signup/lattice_ss+(1).avif",
+    co: "Lattice",
+  },
+  {
+    stat: "$6M",
+    label: "reduction in dev costs",
+    img: "https://webflow-assets.s3.us-east-1.amazonaws.com/signup/orangetheory_ss.avif",
+    co: "OrangeTheory",
+  },
+  {
+    stat: "10X",
+    label: "faster website changes",
+    img: "https://webflow-assets.s3.us-east-1.amazonaws.com/signup/nursa_ss.avif",
+    co: "Nursa",
+  },
+];
+
+/* ─── PAGE ─── */
 export default function SignupPage() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [slideIdx, setSlideIdx] = useState(0);
+  const slide = PROMO_SLIDES[slideIdx];
+
+  const prevSlide = () => setSlideIdx((i) => (i - 1 + PROMO_SLIDES.length) % PROMO_SLIDES.length);
+  const nextSlide = () => setSlideIdx((i) => (i + 1) % PROMO_SLIDES.length);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -21,78 +76,152 @@ export default function SignupPage() {
   }
 
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{ background: V("color-canvas-soft") }}
-    >
-      {/* ─── Main Content ─── */}
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full" style={{ maxWidth: 480 }}>
+    <div className="min-h-screen flex" style={{ background: V("color-ink") }}>
+      {/* ─── LEFT: PROMO CAROUSEL ─── */}
+      <div
+        className="hidden lg:flex lg:w-1/2 relative overflow-hidden"
+        style={{ background: V("color-canvas-soft") }}
+      >
+        {/* Slide image */}
+        <div className="absolute inset-0">
+          <img
+            src={slide.img}
+            alt={slide.co}
+            className="w-full h-full object-cover"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.4) 50%, rgba(8,8,8,0.1) 100%)",
+            }}
+          />
+        </div>
+
+        {/* Navigation arrows */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all z-10"
+          style={{
+            background: "rgba(255,255,255,0.1)",
+            color: "#fff",
+            backdropFilter: "blur(8px)",
+          }}
+          aria-label="Previous slide"
+        >
+          &larr;
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all z-10"
+          style={{
+            background: "rgba(255,255,255,0.1)",
+            color: "#fff",
+            backdropFilter: "blur(8px)",
+          }}
+          aria-label="Next slide"
+        >
+          &rarr;
+        </button>
+
+        {/* Slide stat */}
+        <div className="absolute bottom-0 left-0 right-0 p-10 z-10">
+          <div
+            className="mb-2"
+            style={{ ...T.stat, color: "#fff" }}
+          >
+            {slide.stat}
+          </div>
+          <p
+            className="mb-2 max-w-md"
+            style={{ fontSize: "18px", fontWeight: 400, lineHeight: "27px", color: "rgba(255,255,255,0.7)" }}
+          >
+            {slide.label}
+          </p>
+        </div>
+
+        {/* Slide dots */}
+        <div className="absolute bottom-10 right-10 z-10 flex gap-2">
+          {PROMO_SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setSlideIdx(i)}
+              className="rounded-full transition-all"
+              style={{
+                width: i === slideIdx ? 24 : 8,
+                height: 8,
+                background: i === slideIdx ? "#fff" : "rgba(255,255,255,0.3)",
+              }}
+              aria-label={`Slide ${i + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* Progress bar */}
+        <div className="absolute bottom-[clamp(1rem,2vw,2rem)] left-10 right-10 z-10 h-0.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.1)" }}>
+          <div
+            className="h-full rounded-full transition-all duration-500"
+            style={{
+              width: `${((slideIdx + 1) / PROMO_SLIDES.length) * 100}%`,
+              background: V("color-accent-blue"),
+            }}
+          />
+        </div>
+      </div>
+
+      {/* ─── RIGHT: SIGNUP FORM ─── */}
+      <div
+        className="flex-1 flex items-center justify-center px-4 py-12 lg:py-0"
+        style={{ background: V("color-ink") }}
+      >
+        <div className="w-full" style={{ maxWidth: 420 }}>
+          {/* Top link */}
+          <div className="mb-8 text-center lg:text-left">
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 transition-all"
+              style={{ ...T.bodySm, color: V("color-mute") }}
+            >
+              <span className="text-lg">&larr;</span> Go to <Kreature />
+            </a>
+          </div>
+
           {/* Card */}
           <div
             className="w-full"
             style={{
-              background: V("color-canvas"),
-              borderRadius: 8,
-              border: `1px solid ${V("color-hairline")}`,
-              padding: 32,
-              boxShadow: V("shadow-card"),
+              background: V("color-canvas-soft"),
+              borderRadius: "12px",
+              border: "1px solid rgba(255,255,255,0.06)",
+              padding: "clamp(1.5rem,3vw,2.5rem)",
             }}
           >
             {/* Heading */}
-            <h1
-              className="text-center mb-2"
-              style={{
-                fontSize: 28,
-                fontWeight: 600,
-                letterSpacing: "-0.5px",
-                color: V("color-ink"),
-                lineHeight: 1.2,
-              }}
-            >
-              Get started with Kreature
+            <h1 className="mb-1" style={{ ...T.h1, color: V("color-canvas") }}>
+              Welcome to <Kreature />
             </h1>
-            <p
-              className="text-center mb-8"
-              style={{
-                fontSize: 14,
-                lineHeight: "22.4px",
-                color: V("color-body-mid"),
-              }}
-            >
-              Start building with AI-powered speed. No credit card required.
-            </p>
 
             {/* Social signup buttons */}
-            <div className="flex flex-col gap-3 mb-6">
+            <div className="flex flex-col gap-3 mt-6">
               {/* Google */}
               <a
                 href="/auth/google"
-                className="w-full flex items-center justify-center gap-3 font-medium no-underline transition-all"
+                className="w-full flex items-center justify-center gap-3 transition-all"
                 style={{
-                  fontSize: 16,
-                  fontWeight: 500,
-                  padding: "14px 24px",
-                  borderRadius: 4,
-                  background: V("color-canvas-soft"),
+                  ...T.socialBtn,
+                  background: V("color-canvas"),
                   color: V("color-ink"),
-                  border: `1px solid ${V("color-hairline")}`,
-                  lineHeight: 1.5,
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  textDecoration: "none",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = V("color-canvas-mid");
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = V("color-canvas-soft");
+                  e.currentTarget.style.background = V("color-canvas");
                 }}
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                   <path
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
                     fill="#4285F4"
@@ -110,116 +239,52 @@ export default function SignupPage() {
                     fill="#EA4335"
                   />
                 </svg>
-                Continue with Google
+                Sign up with Google
               </a>
 
               {/* GitHub */}
               <a
                 href="/auth/github"
-                className="w-full flex items-center justify-center gap-3 font-medium no-underline transition-all"
+                className="w-full flex items-center justify-center gap-3 transition-all"
                 style={{
-                  fontSize: 16,
-                  fontWeight: 500,
-                  padding: "14px 24px",
-                  borderRadius: 4,
-                  background: V("color-canvas-soft"),
+                  ...T.socialBtn,
+                  background: V("color-canvas"),
                   color: V("color-ink"),
-                  border: `1px solid ${V("color-hairline")}`,
-                  lineHeight: 1.5,
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  textDecoration: "none",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = V("color-canvas-mid");
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = V("color-canvas-soft");
+                  e.currentTarget.style.background = V("color-canvas");
                 }}
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{ color: V("color-ink") }}
-                >
-                  <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.604-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12 24 5.37 18.63 0 12 0z" />
                 </svg>
-                Continue with GitHub
+                Sign up with GitHub
               </a>
             </div>
 
             {/* Divider */}
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 my-6">
               <div
                 className="flex-1"
-                style={{ height: 1, background: V("color-hairline") }}
+                style={{ height: 1, background: "rgba(255,255,255,0.08)" }}
               />
-              <span
-                style={{
-                  fontSize: 12.8,
-                  fontWeight: 550,
-                  color: V("color-mute"),
-                  textTransform: "uppercase",
-                  letterSpacing: "0.5px",
-                }}
-              >
-                or
-              </span>
+              <span style={{ ...T.caption, color: V("color-mute") }}>or</span>
               <div
                 className="flex-1"
-                style={{ height: 1, background: V("color-hairline") }}
+                style={{ height: 1, background: "rgba(255,255,255,0.08)" }}
               />
             </div>
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              {/* Full name field */}
+              {/* Email */}
               <label className="flex flex-col gap-1.5">
-                <span
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 500,
-                    color: V("color-ink"),
-                    lineHeight: "22.4px",
-                  }}
-                >
-                  Full name
-                </span>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  placeholder="John Doe"
-                  className="w-full px-4 py-3 rounded text-base outline-none transition-colors"
-                  style={{
-                    fontSize: 16,
-                    background: V("color-canvas-soft"),
-                    color: V("color-ink"),
-                    border: `1px solid ${V("color-hairline")}`,
-                    lineHeight: 1.5,
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = V("color-accent-blue");
-                    e.currentTarget.style.boxShadow = `0 0 0 3px ${V("color-accent-blue")}20`;
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = V("color-hairline");
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
-                />
-              </label>
-
-              {/* Email field */}
-              <label className="flex flex-col gap-1.5">
-                <span
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 500,
-                    color: V("color-ink"),
-                    lineHeight: "22.4px",
-                  }}
-                >
+                <span style={{ ...T.label, color: V("color-canvas") }}>
                   Email
                 </span>
                 <input
@@ -228,35 +293,27 @@ export default function SignupPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="you@example.com"
-                  className="w-full px-4 py-3 rounded text-base outline-none transition-colors"
+                  className="w-full outline-none transition-all"
                   style={{
-                    fontSize: 16,
-                    background: V("color-canvas-soft"),
+                    ...T.input,
+                    background: V("color-canvas"),
                     color: V("color-ink"),
-                    border: `1px solid ${V("color-hairline")}`,
-                    lineHeight: 1.5,
+                    border: "1px solid rgba(255,255,255,0.08)",
                   }}
                   onFocus={(e) => {
                     e.currentTarget.style.borderColor = V("color-accent-blue");
                     e.currentTarget.style.boxShadow = `0 0 0 3px ${V("color-accent-blue")}20`;
                   }}
                   onBlur={(e) => {
-                    e.currentTarget.style.borderColor = V("color-hairline");
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
                     e.currentTarget.style.boxShadow = "none";
                   }}
                 />
               </label>
 
-              {/* Password field */}
+              {/* Password */}
               <label className="flex flex-col gap-1.5">
-                <span
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 500,
-                    color: V("color-ink"),
-                    lineHeight: "22.4px",
-                  }}
-                >
+                <span style={{ ...T.label, color: V("color-canvas") }}>
                   Password
                 </span>
                 <input
@@ -265,129 +322,128 @@ export default function SignupPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="Create a password (min. 8 characters)"
-                  className="w-full px-4 py-3 rounded text-base outline-none transition-colors"
+                  className="w-full outline-none transition-all"
                   style={{
-                    fontSize: 16,
-                    background: V("color-canvas-soft"),
+                    ...T.input,
+                    background: V("color-canvas"),
                     color: V("color-ink"),
-                    border: `1px solid ${V("color-hairline")}`,
-                    lineHeight: 1.5,
+                    border: "1px solid rgba(255,255,255,0.08)",
                   }}
                   onFocus={(e) => {
                     e.currentTarget.style.borderColor = V("color-accent-blue");
                     e.currentTarget.style.boxShadow = `0 0 0 3px ${V("color-accent-blue")}20`;
                   }}
                   onBlur={(e) => {
-                    e.currentTarget.style.borderColor = V("color-hairline");
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
                     e.currentTarget.style.boxShadow = "none";
                   }}
                 />
               </label>
 
-              {/* Submit button */}
+              {/* Submit */}
               <button
                 type="submit"
                 className="w-full font-medium cursor-pointer transition-all mt-1"
                 style={{
-                  fontSize: 16,
-                  fontWeight: 500,
-                  padding: "16px 24px",
-                  borderRadius: 4,
+                  ...T.btn,
                   background: V("color-accent-blue"),
-                  color: "#ffffff",
+                  color: "#fff",
                   border: "none",
-                  lineHeight: 1.5,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = V(
-                    "color-accent-blue-hover"
-                  );
+                  e.currentTarget.style.background = V("color-accent-blue-hover");
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = V("color-accent-blue");
                 }}
               >
-                Start for free
+                Continue
                 <Arrow />
               </button>
             </form>
-
-            {/* Terms */}
-            <p
-              className="text-center mt-6"
-              style={{
-                fontSize: 12.8,
-                fontWeight: 550,
-                lineHeight: "20px",
-                color: V("color-mute"),
-              }}
-            >
-              By signing up, you agree to our{" "}
-              <a
-                href="/terms"
-                className="no-underline hover:underline font-medium"
-                style={{ color: V("color-accent-blue") }}
-              >
-                Terms of Service
-              </a>{" "}
-              and{" "}
-              <a
-                href="/privacy"
-                className="no-underline hover:underline font-medium"
-                style={{ color: V("color-accent-blue") }}
-              >
-                Privacy Policy
-              </a>
-              .
-            </p>
           </div>
-        </div>
-      </main>
 
-      {/* ─── Footer ─── */}
-      <footer
-        className="py-6 px-6"
-        style={{
-          background: V("color-canvas-soft"),
-          borderTop: `1px solid ${V("color-hairline")}`,
-        }}
-      >
-        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Terms */}
           <p
-            style={{
-              fontSize: 12.8,
-              fontWeight: 550,
-              color: V("color-mute"),
-            }}
+            className="text-center mt-6"
+            style={{ ...T.bodySm, color: V("color-mute") }}
           >
-            &copy; {new Date().getFullYear()} Kreature. All rights reserved.
+            Signing up for a <Kreature /> account means you agree to the{" "}
+            <a
+              href="/privacy"
+              className="font-medium no-underline hover:underline"
+              style={{ color: V("color-accent-blue") }}
+            >
+              Privacy Policy
+            </a>{" "}
+            and{" "}
+            <a
+              href="/terms"
+              className="font-medium no-underline hover:underline"
+              style={{ color: V("color-accent-blue") }}
+            >
+              Terms of Service
+            </a>
+            .
           </p>
-          <div className="flex items-center gap-6">
+
+          {/* Already have account */}
+          <p
+            className="text-center mt-6"
+            style={{ ...T.bodySm, color: V("color-mute") }}
+          >
+            Already have an account?{" "}
+            <a
+              href="/login"
+              className="font-medium no-underline hover:underline"
+              style={{ color: V("color-accent-blue") }}
+            >
+              Log in
+              <Arrow />
+            </a>
+          </p>
+
+          {/* Enterprise link */}
+          <p
+            className="text-center mt-4"
+            style={{ ...T.bodySm, color: V("color-mute") }}
+          >
+            Building an Enterprise site?{" "}
+            <a
+              href="/contact-sales"
+              className="font-medium no-underline hover:underline"
+              style={{ color: V("color-accent-blue") }}
+            >
+              Contact sales
+              <Arrow />
+            </a>
+          </p>
+
+          {/* Footer links */}
+          <div
+            className="flex items-center justify-center gap-6 mt-8 pt-6"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
+          >
             <a
               href="/terms"
               className="no-underline hover:underline"
-              style={{
-                fontSize: 12.8,
-                fontWeight: 550,
-                color: V("color-mute"),
-              }}
+              style={{ ...T.caption, color: V("color-mute") }}
             >
               Terms
             </a>
             <a
               href="/privacy"
               className="no-underline hover:underline"
-              style={{
-                fontSize: 12.8,
-                fontWeight: 550,
-                color: V("color-mute"),
-              }}
+              style={{ ...T.caption, color: V("color-mute") }}
             >
               Privacy
             </a>
+            <p style={{ ...T.caption, color: V("color-mute") }}>
+              &copy; {new Date().getFullYear()} Kreature
+            </p>
           </div>
         </div>
-      </footer>
+      </div>
     </div>
   );
 }

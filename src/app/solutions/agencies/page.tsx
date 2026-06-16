@@ -1,619 +1,813 @@
 "use client";
 
-/* ──────────────── Helpers ──────────────── */
+import { useState, useCallback } from "react";
+
+/* ──────────────── CDN & Helpers ──────────────── */
 
 const V = (n: string) => `var(--${n})`;
+const CDN = "https://cdn.prod.website-files.com/686294e263eb7e215bd232f7";
+const LOGOS_CDN = "https://dhygzobemt712.cloudfront.net/Web/logos/dark";
+const ICONS_CDN = "https://dhygzobemt712.cloudfront.net/Icons/Light/64px";
 
-/* ──────────────── Shared Components ──────────────── */
+/* ──────────────── Typography ──────────────── */
 
-function Arrow() {
+const T = {
+  h1: {
+    fontFamily: "var(--font-heading)",
+    fontWeight: 600,
+    fontSize: "clamp(44px, 6vw, 80px)",
+    lineHeight: 1.04,
+    letterSpacing: "-0.8px",
+  },
+  h2: {
+    fontFamily: "var(--font-heading)",
+    fontWeight: 600,
+    fontSize: "clamp(32px, 4.5vw, 56px)",
+    lineHeight: 1.06,
+    letterSpacing: "-0.4px",
+  },
+  h3: {
+    fontFamily: "var(--font-heading)",
+    fontWeight: 600,
+    fontSize: "clamp(22px, 2.5vw, 28px)",
+    lineHeight: 1.2,
+  },
+  heroSub: {
+    fontSize: 14,
+    fontWeight: 600,
+    letterSpacing: "0.16em",
+    textTransform: "uppercase" as const,
+    lineHeight: 1.4,
+  },
+  bodyLg: {
+    fontSize: 18,
+    lineHeight: 1.7,
+  },
+  body: {
+    fontSize: 15,
+    lineHeight: 1.7,
+  },
+  bodySm: {
+    fontSize: 13,
+    lineHeight: 1.6,
+  },
+  caption: {
+    fontSize: 11,
+    lineHeight: 1.5,
+  },
+  btn: {
+    fontSize: 15,
+    fontWeight: 500,
+    lineHeight: 1,
+  },
+  quote: {
+    fontSize: 16,
+    lineHeight: 1.65,
+    fontStyle: "italic" as const,
+  },
+};
+
+/* ──────────────── Shared Sub-Components ──────────────── */
+
+function Wordmark() {
   return (
-    <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>
+    <span
+      style={{
+        fontFamily: "var(--font-heading)",
+        fontWeight: 800,
+        fontSize: 18,
+        letterSpacing: "-0.3px",
+        color: V("color-ink"),
+      }}
+    >
+      Kreature<span style={{ color: V("color-accent-blue") }}>.</span>
+    </span>
   );
 }
 
-/* ──────────────── Footer Data ──────────────── */
+function Arrow() {
+  return (
+    <span className="ml-1.5 text-[1.1em] leading-none select-none">&rarr;</span>
+  );
+}
 
-const FOOTER_DATA = [
+function Badge({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      style={{
+        ...T.heroSub,
+        color: V("color-accent-blue"),
+        display: "inline-block",
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
+function Section({
+  children,
+  soft,
+  id,
+  className,
+}: {
+  children: React.ReactNode;
+  soft?: boolean;
+  id?: string;
+  className?: string;
+}) {
+  return (
+    <section
+      id={id}
+      className={`px-5 sm:px-8 py-20 sm:py-28 lg:py-36 ${className ?? ""}`}
+      style={{
+        backgroundColor: soft ? V("color-canvas-soft") : V("color-canvas"),
+      }}
+    >
+      <div className="max-w-7xl mx-auto">{children}</div>
+    </section>
+  );
+}
+
+function PrimaryBtn({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      className="inline-flex items-center text-[15px] font-medium px-7 py-3.5 rounded-lg transition-all duration-200"
+      style={{
+        backgroundColor: V("color-accent-blue"),
+        color: "#ffffff",
+      }}
+    >
+      {children}
+      <Arrow />
+    </a>
+  );
+}
+
+function OutlineBtn({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      className="inline-flex items-center text-[15px] font-medium px-7 py-3.5 rounded-lg transition-all duration-200 border"
+      style={{
+        borderColor: V("color-hairline"),
+        color: V("color-ink"),
+      }}
+    >
+      {children}
+    </a>
+  );
+}
+
+/* ──────────────── Data ──────────────── */
+
+const TRUSTED_LOGOS = [
+  { name: "IDEO", src: `${LOGOS_CDN}/IDEO_logo.svg` },
+  { name: "Monday.com", src: `${LOGOS_CDN}/Monday_logo.svg` },
+  { name: "BBDO", src: `${LOGOS_CDN}/BBDO_logo.svg` },
+  { name: "New York Times", src: `${LOGOS_CDN}/NYT_logo.svg` },
+  { name: "TED", src: `${LOGOS_CDN}/TED_logo.svg` },
+  { name: "DocuSign", src: `${LOGOS_CDN}/DocuSign_logo.svg` },
+];
+
+interface FeatureRow {
+  title: string;
+  body: string;
+  image: string;
+}
+
+const STICKY_FEATURES: FeatureRow[] = [
   {
-    heading: "Solutions",
-    links: [
-      { label: "Agencies", href: "/solutions/agencies" },
-      { label: "Freelancers", href: "/solutions/freelancers" },
-      { label: "Developers", href: "/solutions/developers" },
-      { label: "Creative Teams", href: "/solutions/brand-creative-teams" },
-    ],
+    title: "Launch exceptional, fully custom web experiences faster",
+    body: "Start every project from a blank canvas or use an existing template as a starting point. Kreature's visual-first, code-capable Designer gives you pixel-perfect control over every element. Build at the speed of AI without sacrificing creative control or code quality.",
+    image: `${CDN}/689f328cf64d1090a5f4d8a9_stikcy%201.avif`,
   },
   {
-    heading: "Platform",
-    links: [
-      { label: "Designer", href: "/platform" },
-      { label: "CMS", href: "/platform#cms" },
-      { label: "Hosting", href: "/platform#hosting" },
-      { label: "Integrations", href: "/integrations" },
-    ],
+    title: "Prove ROI to keep your clients coming back",
+    body: "Show measurable impact with built-in analytics, A/B testing infrastructure, and AI-powered conversion insights. Every site you deliver becomes a growth engine for your clients — and a recurring revenue stream for your agency.",
+    image: `${CDN}/689f328c2d0082005f682440_sticky%202.avif`,
   },
   {
-    heading: "Resources",
-    links: [
-      { label: "Templates", href: "/templates" },
-      { label: "Libraries", href: "/libraries" },
-      { label: "Glossary", href: "/glossary" },
-      { label: "Blog", href: "/blog" },
-    ],
+    title: "Manage clients securely with built-in guardrails",
+    body: "Set role-based permissions, create staging environments, and control exactly what clients can edit. Keep your projects secure and your clients confident. Built-in version history and rollback means you can experiment fearlessly.",
+    image: `${CDN}/698630a0601bd97aad9f53d2_client-management-freelancers-solutions.avif`,
   },
   {
-    heading: "Company",
-    links: [
-      { label: "About", href: "/company" },
-      { label: "Customers", href: "/customers" },
-      { label: "Partners", href: "/certified-partners" },
-      { label: "Contact", href: "/contact-sales" },
-    ],
-  },
-  {
-    heading: "Compare",
-    links: [
-      { label: "vs Webflow", href: "/webflow-clone" },
-      { label: "vs Framer", href: "/webflow-way" },
-      { label: "vs WordPress", href: "/made-in-webflow" },
-    ],
-  },
-  {
-    heading: "Social",
-    links: [
-      { label: "Twitter", href: "https://twitter.com" },
-      { label: "LinkedIn", href: "https://linkedin.com" },
-      { label: "YouTube", href: "https://youtube.com" },
-      { label: "Community", href: "/community" },
-    ],
+    title: "Launch with enterprise-grade managed hosting, security, and performance",
+    body: "Every site gets automatic SSL, global CDN, DDoS protection, and 99.99% uptime SLA. Focus on building great work — Kreature handles the infrastructure. SOC 2 Type II certified with GDPR compliance built in.",
+    image: `${CDN}/69863181befa1c407f081783_sticky-img-enterprise.avif`,
   },
 ];
 
-/* ──────────────── Section Data ──────────────── */
+interface EcosystemCard {
+  icon: string;
+  title: string;
+  body: string;
+  cta: string;
+  href: string;
+}
 
-const VALUE_PROPS = [
+const ECOSYSTEM_CARDS: EcosystemCard[] = [
   {
-    icon: "⚙",
-    title: "Client Management",
-    body: "Manage all client projects from a single dashboard. Assign roles, set permissions, and keep every stakeholder aligned.",
+    icon: `${ICONS_CDN}/CertifiedStamp.svg`,
+    title: "Become a Partner",
+    body: "Join the Kreature Partner Program and unlock exclusive resources, revenue sharing, and co-marketing opportunities designed to grow your agency.",
+    cta: "Learn more",
+    href: "/certified-partners/apply",
   },
   {
-    icon: "🎨",
-    title: "White-Label Options",
-    body: "Rebrand Kreature as your own. Custom domain, branded client portal, and white-labeled exports with your agency identity.",
+    icon: `${ICONS_CDN}/LayoutTemplate.svg`,
+    title: "Build faster with Templates",
+    body: "Browse hundreds of professionally designed, fully customizable templates. Start every project with a production-ready foundation.",
+    cta: "Browse Templates",
+    href: "/templates",
   },
   {
-    icon: "⭐",
-    title: "Partner Program",
-    body: "Earn revenue share on client subscriptions. Get priority support, early access to features, and co-marketing opportunities.",
+    icon: `${ICONS_CDN}/Apps.svg`,
+    title: "Extend with Integrations",
+    body: "Connect Kreature to your existing stack with a robust library of apps and integrations. Build custom workflows that scale with your agency.",
+    cta: "Browse Apps",
+    href: "/apps",
   },
   {
-    icon: "📈",
-    title: "Revenue Growth",
-    body: "Scale output without scaling headcount. Ship 3x more client projects with the same team using AI-assisted workflows.",
+    icon: `${ICONS_CDN}/Libraries.svg`,
+    title: "Design smarter with Libraries",
+    body: "Create and share reusable component libraries, style guides, and brand assets across your team and all client projects for unmatched consistency.",
+    cta: "Browse libraries",
+    href: "/apps",
   },
 ];
 
-const WHY_KREATURE = [
+interface TestimonialCard {
+  quote: string;
+  name: string;
+  role: string;
+  company: string;
+  image: string;
+}
+
+const TESTIMONIALS: TestimonialCard[] = [
   {
-    title: "Speed Without Sacrifice",
-    body: "AI-accelerated builds that don't cut corners. Your clients get production-grade code, not prototypes.",
+    quote:
+      "Historically, agencies won sites at cost to earn the retainer. With Kreature, we build high-performance sites profitably from day one and maintain them at a margin that actually makes sense.",
+    name: "Mason Poe",
+    role: "Managing Member",
+    company: "Edgar Allan",
+    image: `${CDN}/689f328ce74a9f28b0886ddd_testimonial-1.avif`,
   },
   {
-    title: "Agency-Grade Tooling",
-    body: "Built for teams that manage dozens of projects. Workspaces, permissions, version history, and audit logs included.",
+    quote:
+      "We're able to work with brands we never thought possible because Kreature gives us the same output quality as custom-coded builds — at a fraction of the timeline. It's our competitive advantage.",
+    name: "Marc Debiak",
+    role: "CEO",
+    company: "Paper Tiger",
+    image: `${CDN}/689f328ce74a9f28b0886ddf_testimonial-2.avif`,
   },
   {
-    title: "Recurring Revenue",
-    body: "Every client site you build becomes a recurring hosting and maintenance stream. Kreature handles the infrastructure.",
+    quote:
+      "Kreature is the ideal intersection of creative flexibility and technical robustness. I can push the boundaries of what a site can do without worrying about breaking things or compromising performance.",
+    name: "Michael Lam",
+    role: "Developer",
+    company: "Hubilo",
+    image: `${CDN}/689f328ce74a9f28b0886de1_testimonial-3.avif`,
+  },
+  {
+    quote:
+      "Kreature has the power of custom coded web development combined with the speed and ease of use that allows our entire team — designers, PMs, and developers — to collaborate in one place.",
+    name: "Marcus Jones",
+    role: "COO",
+    company: "Outliant",
+    image: `${CDN}/689f328ce74a9f28b0886de3_testimonial-4.avif`,
   },
 ];
 
-const PARTNER_TIERS = [
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+const FAQS: FAQItem[] = [
   {
-    tier: "Certified",
-    accent: "color-accent-green",
-    revenue: "10%",
-    requirements: "1+ active client site",
-    features: [
-      "Partner badge & directory listing",
-      "Standard support (24h SLA)",
-      "Partner Slack community",
-      "Co-branded case studies",
-      "Monthly partner newsletter",
-    ],
+    question: "What makes Kreature different for agencies compared to other platforms?",
+    answer:
+      "Kreature combines visual design freedom with developer-grade code output, giving agencies pixel-perfect control without sacrificing performance. Unlike traditional website builders, Kreature generates clean, semantic code that performs exceptionally on Core Web Vitals. Plus, built-in client management tools, role-based permissions, and white-label capabilities are purpose-built for agencies managing multiple clients.",
   },
   {
-    tier: "Premier",
-    accent: "color-accent-blue",
-    revenue: "20%",
-    requirements: "10+ active client sites",
-    features: [
-      "Everything in Certified",
-      "Priority support (4h SLA)",
-      "Dedicated partner manager",
-      "White-label client dashboard",
-      "Early access to new features",
-      "Quarterly business review",
-    ],
+    question: "How does the agency partner program work?",
+    answer:
+      "The Kreature Partner Program is designed to help agencies grow their business. Partners earn revenue share on client hosting subscriptions, get access to priority support, co-marketing opportunities, and exclusive resources. There are three tiers — Certified, Premier, and Global — each with increasing benefits based on the number of active client sites you manage.",
   },
   {
-    tier: "Global",
-    accent: "color-accent-purple",
-    revenue: "25%",
-    requirements: "50+ active client sites",
-    features: [
-      "Everything in Premier",
-      "VIP support (1h SLA)",
-      "Custom feature development",
-      "Co-marketing campaigns & budget",
-      "API access & custom integrations",
-      "Revenue share on referrals",
-      "Annual partner summit invite",
-    ],
+    question: "Can I white-label Kreature for my clients?",
+    answer:
+      "Yes. Premier and Global tier partners get full white-label capabilities, including a branded client dashboard with your agency's logo and colors, custom domain support, and white-labeled exports. Your clients experience your brand, not Kreature's.",
   },
+  {
+    question: "What kind of support do agency partners receive?",
+    answer:
+      "All partners get access to our partner Slack community and standard support with a 24-hour SLA. Premier partners receive priority support with a 4-hour SLA and a dedicated partner manager. Global partners get VIP support with a 1-hour SLA, custom feature development, and an annual on-site visit.",
+  },
+  {
+    question: "How does client management work within Kreature?",
+    answer:
+      "Kreature's Workspace system lets you organize clients into separate environments, each with its own team members, billing, and permissions. You can invite clients to preview staging environments, control what they can edit with granular role-based permissions, and transfer site ownership seamlessly when projects end.",
+  },
+];
+
+const STATS_LOGOS = [
+  { name: "IDEO", src: `${LOGOS_CDN}/IDEO_logo.svg` },
+  { name: "Monday", src: `${LOGOS_CDN}/Monday_logo.svg` },
+  { name: "BBDO", src: `${LOGOS_CDN}/BBDO_logo.svg` },
+  { name: "NYT", src: `${LOGOS_CDN}/NYT_logo.svg` },
+  { name: "TED", src: `${LOGOS_CDN}/TED_logo.svg` },
+  { name: "DocuSign", src: `${LOGOS_CDN}/DocuSign_logo.svg` },
+  { name: "Edgar Allan", src: `${LOGOS_CDN}/EdgarAllan_logo.svg` },
+  { name: "Paper Tiger", src: `${LOGOS_CDN}/PaperTiger_logo.svg` },
+  { name: "Outliant", src: `${LOGOS_CDN}/Outliant_logo.svg` },
+  { name: "Hubilo", src: `${LOGOS_CDN}/Hubilo_logo.svg` },
 ];
 
 const STATS = [
   { value: "1,200+", label: "Agency partners" },
   { value: "45,000+", label: "Client sites built" },
-  { value: "$320M+", label: "Partner revenue" },
-  { value: "4.8/5", label: "Partner satisfaction" },
+  { value: "$320M+", label: "Partner revenue earned" },
+  { value: "4.8/5", label: "Partner satisfaction score" },
 ];
+
+/* ──────────────── FAQ Accordion ──────────────── */
+
+function FAQAccordion({ faqs }: { faqs: FAQItem[] }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggle = useCallback((i: number) => {
+    setOpenIndex((prev) => (prev === i ? null : i));
+  }, []);
+
+  return (
+    <div className="max-w-3xl mx-auto divide-y" style={{ borderColor: V("color-hairline") }}>
+      {faqs.map((faq, i) => (
+        <div key={i} className="py-5">
+          <button
+            type="button"
+            className="w-full flex items-center justify-between gap-4 text-left"
+            onClick={() => toggle(i)}
+          >
+            <span
+              style={{
+                ...T.h3,
+                fontSize: "clamp(16px, 2vw, 20px)",
+                color: V("color-ink"),
+              }}
+            >
+              {faq.question}
+            </span>
+            <span
+              className="flex-shrink-0 text-xl transition-transform duration-200"
+              style={{
+                transform: openIndex === i ? "rotate(45deg)" : "rotate(0deg)",
+                color: V("color-body-mid"),
+              }}
+            >
+              +
+            </span>
+          </button>
+          <div
+            className="overflow-hidden transition-all duration-300"
+            style={{
+              maxHeight: openIndex === i ? "400px" : "0px",
+              opacity: openIndex === i ? 1 : 0,
+              marginTop: openIndex === i ? "12px" : "0px",
+            }}
+          >
+            <p style={{ ...T.body, color: V("color-body") }}>{faq.answer}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 /* ──────────────── Page Component ──────────────── */
 
 export default function AgenciesPage() {
   return (
-    <>
+    <div className="page-wrapper">
       <main>
-        {/* ── HERO ── */}
-        <section
-          className="px-5 sm:px-8 py-20 sm:py-28 lg:py-36 text-center"
-          style={{ backgroundColor: V("color-canvas") }}
-        >
+        {/* ════════════════ SECTION 1 — HERO ════════════════ */}
+        <Section className="text-center" id="hero">
           <div className="max-w-4xl mx-auto">
-            <p
-              className="text-sm uppercase tracking-widest mb-5"
-              style={{ color: V("color-accent-blue") }}
-            >
-              For agencies
+            <p style={{ ...T.heroSub, color: V("color-accent-blue"), marginBottom: 20 }}>
+              Agencies
             </p>
-            <h1
-              className="max-w-3xl mx-auto"
-              style={{
-                fontSize: "clamp(44px, 6vw, 80px)",
-                fontWeight: 600,
-                lineHeight: 1.04,
-                letterSpacing: "-0.8px",
-                color: V("color-ink"),
-              }}
-            >
-              Scale your agency with Kreature
+            <h1 style={{ ...T.h1, color: V("color-ink"), maxWidth: "850px", margin: "0 auto" }}>
+              Deliver a seamless client experience every time
             </h1>
             <p
-              className="mt-6 max-w-2xl mx-auto"
+              style={{ ...T.bodyLg, color: V("color-body"), maxWidth: "680px", margin: "24px auto 0" }}
+            >
+              Bring every client&apos;s vision to life with pixel-perfect precision and
+              developer-grade control. Optimize web experiences for conversion, AI
+              readability, and what&apos;s next.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-9">
+              <PrimaryBtn href="/enterprise/contact-sales">
+                Contact us about becoming an agency partner
+              </PrimaryBtn>
+            </div>
+
+            {/* Hero images */}
+            <div className="mt-16 grid grid-cols-3 gap-4 max-w-5xl mx-auto">
+              <img
+                src={`${CDN}/689f328c98fe684bb6739dbe_hero.avif`}
+                alt="Kreature agency dashboard"
+                className="rounded-xl w-full h-auto col-span-3 md:col-span-2"
+                loading="eager"
+              />
+              <img
+                src={`${CDN}/689f328ca951685640a383ab_floating%201.avif`}
+                alt="Agency client preview"
+                className="rounded-xl w-full h-auto hidden md:block"
+                loading="eager"
+              />
+              <img
+                src={`${CDN}/689f328c10f2dddafd36a382_floating%202.jpg`}
+                alt="Agency collaboration view"
+                className="rounded-xl w-full h-auto hidden md:block md:col-span-1 md:col-start-2"
+                loading="eager"
+              />
+            </div>
+
+            {/* Trusted by logos */}
+            <p
+              className="mt-20 mb-6"
               style={{
-                fontSize: 18,
-                lineHeight: 1.7,
-                color: V("color-body"),
+                fontSize: 13,
+                fontWeight: 500,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: V("color-mute"),
               }}
             >
-              Ship client projects faster, earn recurring revenue, and
-              differentiate your agency with white-labeled AI-assisted
-              development. Join 1,200+ agencies already scaling with Kreature.
+              Trusted by leading agencies
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="#cta"
-                className="text-base font-medium px-8 py-4 rounded transition-colors inline-flex items-center"
-                style={{
-                  backgroundColor: V("color-accent-blue"),
-                  color: "#fff",
-                }}
-              >
-                Apply to partner program <Arrow />
-              </a>
-              <a
-                href="#why"
-                className="text-base font-medium px-8 py-4 rounded transition-colors border inline-flex items-center"
-                style={{
-                  borderColor: V("color-hairline"),
-                  color: V("color-ink"),
-                }}
-              >
-                See how it works
-              </a>
+            <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5 opacity-70">
+              {TRUSTED_LOGOS.map((logo) => (
+                <img
+                  key={logo.name}
+                  src={logo.src}
+                  alt={logo.name}
+                  className="h-6 sm:h-7 w-auto"
+                  loading="lazy"
+                />
+              ))}
+            </div>
+
+            {/* Bottom CTA */}
+            <p
+              className="mt-12 mb-4"
+              style={{ fontSize: 14, color: V("color-body-mid") }}
+            >
+              Start building for free. Upgrade any time.
+            </p>
+            <PrimaryBtn href="/signup">Get started</PrimaryBtn>
+          </div>
+        </Section>
+
+        {/* ════════════════ SECTION 2 — Problem Statement ════════════════ */}
+        <Section soft id="problem">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 style={{ ...T.h2, color: V("color-ink"), marginBottom: 24 }}>
+              The way agencies build for the web is changing. Can your tools keep up?
+            </h2>
+            <p style={{ ...T.bodyLg, color: V("color-body"), marginBottom: 20 }}>
+              Clients expect more than just a nice-looking site. They want measurable results —
+              faster load times, higher conversion rates, and AI-optimized content that ranks.
+              Traditional agency workflows that rely on handoffs between design and development
+              are too slow, too expensive, and too rigid to keep up with the demands of modern
+              digital experiences.
+            </p>
+            <p style={{ ...T.bodyLg, color: V("color-body") }}>
+              Kreature gives agencies a single platform where designers and developers can build
+              together — visually and in code — with AI-assisted workflows that eliminate
+              bottlenecks. Deliver production-grade, high-performance sites faster than ever
+              while keeping your margins healthy and your clients thrilled.
+            </p>
+          </div>
+        </Section>
+
+        {/* ════════════════ SECTION 3 — Icon Cards ════════════════ */}
+        <Section id="cards">
+          <h2 style={{ ...T.h2, color: V("color-ink"), textAlign: "center", maxWidth: "750px", margin: "0 auto 60px" }}>
+            Build high-performing web experiences that drive results — and repeat business
+          </h2>
+          <div className="grid sm:grid-cols-3 gap-8">
+            <div className="text-center px-4">
+              <img
+                src={`${ICONS_CDN}/TimeWatch.svg`}
+                alt=""
+                className="w-14 h-14 mx-auto mb-6"
+                loading="lazy"
+              />
+              <h3 style={{ ...T.h3, color: V("color-ink"), marginBottom: 12 }}>
+                Make every billable hour more valuable
+              </h3>
+              <p style={{ ...T.body, color: V("color-body-mid") }}>
+                AI-powered workflows handle the repetitive work — responsive layouts, semantic
+                HTML structure, accessibility checks — so your team can focus on creative
+                strategy and high-value problem solving that clients actually pay a premium for.
+              </p>
+            </div>
+
+            <div className="text-center px-4">
+              <img
+                src={`${ICONS_CDN}/RewardsStar.svg`}
+                alt=""
+                className="w-14 h-14 mx-auto mb-6"
+                loading="lazy"
+              />
+              <h3 style={{ ...T.h3, color: V("color-ink"), marginBottom: 12 }}>
+                Evolve from design to growth partner
+              </h3>
+              <p style={{ ...T.body, color: V("color-body-mid") }}>
+                Move beyond delivering static mockups. With built-in analytics, A/B testing,
+                and AI-powered optimization insights, you can show clients measurable impact on
+                their business metrics — turning project work into ongoing retainer relationships.
+              </p>
+            </div>
+
+            <div className="text-center px-4">
+              <img
+                src={`${ICONS_CDN}/Interactions.svg`}
+                alt=""
+                className="w-14 h-14 mx-auto mb-6"
+                loading="lazy"
+              />
+              <h3 style={{ ...T.h3, color: V("color-ink"), marginBottom: 12 }}>
+                Deliver fast, reliable sites your clients can trust
+              </h3>
+              <p style={{ ...T.body, color: V("color-body-mid") }}>
+                Every site ships with enterprise-grade performance out of the box — automatic
+                image optimization, global CDN, lazy loading, and clean semantic code that
+                scores 90+ on Core Web Vitals. Your clients&apos; sites load fast, stay secure,
+                and rank higher.
+              </p>
             </div>
           </div>
-        </section>
+        </Section>
 
-        {/* ── STATS BAR ── */}
-        <section
-          className="px-5 sm:px-8 py-10 border-y"
+        {/* ════════════════ SECTION 4 — Sticky Scroll Feature Rows ════════════════ */}
+        <Section soft id="features">
+          <h2 style={{ ...T.h2, color: V("color-ink"), textAlign: "center", maxWidth: "800px", margin: "0 auto 60px" }}>
+            How Kreature&apos;s platform helps you work smarter, not harder
+          </h2>
+
+          <div className="flex flex-col gap-28">
+            {STICKY_FEATURES.map((row, i) => (
+              <div
+                key={i}
+                className={`flex flex-col ${
+                  i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+                } items-center gap-12 lg:gap-16`}
+              >
+                <div className="flex-1">
+                  <h3 style={{ ...T.h3, color: V("color-ink"), marginBottom: 16 }}>
+                    {row.title}
+                  </h3>
+                  <p style={{ ...T.body, color: V("color-body-mid") }}>{row.body}</p>
+                </div>
+                <div className="flex-1">
+                  <img
+                    src={row.image}
+                    alt={row.title}
+                    className="rounded-xl w-full h-auto shadow-lg"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ════════════════ SECTION 5 — Marketplace Ecosystem Cards ════════════════ */}
+        <Section soft id="ecosystem">
+          <div className="text-center mb-16">
+            <h2 style={{ ...T.h2, color: V("color-ink"), marginBottom: 16 }}>
+              Everything you need to make your business thrive
+            </h2>
+            <p style={{ ...T.bodyLg, color: V("color-body"), maxWidth: "600px", margin: "0 auto" }}>
+              From partner resources to templates, integrations, and libraries — the Kreature
+              ecosystem is built to accelerate your agency&apos;s growth.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {ECOSYSTEM_CARDS.map((card) => (
+              <div
+                key={card.title}
+                className="p-7 rounded-xl border transition-all duration-200 flex flex-col"
+                style={{
+                  backgroundColor: V("color-canvas"),
+                  borderColor: V("color-hairline"),
+                }}
+              >
+                <img
+                  src={card.icon}
+                  alt=""
+                  className="w-12 h-12 mb-6"
+                  loading="lazy"
+                />
+                <h4
+                  style={{
+                    fontFamily: "var(--font-heading)",
+                    fontWeight: 600,
+                    fontSize: 17,
+                    lineHeight: 1.3,
+                    color: V("color-ink"),
+                    marginBottom: 10,
+                  }}
+                >
+                  {card.title}
+                </h4>
+                <p style={{ ...T.bodySm, color: V("color-body-mid"), flex: 1, marginBottom: 20 }}>
+                  {card.body}
+                </p>
+                <a
+                  href={card.href}
+                  className="inline-flex items-center text-sm font-medium transition-colors"
+                  style={{ color: V("color-accent-blue") }}
+                >
+                  {card.cta}
+                  <Arrow />
+                </a>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ════════════════ SECTION 6 — Testimonials ════════════════ */}
+        <Section soft id="testimonials">
+          <h2 style={{ ...T.h2, color: V("color-ink"), textAlign: "center", marginBottom: 56 }}>
+            Trusted by agencies worldwide
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-6">
+            {TESTIMONIALS.map((t) => (
+              <div
+                key={t.name}
+                className="p-8 rounded-xl flex flex-col"
+                style={{
+                  backgroundColor: V("color-canvas"),
+                  border: `1px solid ${V("color-hairline")}`,
+                }}
+              >
+                <p style={{ ...T.quote, color: V("color-body"), flex: 1, marginBottom: 24 }}>
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div className="flex items-center gap-3 mt-auto">
+                  <img
+                    src={t.image}
+                    alt={t.name}
+                    className="w-11 h-11 rounded-full object-cover"
+                    loading="lazy"
+                  />
+                  <div>
+                    <p
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: V("color-ink"),
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {t.name}
+                    </p>
+                    <p style={{ fontSize: 12, color: V("color-mute"), lineHeight: 1.4 }}>
+                      {t.role}, {t.company}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ════════════════ SECTION 7 — FAQ ════════════════ */}
+        <Section id="faq">
+          <h2 style={{ ...T.h2, color: V("color-ink"), textAlign: "center", marginBottom: 40 }}>
+            Frequently asked questions
+          </h2>
+          <FAQAccordion faqs={FAQS} />
+        </Section>
+
+        {/* ════════════════ SECTION 8 — Logo Marquee with Stats ════════════════ */}
+        <div
+          className="border-y px-5 sm:px-8 py-16"
           style={{
             backgroundColor: V("color-canvas-soft"),
             borderColor: V("color-hairline"),
           }}
         >
-          <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {STATS.map((s) => (
-              <div key={s.label}>
-                <div
-                  className="text-2xl sm:text-3xl font-semibold"
-                  style={{ color: V("color-ink") }}
-                >
-                  {s.value}
-                </div>
-                <div
-                  className="text-sm mt-1"
-                  style={{ color: V("color-mute") }}
-                >
-                  {s.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── VALUE PROPS ── */}
-        <section
-          id="value-props"
-          className="px-5 sm:px-8 py-20 sm:py-28"
-          style={{ backgroundColor: V("color-canvas") }}
-        >
-          <div className="max-w-6xl mx-auto">
-            <p
-              className="text-sm uppercase tracking-widest mb-3"
-              style={{ color: V("color-accent-blue") }}
-            >
-              Agency benefits
-            </p>
-            <h2
-              style={{
-                fontSize: "clamp(32px, 4vw, 56px)",
-                fontWeight: 600,
-                lineHeight: 1.04,
-                color: V("color-ink"),
-              }}
-            >
-              Everything your agency needs
-            </h2>
-            <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {VALUE_PROPS.map((prop) => (
-                <div
-                  key={prop.title}
-                  className="p-6 rounded-xl border transition-colors"
-                  style={{
-                    borderColor: V("color-hairline"),
-                    backgroundColor: V("color-canvas"),
-                  }}
-                >
-                  <div className="text-2xl mb-4">{prop.icon}</div>
-                  <h4
-                    className="mb-2"
-                    style={{
-                      fontSize: 18,
-                      fontWeight: 600,
-                      color: V("color-ink"),
-                    }}
-                  >
-                    {prop.title}
-                  </h4>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: V("color-body-mid") }}
-                  >
-                    {prop.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── WHY KREATURE ── */}
-        <section
-          id="why"
-          className="px-5 sm:px-8 py-20 sm:py-28"
-          style={{ backgroundColor: V("color-canvas-soft") }}
-        >
-          <div className="max-w-6xl mx-auto">
-            <p
-              className="text-sm uppercase tracking-widest mb-3"
-              style={{ color: V("color-accent-purple") }}
-            >
-              Why Kreature
-            </p>
-            <h2
-              style={{
-                fontSize: "clamp(32px, 4vw, 56px)",
-                fontWeight: 600,
-                lineHeight: 1.04,
-                color: V("color-ink"),
-              }}
-            >
-              Built for agencies, not freelancers
-            </h2>
-            <div className="mt-14 grid sm:grid-cols-3 gap-8">
-              {WHY_KREATURE.map((item) => (
-                <div key={item.title}>
+          <div className="max-w-7xl mx-auto">
+            {/* Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center mb-14">
+              {STATS.map((s) => (
+                <div key={s.label}>
                   <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center mb-5"
-                    style={{ backgroundColor: V("color-accent-blue") }}
-                  >
-                    <span className="text-white text-lg font-bold">
-                      {WHY_KREATURE.indexOf(item) + 1}
-                    </span>
-                  </div>
-                  <h3
-                    className="mb-3"
                     style={{
-                      fontSize: 22,
-                      fontWeight: 600,
+                      fontSize: "clamp(28px, 4vw, 40px)",
+                      fontWeight: 700,
                       color: V("color-ink"),
+                      letterSpacing: "-0.5px",
                     }}
                   >
-                    {item.title}
-                  </h3>
-                  <p style={{ color: V("color-body-mid"), lineHeight: 1.7 }}>
-                    {item.body}
+                    {s.value}
+                  </div>
+                  <p style={{ fontSize: 13, color: V("color-mute"), marginTop: 6 }}>
+                    {s.label}
                   </p>
                 </div>
               ))}
             </div>
-          </div>
-        </section>
 
-        {/* ── PARTNER TIERS ── */}
-        <section
-          id="tiers"
-          className="px-5 sm:px-8 py-20 sm:py-28"
-          style={{ backgroundColor: V("color-canvas") }}
-        >
-          <div className="max-w-6xl mx-auto">
-            <p
-              className="text-sm uppercase tracking-widest mb-3"
-              style={{ color: V("color-accent-orange") }}
-            >
-              Partner program
-            </p>
-            <h2
-              className="mb-4"
-              style={{
-                fontSize: "clamp(32px, 4vw, 56px)",
-                fontWeight: 600,
-                lineHeight: 1.04,
-                color: V("color-ink"),
-              }}
-            >
-              Choose your tier
-            </h2>
-            <p
-              className="max-w-xl"
-              style={{ color: V("color-body"), lineHeight: 1.7 }}
-            >
-              Every tier includes access to the full Kreature platform. Higher
-              tiers unlock more revenue share, dedicated support, and co-marketing.
-            </p>
-            <div className="mt-14 grid md:grid-cols-3 gap-6">
-              {PARTNER_TIERS.map((tier) => (
-                <div
-                  key={tier.tier}
-                  className="p-8 rounded-xl border relative overflow-hidden transition-colors"
-                  style={{
-                    borderColor:
-                      tier.tier === "Premier"
-                        ? V("color-accent-blue")
-                        : V("color-hairline"),
-                    backgroundColor: V("color-canvas"),
-                    boxShadow:
-                      tier.tier === "Premier"
-                        ? `0 0 0 1px ${V("color-accent-blue")}, 0 24px 48px -12px rgba(0,0,0,0.15)`
-                        : "none",
-                  }}
-                >
-                  {tier.tier === "Premier" && (
-                    <div
-                      className="absolute top-0 left-0 right-0 text-center text-xs font-semibold py-1.5"
-                      style={{
-                        backgroundColor: V("color-accent-blue"),
-                        color: "#fff",
-                      }}
-                    >
-                      Most popular
-                    </div>
-                  )}
-                  <div className={tier.tier === "Premier" ? "mt-6" : ""}>
-                    <p
-                      className="text-xs uppercase tracking-widest font-semibold mb-2"
-                      style={{ color: V(tier.accent) }}
-                    >
-                      {tier.tier}
-                    </p>
-                    <div
-                      className="text-4xl font-bold mb-1"
-                      style={{ color: V("color-ink") }}
-                    >
-                      {tier.revenue}
-                    </div>
-                    <p
-                      className="text-sm mb-6"
-                      style={{ color: V("color-mute") }}
-                    >
-                      revenue share
-                    </p>
-                    <p
-                      className="text-xs uppercase tracking-wide mb-4"
-                      style={{ color: V("color-body-mid") }}
-                    >
-                      Requirements
-                    </p>
-                    <p
-                      className="text-sm mb-6 pb-6 border-b"
-                      style={{
-                        color: V("color-body"),
-                        borderColor: V("color-hairline"),
-                      }}
-                    >
-                      {tier.requirements}
-                    </p>
-                    <ul className="space-y-3">
-                      {tier.features.map((f) => (
-                        <li
-                          key={f}
-                          className="text-sm flex items-start gap-2"
-                          style={{ color: V("color-body") }}
-                        >
-                          <span style={{ color: V(tier.accent) }}>
-                            &check;
-                          </span>{" "}
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+            {/* Logo marquee */}
+            <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 opacity-50">
+              {STATS_LOGOS.map((logo) => (
+                <img
+                  key={logo.name}
+                  src={logo.src}
+                  alt={logo.name}
+                  className="h-5 sm:h-6 w-auto"
+                  loading="lazy"
+                />
               ))}
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* ── CTA ── */}
-        <section
-          id="cta"
-          className="px-5 sm:px-8 py-20 sm:py-28"
-          style={{ backgroundColor: V("color-canvas-soft") }}
-        >
-          <div className="max-w-3xl mx-auto text-center">
-            <h2
-              className="mb-6"
-              style={{
-                fontSize: "clamp(32px, 4vw, 56px)",
-                fontWeight: 600,
-                lineHeight: 1.04,
-                color: V("color-ink"),
-              }}
-            >
-              Become a partner
+        {/* ════════════════ SECTION 9 — Bottom CTA ════════════════ */}
+        <Section soft id="cta" className="text-center">
+          <div className="max-w-2xl mx-auto">
+            <h2 style={{ ...T.h2, color: V("color-ink"), marginBottom: 28 }}>
+              Talk to us
             </h2>
-            <p
-              className="mb-10 max-w-xl mx-auto"
-              style={{ color: V("color-body"), lineHeight: 1.7, fontSize: 18 }}
-            >
-              Join 1,200+ agencies scaling their business with Kreature. Apply
-              to the partner program and start earning revenue share on day one.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="/contact-sales"
-                className="text-base font-medium px-8 py-4 rounded transition-colors inline-flex items-center"
-                style={{
-                  backgroundColor: V("color-accent-blue"),
-                  color: "#fff",
-                }}
-              >
-                Apply now <Arrow />
-              </a>
-              <a
-                href="/certified-partners"
-                className="text-base font-medium px-8 py-4 rounded transition-colors border inline-flex items-center"
-                style={{
-                  borderColor: V("color-hairline"),
-                  color: V("color-ink"),
-                }}
-              >
-                Explore partners
-              </a>
+            <div className="mb-6">
+              <PrimaryBtn href="/enterprise/contact-sales">
+                Contact partnerships
+              </PrimaryBtn>
             </div>
+            <p style={{ fontSize: 14, color: V("color-mute") }}>
+              Learn more about how Kreature can help scale your digital experiences.
+            </p>
           </div>
-        </section>
+        </Section>
       </main>
 
       {/* ════════════════ FOOTER ════════════════ */}
       <footer
-        className="border-t"
+        className="border-t px-5 sm:px-8 py-16"
         style={{
           borderColor: V("color-hairline"),
           backgroundColor: V("color-canvas"),
         }}
       >
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16">
-          <div className="grid sm:grid-cols-3 lg:grid-cols-7 gap-8">
-            {/* Brand column -- spans 1 of 7 */}
-            <div className="sm:col-span-3 lg:col-span-1">
-              <div className="flex items-center gap-2.5 mb-3">
-                <img
-                  src="/logo/kreature-logo-dark.png"
-                  alt="Kreature"
-                  className="logo-dark h-[30px] w-auto"
-                />
-                <img
-                  src="/logo/kreature-logo-light.png"
-                  alt="Kreature"
-                  className="logo-light h-[30px] w-auto"
-                />
-                <span
-                  className="font-[800] text-lg tracking-tight"
-                  style={{ color: V("color-ink") }}
-                >
-                  Kreature
-                  <span style={{ color: V("color-accent-blue") }}>.</span>
-                </span>
-              </div>
-              <p
-                className="text-xs leading-relaxed"
-                style={{ color: V("color-mute") }}
-              >
-                AI Product Studio for teams who ship fast.
-              </p>
+        <div className="max-w-7xl mx-auto">
+          {/* Brand row */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-12 mb-12 border-b" style={{ borderColor: V("color-hairline") }}>
+            <div className="flex items-center gap-2.5">
+              <img
+                src="/logo/kreature-logo-dark.png"
+                alt="Kreature"
+                className="logo-dark h-[28px] w-auto"
+              />
+              <img
+                src="/logo/kreature-logo-light.png"
+                alt="Kreature"
+                className="logo-light h-[28px] w-auto"
+              />
+              <Wordmark />
             </div>
-
-            {/* Link columns -- span remaining 6 columns */}
-            {FOOTER_DATA.map((col) => (
-              <div key={col.heading}>
-                <div
-                  className="text-xs uppercase tracking-wider font-semibold mb-4"
-                  style={{ color: V("color-body-mid") }}
-                >
-                  {col.heading}
-                </div>
-                <ul className="space-y-2.5">
-                  {col.links.map((link) => (
-                    <li key={link.label}>
-                      <a
-                        href={link.href}
-                        className="text-xs transition-colors"
-                        style={{ color: V("color-mute") }}
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          <div
-            className="mt-14 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4"
-            style={{ borderColor: V("color-hairline") }}
-          >
-            <p className="text-xs" style={{ color: V("color-mute-soft") }}>
-              &copy; {new Date().getFullYear()} Kreature Studio. All rights
-              reserved.
-            </p>
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-4">
               <a
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Twitter"
-                className="transition-colors"
-                style={{ color: V("color-mute") }}
+                aria-label="Twitter / X"
+                className="transition-opacity opacity-60 hover:opacity-100"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{ color: V("color-mute") }}>
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
               </a>
@@ -622,17 +816,60 @@ export default function AgenciesPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="transition-colors"
-                style={{ color: V("color-mute") }}
+                className="transition-opacity opacity-60 hover:opacity-100"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{ color: V("color-mute") }}>
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                 </svg>
               </a>
             </div>
           </div>
+
+          {/* Footer link columns */}
+          <div className="grid sm:grid-cols-3 gap-8">
+            <div>
+              <p className="text-xs uppercase tracking-wider font-semibold mb-4" style={{ color: V("color-body-mid") }}>Solutions</p>
+              <ul className="space-y-2.5">
+                <li><a href="/solutions/agencies" className="text-sm transition-colors" style={{ color: V("color-mute") }}>Agencies</a></li>
+                <li><a href="/solutions/freelancers" className="text-sm transition-colors" style={{ color: V("color-mute") }}>Freelancers</a></li>
+                <li><a href="/solutions/developers" className="text-sm transition-colors" style={{ color: V("color-mute") }}>Developers</a></li>
+                <li><a href="/solutions/brand-creative-teams" className="text-sm transition-colors" style={{ color: V("color-mute") }}>Creative Teams</a></li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-wider font-semibold mb-4" style={{ color: V("color-body-mid") }}>Resources</p>
+              <ul className="space-y-2.5">
+                <li><a href="/templates" className="text-sm transition-colors" style={{ color: V("color-mute") }}>Templates</a></li>
+                <li><a href="/libraries" className="text-sm transition-colors" style={{ color: V("color-mute") }}>Libraries</a></li>
+                <li><a href="/apps" className="text-sm transition-colors" style={{ color: V("color-mute") }}>Integrations</a></li>
+                <li><a href="/blog" className="text-sm transition-colors" style={{ color: V("color-mute") }}>Blog</a></li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-wider font-semibold mb-4" style={{ color: V("color-body-mid") }}>Company</p>
+              <ul className="space-y-2.5">
+                <li><a href="/company" className="text-sm transition-colors" style={{ color: V("color-mute") }}>About</a></li>
+                <li><a href="/customers" className="text-sm transition-colors" style={{ color: V("color-mute") }}>Customers</a></li>
+                <li><a href="/certified-partners" className="text-sm transition-colors" style={{ color: V("color-mute") }}>Partners</a></li>
+                <li><a href="/enterprise/contact-sales" className="text-sm transition-colors" style={{ color: V("color-mute") }}>Contact</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+            className="mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4"
+            style={{ borderColor: V("color-hairline") }}
+          >
+            <p className="text-xs" style={{ color: V("color-mute") }}>
+              &copy; {new Date().getFullYear()} Kreature Studio. All rights reserved.
+            </p>
+            <div className="flex items-center gap-5">
+              <a href="/legal/privacy" className="text-xs transition-colors" style={{ color: V("color-mute") }}>Privacy Policy</a>
+              <a href="/legal/terms" className="text-xs transition-colors" style={{ color: V("color-mute") }}>Terms of Service</a>
+            </div>
+          </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }

@@ -10,10 +10,12 @@ const S = {
   h3: { fontSize: "32px", fontWeight: 500, lineHeight: "41.6px" } as React.CSSProperties,
   h4: { fontSize: "20px", fontWeight: 600, lineHeight: "28px" } as React.CSSProperties,
   body: { fontSize: "16px", fontWeight: 400, lineHeight: "25.6px" } as React.CSSProperties,
+  bodyLg: { fontSize: "20px", lineHeight: 1.5 } as React.CSSProperties,
   bodySm: { fontSize: "14px", lineHeight: "22.4px" } as React.CSSProperties,
   caption: { fontSize: "12.8px", fontWeight: 550, lineHeight: "15.36px" } as React.CSSProperties,
-  eyebrow: { fontSize: "15px", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" as const } as React.CSSProperties,
+  eyebrow: { fontSize: "15px", fontWeight: 500, letterSpacing: "0.05em", textTransform: "uppercase" as const } as React.CSSProperties,
   btn: { fontSize: "16px", fontWeight: 500, lineHeight: "19.2px", padding: "16px 24px", borderRadius: "4px" } as React.CSSProperties,
+  btnSm: { fontSize: "14px", fontWeight: 500, padding: "12px 20px", borderRadius: "4px" } as React.CSSProperties,
 };
 
 /* ─── Shared components ─── */
@@ -21,7 +23,6 @@ function Arrow() {
   return <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>;
 }
 
-/* ─── Wordmark ─── */
 function Wordmark({ className = "" }: { className?: string }) {
   return (
     <span className={`font-heading font-[800] text-xl tracking-tight ${className}`} style={{ color: V("color-ink") }}>
@@ -30,549 +31,459 @@ function Wordmark({ className = "" }: { className?: string }) {
   );
 }
 
-/* ─── HOSTING FEATURES ─── */
-const HOSTING_FEATURES = [
-  {
-    icon: "☁",
-    title: "Global CDN",
-    subtitle: "Powered by AWS CloudFront",
-    desc: "300+ points of presence across 90+ cities worldwide. Your content is served from the edge closest to every visitor, reducing latency to under 20ms globally.",
-  },
-  {
-    icon: "◉",
-    title: "99.99% uptime SLA",
-    subtitle: "Enterprise reliability",
-    desc: "Redundant infrastructure across multiple availability zones. Automatic failover ensures your site stays online even during regional outages.",
-  },
-  {
-    icon: "🔒",
-    title: "SSL certificates",
-    subtitle: "One-click HTTPS",
-    desc: "Free, auto-renewing SSL certificates for every custom domain. HTTP/2 and TLS 1.3 enabled by default with zero configuration required.",
-  },
-  {
-    icon: "🛡",
-    title: "DDoS protection",
-    subtitle: "Enterprise-grade security",
-    desc: "Layer 3, 4, and 7 protection absorbs attacks up to multiple Tbps. Rate limiting, WAF rules, and bot detection built into every plan.",
-  },
-  {
-    icon: "↻",
-    title: "Automatic backups",
-    subtitle: "Point-in-time recovery",
-    desc: "Every site backed up daily with 90-day retention. Restore any version with one click. Manual snapshots available before major changes.",
-  },
-  {
-    icon: "⚡",
-    title: "SEO optimization",
-    subtitle: "Out-of-the-box performance",
-    desc: "Automatic image compression, lazy loading, responsive images, and clean semantic HTML. Core Web Vitals optimized by default.",
-  },
-];
-
-/* ─── PERFORMANCE STATS ─── */
-const PERF_STATS = [
-  { value: "100", label: "Lighthouse Performance", unit: "/100" },
-  { value: "0.9s", label: "Average FCP", unit: "First Contentful Paint" },
-  { value: "1.2s", label: "Average LCP", unit: "Largest Contentful Paint" },
-  { value: "48ms", label: "Average TBT", unit: "Total Blocking Time" },
-  { value: "0.05", label: "Average CLS", unit: "Cumulative Layout Shift" },
-  { value: "<20ms", label: "Global TTFB", unit: "Time to First Byte" },
-];
-
-/* ─── SECURITY COMPLIANCE ─── */
-const COMPLIANCE = [
-  {
-    badge: "SOC 2",
-    type: "Type II",
-    desc: "Annual third-party audit covering security, availability, and confidentiality. Report available under NDA for enterprise customers.",
-  },
-  {
-    badge: "GDPR",
-    desc: "Full compliance with EU data protection regulations. Data processing agreements, data residency options, and right-to-erasure support.",
-  },
-  {
-    badge: "ISO 27001",
-    desc: "Certified Information Security Management System. Regular penetration testing and vulnerability assessments by independent firms.",
-  },
-  {
-    badge: "PCI DSS",
-    type: "Level 1",
-    desc: "Highest level of payment card security compliance. Secure checkout experiences without handling raw card data.",
-  },
-];
-
-/* ─── COMPARISON TABLE ─── */
-const COMPARISON_ROWS = [
-  { feature: "Global CDN", kreature: "300+ PoPs", traditional: "Limited regions" },
-  { feature: "SSL certificates", kreature: "Free, auto-renewing", traditional: "Manual, often paid" },
-  { feature: "Uptime SLA", kreature: "99.99%", traditional: "99.9% typical" },
-  { feature: "Deploy time", kreature: "< 1 second", traditional: "2-5 minutes" },
-  { feature: "Backups", kreature: "Daily with 90-day retention", traditional: "Weekly or manual only" },
-  { feature: "Scaling", kreature: "Automatic, infinite", traditional: "Manual, plan-limited" },
-  { feature: "DDoS protection", kreature: "Included, multi-Tbps", traditional: "Add-on or unavailable" },
-  { feature: "HTTP/3 support", kreature: "Enabled by default", traditional: "Often unsupported" },
-  { feature: "Server management", kreature: "Zero — fully managed", traditional: "Updates, patches, config" },
-];
-
-/* ─── FOOTER DATA ─── */
-const FOOTER_COLS = [
-  {
-    heading: "Product",
-    links: [
-      { label: "CMS", href: "/feature/cms" },
-      { label: "Hosting", href: "/feature/hosting" },
-      { label: "Design", href: "/feature/design" },
-      { label: "AI", href: "/feature/ai" },
-      { label: "SEO", href: "/feature/seo" },
-    ],
-  },
-  {
-    heading: "Solutions",
-    links: [
-      { label: "Enterprise", href: "/enterprise" },
-      { label: "Agencies", href: "/solutions" },
-      { label: "Ecommerce", href: "/feature/ecommerce" },
-      { label: "Startups", href: "/solutions" },
-    ],
-  },
-  {
-    heading: "Resources",
-    links: [
-      { label: "Blog", href: "/blog" },
-      { label: "Templates", href: "/templates" },
-      { label: "Libraries", href: "/libraries" },
-      { label: "Glossary", href: "/glossary" },
-      { label: "Made in Webflow", href: "/made-in-webflow" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "About", href: "/company" },
-      { label: "Careers", href: "/company" },
-      { label: "Customers", href: "/customers" },
-      { label: "Partners", href: "/certified-partners" },
-      { label: "Contact", href: "/contact-sales" },
-    ],
-  },
-  {
-    heading: "Compare",
-    links: [
-      { label: "vs WordPress", href: "/webflow-vs-wordpress" },
-      { label: "vs Framer", href: "/webflow-vs-framer" },
-      { label: "vs Squarespace", href: "/webflow-vs-squarespace" },
-      { label: "vs Wix", href: "/webflow-vs-wix" },
-    ],
-  },
-  {
-    heading: "Community",
-    links: [
-      { label: "Forum", href: "/community" },
-      { label: "Events", href: "/community" },
-      { label: "Webflow TV", href: "/community" },
-      { label: "Discord", href: "/community" },
-    ],
-  },
-  {
-    heading: "Get Help",
-    links: [
-      { label: "Support", href: "/contact-sales" },
-      { label: "Docs", href: "/resources" },
-      { label: "Status", href: "/resources" },
-      { label: "Login", href: "/login" },
-    ],
-  },
-];
-
-/* ═══════════════════════════════════════════════════════════════════════════════
-   HOSTING FEATURE PAGE
-   ═══════════════════════════════════════════════════════════════════════════════ */
-export default function HostingPage() {
+function Section({
+  bg,
+  children,
+  className,
+}: {
+  bg?: "soft" | "dark" | "blue";
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <>
+    <section
+      className={`px-5 sm:px-8 py-[clamp(3rem,8vw,7rem)] ${className || ""}`}
+      style={{
+        background:
+          bg === "soft"
+            ? V("color-canvas-soft")
+            : bg === "dark"
+              ? V("color-ink")
+              : bg === "blue"
+                ? V("color-accent-blue")
+                : V("color-canvas"),
+      }}
+    >
+      <div className="max-w-[1440px] mx-auto">{children}</div>
+    </section>
+  );
+}
+
+/* ─── Icons (SVG placeholders matching source) ─── */
+function Icon({ name }: { name: string }) {
+  const icons: Record<string, string> = {
+    SiteLove: "♥",
+    ChartLineIncrease: "↗",
+    ImageDecrease: "⊟",
+    Encryption: "🔒",
+    SecurityCertified: "🛡",
+    Sync: "↻",
+    SiteSSO: "🔑",
+    WebMonitor: "◉",
+    CertifiedStamp: "✓",
+    CloudBackup: "☁",
+    PublishMarketing: "◇",
+    BranchMerge: "⑂",
+    Localization: "🌐",
+    SiteControls: "⚙",
+  };
+  return <span className="text-4xl leading-none">{icons[name] || "●"}</span>;
+}
+
+/* ─── SCALE SECURELY FEATURES ─── */
+const SCALE_FEATURES = [
+  {
+    icon: "SiteLove",
+    title: "Zero maintenance",
+    desc: "No updates to run, packages to install, or capacity planning. Just publish your site and let us take care of the rest.",
+  },
+  {
+    icon: "ChartLineIncrease",
+    title: "Traffic-surge ready",
+    desc: "Webflow is equipped to handle high traffic volumes and can scale alongside growing site traffic.",
+  },
+  {
+    icon: "ImageDecrease",
+    title: "Image optimization and compression",
+    desc: "Responsive images come with every plan, and we offer easy conversion to WebP and AVIF formats for even more streamlined performance.",
+  },
+  {
+    icon: "Encryption",
+    title: "SSL/TLS comes free",
+    desc: "Every Site plan automatically includes SSL and TLS. This means improved SEO for your site and no more security warnings for your customers.",
+  },
+  {
+    icon: "SecurityCertified",
+    title: "Global DDoS & Bot protection comes free",
+    desc: "Powered by our global CDN provider, our hosting network offers built-in protection from Distributed Denial-of-Service (DDoS) attacks and uses advanced Bot protection to keep your site safe.",
+  },
+  {
+    icon: "Sync",
+    title: "Automatic form spam filtering comes free",
+    desc: "No more manual spam cleanup — Webflow's automated system filters form responses for you.",
+  },
+  {
+    icon: "SiteSSO",
+    title: "SSO included for Enterprise",
+    desc: "Webflow Enterprise customers enjoy secure and centralized access management using Single Sign-On (SSO), ensuring compliance with security policies.",
+  },
+  {
+    icon: "WebMonitor",
+    title: "Vulnerability scanning",
+    desc: "We continuously monitor for new security vulnerabilities and deploy updates automatically to stay ahead of threats.",
+  },
+  {
+    icon: "CertifiedStamp",
+    title: "Security compliant",
+    desc: "We take security seriously and map our security program to industry standards. Webflow is also SOC 2 Type II, CCPA, and GDPR compliant — to name a few.",
+  },
+];
+
+/* ─── SITE MANAGEMENT FEATURES ─── */
+const MANAGE_FEATURES = [
+  {
+    icon: "CloudBackup",
+    title: "Backups and versioning",
+    desc: "Preview and restore your site from ongoing, automatic backups — or create save points to mark progress and track changes.",
+  },
+  {
+    icon: "PublishMarketing",
+    title: "Staging domains",
+    desc: "Stage your site for testing and approval before hitting publish — and customize them (or make them private) with Webflow Enterprise.",
+  },
+  {
+    icon: "SecurityCertified",
+    title: "Password protection",
+    desc: "Password protect individual pages — or your entire website — to protect in-progress work or restrict access.",
+  },
+  {
+    icon: "BranchMerge",
+    title: "Branching",
+    desc: "Every Site plan automatically includes SSL and TLS. This means improved SEO for your site and no more security warnings for your customers.",
+  },
+  {
+    icon: "Localization",
+    title: "Localization",
+    desc: "Build, customize, and deliver fully localized sites within Webflow — and maintain domain authority with hosted subdirectories (like .com/es/).",
+  },
+  {
+    icon: "SiteControls",
+    title: "Custom Security Headers",
+    desc: "Protect your site visitors from man-in-the-middle (MitM) attacks when you host with Webflow Enterprise.",
+  },
+];
+
+/* ─── FAQ ─── */
+const FAQS = [
+  {
+    q: "What's the difference between Webflow Hosting and Webflow Cloud?",
+    a: "Webflow's core hosting powers static and CMS-driven websites with enterprise-grade speed, security, and reliability. Webflow Cloud extends that foundation to support dynamic, server-rendered web apps, giving developers full control over backend logic, API routes, and deployment workflows, on the same domain.",
+  },
+  {
+    q: "Can Webflow host web apps as well as websites?",
+    a: "Yes. Webflow Cloud lets developers deploy full-stack web apps and dynamic experiences alongside websites on Webflow's infrastructure, on the same custom domain. This means teams can build everything from marketing pages to product dashboards in one place, without juggling multiple hosting providers or environments. Developers can use frameworks like Next.js, Astro, and more in the future. Webflow Cloud also supports server-side rendering, API routes, and environment variables, making it possible to build interactive, data-driven applications with the performance and scalability of Webflow's global infrastructure.",
+  },
+  {
+    q: "Can I connect my own custom domain to Webflow hosting?",
+    a: "Yes, you can easily connect any custom domain to your Webflow-hosted site by updating your DNS records to point to Webflow's servers. You can purchase a domain directly within Webflow or use one you already own from any domain registrar. Once connected, your custom domain benefits from all of Webflow's hosting features, including SSL certificates, global CDN delivery, and automatic backups. You maintain full control over your domain settings and the ability to transfer hosting between sites in your workspace without downtime.",
+  },
+  {
+    q: "How does Webflow hosting handle security and SSL certificates?",
+    a: "Every Webflow Site plan includes free SSL/TLS certificates that automatically renew, providing end-to-end encryption between your site and visitors without any setup required. Webflow hosting also includes automatic vulnerability scanning, DDoS and bot protection powered by Cloudflare, form spam filtering, and compliance with SOC 2 Type II, CCPA, and GDPR standards. For Enterprise customers requiring additional control, custom SSL certificates can be uploaded, and advanced security features like custom security headers protect against man-in-the-middle attacks.",
+  },
+  {
+    q: "Can I use Webflow to host high-traffic or enterprise websites?",
+    a: "Webflow's enterprise-grade hosting infrastructure processes tens of billions of page views monthly and is built to scale automatically with your traffic needs. Enterprise customers benefit from a 99.99% uptime SLA, custom security headers, SSO integration, and the ability to upload custom SSL certificates. Companies like Monday.com, IDEO, and The New York Times trust Webflow to handle their high-traffic demands, with features like automatic image optimization, HTTP/2 and HTTP/3 support, and global CDN distribution that ensure fast load times regardless of visitor volume.",
+  },
+  {
+    q: "How does Webflow compare to other hosting providers?",
+    a: "Webflow combines the power of AWS infrastructure with Cloudflare's global CDN to deliver 99.99% uptime and reach 95% of the world in less than 50 milliseconds. Unlike traditional hosting providers where you have to manage updates, security patches, and server configurations, Webflow provides a zero-maintenance solution with automatic backups, built-in DDoS protection, and traffic-surge readiness. This managed approach means you can focus on building and updating your site while we handle the technical complexities of keeping it fast, secure, and available worldwide.",
+  },
+  {
+    q: "Is hosting included with Webflow?",
+    a: "Yes, hosting is included with all paid Webflow Site plans, providing a completely managed solution powered by AWS and Cloudflare. Site plans include enterprise-grade hosting that handles millions of page views daily with less than 100ms response time, automatic SSL certificates, global CDN delivery, and continuous security monitoring — all without needing to manage servers or technical infrastructure yourself. Webflow also offers built-in staging, rollback, and environment support, so you can test changes in isolated branches, preview them safely, and revert instantly if needed.",
+  },
+];
+
+/* ─── CUSTOMER STORIES ─── */
+const STORIES = [
+  { metric: "10x", label: "In cost savings annually", logo: "Verifone" },
+  { metric: "67%", label: "decrease in dev ticketing", logo: "Dropbox" },
+  { metric: "$6M", label: "in cost savings annually", logo: "Orangetheory Fitness" },
+  { metric: "56%", label: "increase in form fills", logo: "Walker & Dunlop" },
+  { metric: "1,170%", label: "increase in traffic YoY", logo: "DocuSign" },
+  { metric: "$200M", label: "in new pipeline generated post-site launch", logo: "ABM" },
+  { metric: "+20%", label: "increase in site-wide conversion", logo: "Lattice" },
+];
+
+/* ─── PAGE ─── */
+export default function HostingFeaturePage() {
+  return (
+    <div className="page-wrapper" style={{ background: V("color-canvas"), color: V("color-body") }}>
       <main>
-        {/* ═══ HERO ═══ */}
+        {/* ═══════ HERO ═══════ */}
         <section
-          className="pt-[148px] pb-20 sm:pb-28 px-5 sm:px-8"
-          style={{ background: V("color-canvas") }}
+          className="relative overflow-hidden px-5 sm:px-8 pt-[clamp(4rem,10vw,8rem)] pb-[clamp(3rem,6vw,5rem)]"
+          style={{ background: V("color-ink") }}
         >
-          <div className="max-w-3xl mx-auto text-center">
-            <p style={{ ...S.eyebrow, color: V("color-accent-orange") }}>Hosting Infrastructure</p>
-            <h1 className="mt-4 mb-6" style={S.h1}>
-              Lightning-fast hosting
-            </h1>
-            <p className="max-w-2xl mx-auto" style={{ ...S.body, color: V("color-body-mid"), fontSize: "20px" }}>
-              Enterprise infrastructure built on AWS. Global CDN, automatic scaling, and zero-config
-              performance that keeps your sites fast, secure, and always online.
+          <div className="max-w-[1440px] mx-auto relative z-10">
+            <div className="max-w-[800px]">
+              {/* H1 — no eyebrow on source */}
+              <h1
+                className="font-semibold leading-[1.04] tracking-[-0.01em] mb-6"
+                style={{ ...S.h1, color: V("color-canvas") }}
+              >
+                Secure hosting without the hassles
+              </h1>
+
+              <p className="max-w-[650px] mb-10" style={{ ...S.bodyLg, color: V("color-mute-soft") }}>
+                Enjoy reliable, scalable, fast, and secure hosting for your business — managed for you.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a
+                  href="/signup"
+                  className="inline-flex items-center transition-colors"
+                  style={{ ...S.btn, background: V("color-accent-blue"), color: "#fff" }}
+                >
+                  Get started — it&apos;s free
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════ CUSTOMER LOGOS BAR ═══════ */}
+        <section
+          className="px-5 sm:px-8 py-10"
+          style={{ borderBottom: `1px solid ${V("color-hairline")}`, background: V("color-canvas-soft") }}
+        >
+          <div className="max-w-[1440px] mx-auto">
+            <p className="text-center mb-8" style={{ ...S.bodySm, color: V("color-mute"), textTransform: "uppercase" as const, letterSpacing: "0.08em" }}>
+              Powering hosting for millions of websites, including:
             </p>
-            <div className="flex items-center justify-center gap-4 mt-10">
-              <a
-                href="/signup"
-                className="no-underline inline-flex items-center"
-                style={{
-                  ...S.btn,
-                  background: V("color-accent-blue"),
-                  color: "#fff",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = V("color-accent-blue-hover"))}
-                onMouseLeave={(e) => (e.currentTarget.style.background = V("color-accent-blue"))}
-              >
-                Start for free <Arrow />
-              </a>
-              <a
-                href="#features"
-                className="no-underline inline-flex items-center"
-                style={{
-                  ...S.btn,
-                  background: "transparent",
-                  color: V("color-ink"),
-                  border: `1px solid ${V("color-hairline")}`,
-                }}
-              >
-                See features
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ HOSTING FEATURES ═══ */}
-        <section
-          id="features"
-          className="py-20 sm:py-28 px-5 sm:px-8"
-          style={{ background: V("color-canvas-soft") }}
-        >
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <p style={{ ...S.eyebrow, color: V("color-accent-orange") }}>Features</p>
-              <h2 className="mt-3 mb-4" style={S.h2}>
-                Infrastructure you can trust
-              </h2>
-              <p className="max-w-xl mx-auto" style={{ ...S.body, color: V("color-body-mid") }}>
-                Every site gets enterprise-grade hosting with global reach, automatic scaling, and
-                best-in-class security.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {HOSTING_FEATURES.map((feat) => (
-                <div
-                  key={feat.title}
-                  className="rounded-xl p-8 transition-shadow"
-                  style={{
-                    background: V("color-canvas"),
-                    border: `1px solid ${V("color-hairline")}`,
-                    boxShadow: V("shadow-card"),
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.boxShadow = V("shadow-card-strong"))}
-                  onMouseLeave={(e) => (e.currentTarget.style.boxShadow = V("shadow-card"))}
-                >
-                  <div
-                    className="w-12 h-12 rounded-lg flex items-center justify-center text-xl mb-5"
-                    style={{ background: V("color-canvas-soft"), color: V("color-accent-orange") }}
-                  >
-                    {feat.icon}
-                  </div>
-                  <p className="mb-2" style={{ ...S.caption, color: V("color-accent-orange"), textTransform: "uppercase" }}>
-                    {feat.subtitle}
-                  </p>
-                  <h3 className="mb-3" style={{ ...S.h4, color: V("color-ink") }}>{feat.title}</h3>
-                  <p style={{ ...S.bodySm, color: V("color-body-mid") }}>{feat.desc}</p>
+            <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 opacity-60">
+              {["Ideo", "Monday.com", "BBDO", "The New York Times", "Ted", "DocuSign"].map((name) => (
+                <div key={name} className="text-lg font-semibold tracking-tight" style={{ color: V("color-mute-soft") }}>
+                  {name}
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ═══ PERFORMANCE STATS ═══ */}
-        <section className="py-20 sm:py-28 px-5 sm:px-8" style={{ background: V("color-canvas") }}>
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <p style={{ ...S.eyebrow, color: V("color-accent-green") }}>Performance</p>
-              <h2 className="mt-3 mb-4" style={S.h2}>
-                Core Web Vitals, optimized
-              </h2>
-              <p className="max-w-xl mx-auto" style={{ ...S.body, color: V("color-body-mid") }}>
-                Every site on Kreature passes Core Web Vitals out of the box. No plugins, no configuration,
-                no performance engineer required.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
-              {PERF_STATS.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-xl p-6 text-center"
-                  style={{
-                    background: V("color-canvas-soft"),
-                    border: `1px solid ${V("color-hairline")}`,
-                  }}
-                >
-                  <div className="mb-2" style={{ ...S.h2, color: V("color-accent-green"), fontSize: "44px" }}>
-                    {stat.value}
-                  </div>
-                  <p className="mb-1" style={{ ...S.bodySm, color: V("color-ink"), fontWeight: 600 }}>
-                    {stat.label}
-                  </p>
-                  <p style={{ ...S.caption, color: V("color-mute") }}>{stat.unit}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Page speed visualization */}
-            <div className="mt-12 rounded-xl p-8 sm:p-12" style={{ background: V("color-canvas-soft"), border: `1px solid ${V("color-hairline")}` }}>
-              <h3 className="text-center mb-8" style={{ ...S.h4, color: V("color-ink") }}>Lighthouse score breakdown</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                {[
-                  { label: "Performance", score: "100", color: "color-accent-green" },
-                  { label: "Accessibility", score: "100", color: "color-accent-blue" },
-                  { label: "Best Practices", score: "100", color: "color-accent-purple" },
-                  { label: "SEO", score: "100", color: "color-accent-pink" },
-                ].map((item) => (
-                  <div key={item.label} className="text-center">
-                    <div
-                      className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-3"
-                      style={{ border: `4px solid ${V(item.color)}` }}
-                    >
-                      <span style={{ ...S.h4, color: V(item.color) }}>{item.score}</span>
-                    </div>
-                    <p style={{ ...S.caption, color: V("color-body-mid") }}>{item.label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ SECURITY COMPLIANCE ═══ */}
-        <section className="py-20 sm:py-28 px-5 sm:px-8" style={{ background: V("color-canvas-soft") }}>
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <p style={{ ...S.eyebrow, color: V("color-accent-purple") }}>Security & Compliance</p>
-              <h2 className="mt-3 mb-4" style={S.h2}>
-                Enterprise security, by default
-              </h2>
-              <p className="max-w-xl mx-auto" style={{ ...S.body, color: V("color-body-mid") }}>
-                Your data is protected by industry-leading security practices and verified by independent
-                third-party audits.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-6">
-              {COMPLIANCE.map((item) => (
-                <div
-                  key={item.badge}
-                  className="rounded-xl p-8 flex flex-col sm:flex-row gap-6"
-                  style={{
-                    background: V("color-canvas"),
-                    border: `1px solid ${V("color-hairline")}`,
-                  }}
-                >
-                  <div className="shrink-0">
-                    <div
-                      className="px-5 py-3 rounded-lg text-center"
-                      style={{ background: V("color-canvas-soft"), border: `1px solid ${V("color-hairline")}` }}
-                    >
-                      <div style={{ ...S.h4, color: V("color-ink") }}>{item.badge}</div>
-                      {"type" in item && (
-                        <div style={{ ...S.caption, color: V("color-mute") }}>{item.type}</div>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="m-0" style={{ ...S.bodySm, color: V("color-body-mid") }}>{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ COMPARISON TABLE ═══ */}
-        <section className="py-20 sm:py-28 px-5 sm:px-8" style={{ background: V("color-canvas") }}>
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <p style={{ ...S.eyebrow, color: V("color-accent-blue") }}>Comparison</p>
-              <h2 className="mt-3 mb-4" style={S.h2}>
-                How we stack up
-              </h2>
-              <p className="max-w-xl mx-auto" style={{ ...S.body, color: V("color-body-mid") }}>
-                Kreature hosting vs traditional providers. See what you get with a fully managed platform
-                built for modern teams.
-              </p>
-            </div>
-
-            <div className="overflow-x-auto -mx-5 sm:mx-0">
-              <div className="min-w-[640px] sm:min-w-0">
-                {/* Table header */}
-                <div
-                  className="grid grid-cols-3 rounded-t-xl overflow-hidden"
-                  style={{ borderBottom: `1px solid ${V("color-hairline")}` }}
-                >
-                  <div className="p-4 font-semibold" style={{ ...S.bodySm, color: V("color-ink") }}>
-                    Feature
-                  </div>
-                  <div className="p-4 font-semibold" style={{ background: V("color-canvas-soft"), ...S.bodySm, color: V("color-accent-blue") }}>
-                    Kreature hosting
-                  </div>
-                  <div className="p-4 font-semibold" style={{ ...S.bodySm, color: V("color-body-mid") }}>
-                    Traditional hosting
-                  </div>
-                </div>
-
-                {/* Table rows */}
-                {COMPARISON_ROWS.map((row, i) => (
-                  <div
-                    key={row.feature}
-                    className="grid grid-cols-3"
-                    style={{
-                      borderBottom: `1px solid ${V("color-hairline")}`,
-                      background: i % 2 === 0 ? "transparent" : V("color-canvas-soft"),
-                    }}
-                  >
-                    <div className="p-4" style={{ ...S.bodySm, color: V("color-ink") }}>
-                      {row.feature}
-                    </div>
-                    <div className="p-4" style={{ background: i % 2 === 0 ? V("color-canvas-soft") : V("color-canvas") }}>
-                      <span style={{ ...S.bodySm, color: V("color-accent-blue"), fontWeight: 600 }}>
-                        {row.kreature}
-                      </span>
-                    </div>
-                    <div className="p-4">
-                      <span style={{ ...S.bodySm, color: V("color-mute") }}>
-                        {row.traditional}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ CTA ═══ */}
-        <section className="py-20 sm:py-28 px-5 sm:px-8" style={{ background: V("color-canvas-soft") }}>
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="mb-4" style={S.h2}>
-              Start for free
+        {/* ═══════ SCALE SECURELY ═══════ */}
+        <Section>
+          <div className="mb-14 max-w-[750px]">
+            <h2 className="font-semibold leading-[1.04] mb-4" style={{ ...S.h2, color: V("color-ink") }}>
+              Scale securely
             </h2>
-            <p className="max-w-xl mx-auto mb-10" style={{ ...S.body, color: V("color-body-mid"), fontSize: "20px" }}>
-              Deploy your site on the same infrastructure trusted by Fortune 500 companies.
-              Free to start, scales when you do.
+            <p style={{ ...S.bodyLg, color: V("color-body-mid") }}>
+              Webflow&apos;s enterprise-grade hosting securely processes tens of billions of page views a month.
+              Reach 95% of the world in less than 50 milliseconds with Webflow hosting.
             </p>
-            <div className="flex items-center justify-center gap-4 flex-wrap">
-              <a
-                href="/signup"
-                className="no-underline inline-flex items-center"
-                style={{
-                  ...S.btn,
-                  background: V("color-accent-blue"),
-                  color: "#fff",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = V("color-accent-blue-hover"))}
-                onMouseLeave={(e) => (e.currentTarget.style.background = V("color-accent-blue"))}
-              >
-                Deploy your site <Arrow />
-              </a>
-              <a
-                href="/contact-sales"
-                className="no-underline inline-flex items-center"
-                style={{
-                  ...S.btn,
-                  background: "transparent",
-                  color: V("color-ink"),
-                  border: `1px solid ${V("color-hairline")}`,
-                }}
-              >
-                Talk to sales
-              </a>
-            </div>
           </div>
-        </section>
-      </main>
 
-      {/* ═══ FOOTER ═══ */}
-      <footer style={{ background: V("color-canvas"), borderTop: `1px solid ${V("color-hairline")}` }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-16">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-8">
-            {/* Brand column */}
-            <div className="col-span-2 sm:col-span-3 lg:col-span-1 lg:row-span-1">
-              <a href="/" className="flex items-center gap-2.5 mb-3 no-underline">
-                <img src="/logo/kreature-logo-dark.png" alt="Kreature" className="logo-dark h-[36px] w-auto" />
-                <img src="/logo/kreature-logo-light.png" alt="Kreature" className="logo-light h-[36px] w-auto" />
-                <Wordmark />
-              </a>
-              <p className="text-sm leading-relaxed max-w-xs" style={{ color: V("color-mute") }}>
-                AI Product Studio for founders who ship fast.
-              </p>
-            </div>
-
-            {/* Link columns */}
-            {FOOTER_COLS.map((col) => (
-              <div key={col.heading} className="lg:justify-self-start">
-                <div className="mb-4" style={{ ...S.caption, color: V("color-mute"), textTransform: "uppercase", letterSpacing: "0.1em" }}>
-                  {col.heading}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {SCALE_FEATURES.map((feat) => (
+              <div
+                key={feat.title}
+                className="rounded-lg p-[clamp(1.5rem,2.5vw,2rem)]"
+                style={{ borderRadius: "8px", border: `1px solid ${V("color-hairline")}`, background: V("color-canvas") }}
+              >
+                <div className="mb-5" style={{ color: V("color-accent-blue") }}>
+                  <Icon name={feat.icon} />
                 </div>
-                <ul className="list-none p-0 m-0 space-y-3">
-                  {col.links.map((link) => (
-                    <li key={link.label}>
-                      <a
-                        href={link.href}
-                        className="no-underline transition-colors"
-                        style={{ ...S.bodySm, color: V("color-body-mid") }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = V("color-ink"))}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = V("color-body-mid"))}
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                <h3 className="font-semibold mb-3" style={{ ...S.h4, color: V("color-ink") }}>
+                  {feat.title}
+                </h3>
+                <p style={{ ...S.body, color: V("color-body-mid") }}>{feat.desc}</p>
               </div>
             ))}
           </div>
+        </Section>
 
-          {/* Bottom bar */}
-          <div
-            className="mt-14 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
-            style={{ borderTop: `1px solid ${V("color-hairline")}` }}
-          >
-            <p className="text-xs m-0" style={{ color: V("color-mute") }}>
-              &copy; {new Date().getFullYear()} Kreature Studio. All rights reserved.
+        {/* ═══════ SEAMLESS SITE MANAGEMENT ═══════ */}
+        <Section bg="soft">
+          <div className="mb-14 max-w-[750px]">
+            <h2 className="font-semibold leading-[1.04] mb-4" style={{ ...S.h2, color: V("color-ink") }}>
+              Seamless site management
+            </h2>
+            <p style={{ ...S.bodyLg, color: V("color-body-mid") }}>
+              Webflow hosting is packed with features that make running your site easier.
             </p>
-            <div className="flex items-center gap-5">
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-                className="transition-colors"
-                style={{ color: V("color-mute") }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = V("color-ink"))}
-                onMouseLeave={(e) => (e.currentTarget.style.color = V("color-mute"))}
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {MANAGE_FEATURES.map((feat) => (
+              <div
+                key={feat.title}
+                className="rounded-lg p-[clamp(1.5rem,2.5vw,2rem)]"
+                style={{ borderRadius: "8px", border: `1px solid ${V("color-hairline")}`, background: V("color-canvas") }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
+                <div className="mb-5" style={{ color: V("color-accent-blue") }}>
+                  <Icon name={feat.icon} />
+                </div>
+                <h3 className="font-semibold mb-3" style={{ ...S.h4, color: V("color-ink") }}>
+                  {feat.title}
+                </h3>
+                <p style={{ ...S.body, color: V("color-body-mid") }}>{feat.desc}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ═══════ FAQ ═══════ */}
+        <Section>
+          <div className="max-w-[900px] mx-auto">
+            <h2 className="font-semibold leading-[1.04] mb-12" style={{ ...S.h2, color: V("color-ink") }}>
+              Frequently asked questions
+            </h2>
+            <div className="space-y-1">
+              {FAQS.map((faq, i) => (
+                <details
+                  key={i}
+                  className="group py-6 cursor-pointer"
+                  style={{ borderBottom: `1px solid ${V("color-hairline")}` }}
+                >
+                  <summary className="flex items-start justify-between gap-4 list-none">
+                    <h3 className="font-semibold flex-1" style={{ ...S.h4, color: V("color-ink") }}>
+                      {faq.q}
+                    </h3>
+                    <span
+                      className="text-2xl leading-none mt-0.5 transition-transform group-open:rotate-45 shrink-0"
+                      style={{ color: V("color-mute") }}
+                    >
+                      +
+                    </span>
+                  </summary>
+                  <p className="mt-4" style={{ ...S.body, color: V("color-body-mid") }}>
+                    {faq.a}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        {/* ═══════ CUSTOMER STORIES ═══════ */}
+        <Section bg="soft">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {STORIES.slice(0, 4).map((story) => (
+              <div
+                key={story.logo}
+                className="rounded-lg p-6 flex flex-col"
+                style={{ borderRadius: "8px", background: V("color-canvas"), border: `1px solid ${V("color-hairline")}` }}
+              >
+                <div className="text-xs uppercase tracking-wider mb-3" style={{ color: V("color-mute") }}>
+                  {story.logo}
+                </div>
+                <div className="text-4xl font-bold mb-2 leading-none" style={{ color: V("color-ink") }}>
+                  {story.metric}
+                </div>
+                <p className="mb-4" style={{ ...S.bodySm, color: V("color-body-mid") }}>{story.label}</p>
+                <a
+                  href="/customers"
+                  className="inline-flex items-center mt-auto transition-colors"
+                  style={{ ...S.bodySm, fontWeight: 500, color: V("color-accent-blue") }}
+                >
+                  Read story <Arrow />
+                </a>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ═══════ GET STARTED CTA ═══════ */}
+        <Section bg="dark">
+          <div className="text-center max-w-[700px] mx-auto">
+            <h2 className="font-semibold leading-[1.04] mb-6" style={{ ...S.h2, color: V("color-canvas") }}>
+              Get started for free
+            </h2>
+            <p className="mb-10" style={{ ...S.bodyLg, color: V("color-mute-soft") }}>
+              Try Webflow for as long as you like with our free Starter plan. Purchase a paid Site plan to
+              publish, host, and unlock additional features.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="/signup"
+                className="inline-flex items-center transition-colors"
+                style={{ ...S.btn, background: V("color-accent-blue"), color: "#fff" }}
+              >
+                Get started — it&apos;s free
               </a>
               <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="transition-colors"
-                style={{ color: V("color-mute") }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = V("color-ink"))}
-                onMouseLeave={(e) => (e.currentTarget.style.color = V("color-mute"))}
+                href="/product-tour"
+                className="inline-flex items-center transition-colors"
+                style={{
+                  ...S.btn,
+                  background: "transparent",
+                  color: V("color-canvas"),
+                  border: `1px solid rgba(255,255,255,0.2)`,
+                }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg>
+                Watch demo
               </a>
             </div>
           </div>
+        </Section>
+
+        {/* ═══════ FOOTER ═══════ */}
+        <FooterSection />
+      </main>
+    </div>
+  );
+}
+
+/* ─── FOOTER ─── */
+function FooterSection() {
+  const columns: Record<string, string[]> = {
+    Product: ["Platform", "Design", "Edit content", "Interactions", "GSAP", "Page building", "Shared Libraries", "Collaboration", "CMS", "Hosting", "Localization", "Security", "Ecommerce", "Analyze", "Optimize", "SEO", "AEO", "Kreature Cloud", "DevLink", "Figma to Kreature", "Accessibility", "AI"],
+    Solutions: ["Enterprise", "Startups", "Global alliances", "Agencies", "Freelancers"],
+    Resources: ["University", "Blog", "Customer stories", "Webinars & ebooks", "Apps", "Libraries", "Templates", "Developers", "Made in Kreature", "Glossary", "Livestreams", "The Kreature Way"],
+    Company: ["About", "Careers", "Press", "Kreature Ventures", "Kreature Shop", "Terms of Service", "Privacy policy", "Cookie policy", "Accessibility statement"],
+    Compare: ["Contentful", "Framer", "Sitecore", "Wix", "WordPress"],
+    Community: ["Discover the community", "Partner with Kreature", "Certified Partners", "Become a template designer", "Become an affiliate", "Become a Global Leader", "Find a meetup near you"],
+    "Get help": ["Support", "Pricing", "Status", "Community Homebase", "Wishlist"],
+  };
+
+  return (
+    <footer
+      className="border-t px-5 sm:px-8 py-16"
+      style={{ borderColor: V("color-hairline"), background: V("color-canvas") }}
+    >
+      <div className="max-w-[1440px] mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-8 mb-16">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
+            <div className="flex items-center gap-2.5 mb-3">
+              <img src="/logo/kreature-logo-dark.png" alt="Kreature" className="logo-dark h-[32px] w-auto" />
+              <img src="/logo/kreature-logo-light.png" alt="Kreature" className="logo-light h-[32px] w-auto" />
+              <Wordmark />
+            </div>
+            <p className="text-sm leading-relaxed max-w-xs" style={{ color: V("color-mute") }}>
+              Reliable, scalable, fast, and secure hosting — managed for you.
+            </p>
+          </div>
+          {Object.entries(columns).map(([heading, links]) => (
+            <div key={heading}>
+              <div className="text-xs uppercase tracking-wider mb-4 font-medium" style={{ color: V("color-mute-soft") }}>
+                {heading}
+              </div>
+              <ul className="space-y-2.5">
+                {links.map((label) => (
+                  <li key={label}>
+                    <a href="#" className="text-sm transition-colors hover:underline" style={{ color: V("color-body-mid") }}>
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-      </footer>
-    </>
+        <div className="border-t pt-8 flex flex-col sm:flex-row justify-between items-center gap-4" style={{ borderColor: V("color-hairline") }}>
+          <p style={{ ...S.caption, color: V("color-mute") }}>
+            &copy; 2026 Kreature, Inc. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            {["YouTube", "X", "Facebook", "LinkedIn", "Instagram", "TikTok"].map((s) => (
+              <a key={s} href="#" className="text-sm transition-colors" style={{ color: V("color-mute") }}>
+                {s}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }

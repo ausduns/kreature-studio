@@ -2,633 +2,905 @@
 
 import { useState } from "react";
 
-/* ─── CSS VAR ─── */
+/* ─── Helpers ─── */
 const V = (n: string) => `var(--${n})`;
 
-/* ─── STYLES ─── */
-const S = {
-  h1: { fontSize: "80px", fontWeight: 600, lineHeight: "83.2px", letterSpacing: "-0.8px" } as React.CSSProperties,
-  h2: { fontSize: "56px", fontWeight: 600, lineHeight: "58.24px" } as React.CSSProperties,
-  h3: { fontSize: "32px", fontWeight: 500, lineHeight: "41.6px" } as React.CSSProperties,
-  h4: { fontSize: "20px", fontWeight: 600, lineHeight: "28px" } as React.CSSProperties,
-  body: { fontSize: "16px", fontWeight: 400, lineHeight: "25.6px" } as React.CSSProperties,
-  bodySm: { fontSize: "14px", lineHeight: "22.4px" } as React.CSSProperties,
-  bodyLg: { fontSize: "20px", lineHeight: 1.5 } as React.CSSProperties,
-  caption: { fontSize: "12.8px", fontWeight: 550, lineHeight: "15.36px" } as React.CSSProperties,
-  eyebrow: { fontSize: "15px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.05em" } as React.CSSProperties,
-  btn: { fontSize: "16px", fontWeight: 500, padding: "16px 24px", borderRadius: "4px" } as React.CSSProperties,
-};
-
-/* ─── DATA ─── */
-
-const CUSTOMER_LOGOS = [
-  "Verifone", "NCR", "Monday.com", "Spotify", "TED",
-  "Greenhouse", "Clear", "OrangeTheory", "Checkout.com",
-  "SoundCloud", "Docusign", "Lattice", "Reddit", "IDEO",
-  "Upwork", "Asana", "Stripe", "Shopify", "Airbnb",
-  "Atlassian", "Notion", "Figma", "Vercel", "Linear",
-];
-
-const FEATURED_STORIES = [
-  {
-    id: "verifone",
-    company: "Verifone",
-    logo: "V",
-    industry: "Payments",
-    headline: "32 global sites launched in 10 days",
-    quote: "Kreature enabled our global marketing team to launch localized sites across 32 markets simultaneously. What would have taken six months with a traditional agency took 10 days.",
-    author: "Sarah Chen",
-    role: "VP of Global Marketing",
-    stats: [
-      { value: "32", label: "global sites" },
-      { value: "10", label: "days to launch" },
-      { value: "98%", label: "brand consistency" },
-    ],
-    accent: "blue",
-  },
-  {
-    id: "lattice",
-    company: "Lattice",
-    logo: "L",
-    industry: "HR Tech",
-    headline: "20% increase in site-wide conversion",
-    quote: "After migrating to Kreature, our marketing team saw an immediate lift. The visual editor let our designers iterate faster, while the built-in A/B testing helped us optimize every page for conversion.",
-    author: "Marcus Rivera",
-    role: "Head of Growth",
-    stats: [
-      { value: "20%", label: "conversion lift" },
-      { value: "3x", label: "faster page launches" },
-      { value: "45%", label: "reduction in dev dependency" },
-    ],
-    accent: "green",
-  },
-  {
-    id: "orangetheory",
-    company: "OrangeTheory",
-    logo: "OT",
-    industry: "Fitness",
-    headline: "$6M in annual cost savings",
-    quote: "Consolidating from three legacy platforms onto Kreature saved us $6M annually in licensing and maintenance costs. Beyond the savings, our team now ships content updates in minutes instead of waiting weeks for engineering cycles.",
-    author: "Jennifer Park",
-    role: "Chief Digital Officer",
-    stats: [
-      { value: "$6M", label: "annual savings" },
-      { value: "300+", label: "franchise sites managed" },
-      { value: "85%", label: "faster content updates" },
-    ],
-    accent: "orange",
-  },
-  {
-    id: "docusign",
-    company: "Docusign",
-    logo: "D",
-    industry: "SaaS",
-    headline: "1,170% increase in organic traffic",
-    quote: "Kreature's built-in SEO and AEO capabilities transformed our organic presence. The platform automatically optimizes every page for both traditional search and AI-powered answer engines — we saw a 1,170% traffic increase within six months of migration.",
-    author: "David Okonkwo",
-    role: "VP of Digital",
-    stats: [
-      { value: "1,170%", label: "traffic increase" },
-      { value: "#1", label: "for 200+ keywords" },
-      { value: "60%", label: "more qualified leads" },
-    ],
-    accent: "blue",
-  },
-  {
-    id: "walker-dunlop",
-    company: "Walker & Dunlop",
-    logo: "WD",
-    industry: "Commercial Real Estate",
-    headline: "56% increase in form fills",
-    quote: "The combination of Kreature's visual design tools and A/B testing infrastructure let us continuously optimize our lead generation funnels. We saw a 56% lift in form completions within the first quarter — and the improvements keep compounding.",
-    author: "Rachel Kim",
-    role: "SVP Marketing",
-    stats: [
-      { value: "56%", label: "more form fills" },
-      { value: "4.8★", label: "page experience score" },
-      { value: "2.3x", label: "ROI on content investment" },
-    ],
-    accent: "purple",
-  },
-];
-
-const FOOTER: Record<string, string[]> = {
-  Product: ["Platform", "Design", "Edit content", "Interactions", "GSAP", "Page building", "Shared Libraries", "Collaboration", "CMS", "Hosting", "Localization", "Security", "Ecommerce", "Analyze", "Optimize", "SEO", "AEO", "Kreature Cloud", "DevLink", "Figma to Kreature", "Accessibility", "AI"],
-  Solutions: ["Enterprise", "Startups", "Global alliances", "Agencies", "Freelancers"],
-  Resources: ["University", "Blog", "Customer stories", "Webinars & ebooks", "Apps", "Libraries", "Templates", "Developers", "Made in Kreature", "Glossary", "Livestreams", "The Kreature Way"],
-  Company: ["About", "Careers", "Press", "Kreature Ventures", "Kreature Shop", "Terms of Service", "Privacy policy", "Cookie policy", "Accessibility statement"],
-  Compare: ["Contentful", "Framer", "Sitecore", "Wix", "WordPress"],
-  Community: ["Discover the community", "Partner with Kreature", "Certified Partners", "Become a template designer", "Become an affiliate", "Become a Global Leader", "Find a meetup near you"],
-  "Get help": ["Support", "Pricing", "Status", "Community Homebase", "Wishlist"],
-};
-
-/* ─── SHARED COMPONENTS ─── */
 function Arrow() {
-  return <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>;
-}
-
-function Section({
-  bg,
-  children,
-  className,
-}: {
-  bg?: "soft" | "dark";
-  children: React.ReactNode;
-  className?: string;
-}) {
   return (
-    <section
-      className={`px-5 sm:px-8 py-[clamp(3rem,8vw,7rem)] ${className || ""}`}
-      style={{
-        background:
-          bg === "soft"
-            ? V("color-canvas-soft")
-            : bg === "dark"
-            ? V("color-ink")
-            : V("color-canvas"),
-      }}
-    >
-      <div className="max-w-[1440px] mx-auto">{children}</div>
-    </section>
+    <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>
   );
 }
 
-export default function CustomersPage() {
-  const [activeStory, setActiveStory] = useState(0);
+/* ─── Data ─── */
 
+const TRUSTED_BY_LOGOS = [
+  "IDEO",
+  "Monday.com",
+  "BBDO",
+  "The New York Times",
+  "TED",
+  "Docusign",
+];
+
+interface CustomerStory {
+  kind: "customer";
+  name: string;
+  tags: string[];
+  summary: string;
+  metric: string;
+  industry: string;
+  segment: string;
+}
+
+interface AgencyStory {
+  kind: "agency";
+  name: string;
+  summary: string;
+  metric: string;
+}
+
+type Story = CustomerStory | AgencyStory;
+
+const CUSTOMER_STORIES: CustomerStory[] = [
+  {
+    kind: "customer",
+    name: "Encompass",
+    tags: ["Analyze", "Localization", "Optimize"],
+    summary:
+      "Consolidated three acquired brand sites into Kreature, gaining publishing autonomy across the organization.",
+    metric: "5 months to consolidate 3 websites",
+    industry: "Food & beverage",
+    segment: "Mid-market",
+  },
+  {
+    kind: "customer",
+    name: "Greenhouse",
+    tags: ["Analyze", "Localization", "Optimize"],
+    summary:
+      "Migrated from a custom CMS; team gained autonomy and doubled execution speed with Kreature Optimize.",
+    metric: "40% conversion improvement on demo request pages",
+    industry: "Software",
+    segment: "Enterprise",
+  },
+  {
+    kind: "customer",
+    name: "Maven",
+    tags: ["Analyze", "Localization", "Optimize"],
+    summary:
+      "Rebuilt for multiple audiences with a modular system on Kreature Enterprise.",
+    metric: "18% increase in engagement",
+    industry: "Healthcare",
+    segment: "Mid-market",
+  },
+  {
+    kind: "customer",
+    name: "Olympia",
+    tags: ["Analyze", "Localization", "Optimize"],
+    summary:
+      "Digital home for a reimagined London destination, built for scale and performance.",
+    metric: "10M annual footfall once fully operational",
+    industry: "Media & entertainment",
+    segment: "Small business",
+  },
+  {
+    kind: "customer",
+    name: "Veo",
+    tags: ["Analyze", "Localization", "Optimize"],
+    summary:
+      "Took back control from developer-heavy workflows with an Enterprise Partner.",
+    metric: "170% increase in demo bookings",
+    industry: "Software",
+    segment: "Mid-market",
+  },
+  {
+    kind: "customer",
+    name: "Verifone",
+    tags: ["Analyze", "Localization", "Optimize"],
+    summary:
+      "Rebuilt digital presence in 10 days amid a global rebrand, launching across 32 markets.",
+    metric: "32 global sites launched in 10 days",
+    industry: "Finance",
+    segment: "Enterprise",
+  },
+  {
+    kind: "customer",
+    name: "Samsara",
+    tags: ["Analyze", "Localization", "Optimize"],
+    summary:
+      "Took control of experimentation with Kreature Optimize, driving measurable conversion gains.",
+    metric: "50% lift in conversion rate from on-page form experiment",
+    industry: "Software",
+    segment: "Enterprise",
+  },
+  {
+    kind: "customer",
+    name: "Talkspace",
+    tags: ["Analyze", "Localization", "Optimize"],
+    summary:
+      "Unified digital presence and brand identity across all touchpoints.",
+    metric: "7x faster landing page publishing",
+    industry: "Healthcare",
+    segment: "Mid-market",
+  },
+  {
+    kind: "customer",
+    name: "Dermalogica",
+    tags: ["Analyze", "Localization", "Optimize"],
+    summary:
+      "Runs hundreds of experiments across six global sites to optimize conversions.",
+    metric: "450+ variations tested",
+    industry: "Consumer goods",
+    segment: "Enterprise",
+  },
+];
+
+const AGENCY_STORIES: AgencyStory[] = [
+  {
+    kind: "agency",
+    name: "Iron Horse",
+    summary:
+      "A 26-year-old agency went all-in on Kreature, launching a dedicated studio practice.",
+    metric: "30-50% more efficient on work effort",
+  },
+  {
+    kind: "agency",
+    name: "N4",
+    summary:
+      "Evolved into a specialized Kreature Enterprise partner, tackling complex migrations from legacy CMS platforms.",
+    metric: "#1 Kreature Enterprise partner globally",
+  },
+  {
+    kind: "agency",
+    name: "Edgar Allan",
+    summary:
+      "Adopted Kreature over a decade ago and built an innovative, scalable agency model.",
+    metric: "800+ Kreature projects delivered",
+  },
+  {
+    kind: "agency",
+    name: "Composite",
+    summary:
+      "Delivers higher-performing sites in weeks instead of months for enterprise clients.",
+    metric: "3x Enterprise portfolio growth",
+  },
+  {
+    kind: "agency",
+    name: "Flow Ninja",
+    summary:
+      "Helps enterprise teams move faster and cut costs across global deployments.",
+    metric: "$10M generated pipeline in the last 12 months",
+  },
+  {
+    kind: "agency",
+    name: "Verndale",
+    summary:
+      "Turned to Kreature for a visual-first, composable CMS without technical overhead.",
+    metric: "44% faster project timelines",
+  },
+];
+
+const LOGO_CAROUSEL = [
+  { name: "NCR", metric: "10x in cost savings annually" },
+  { name: "Dropbox", metric: "67% decrease in dev ticketing" },
+  { name: "Orangetheory Fitness", metric: "$6M in cost savings annually" },
+  { name: "Walker & Dunlop", metric: "56% increase in form fills" },
+  { name: "DocuSign", metric: "1,170% increase in traffic YoY" },
+  { name: "ABM", metric: "$200M in new pipeline generated post-site launch" },
+  { name: "Lattice", metric: "+20% increase in site-wide conversion" },
+];
+
+const CAROUSEL_LOGOS = [
+  "Verifone",
+  "Monday.com",
+  "Spotify",
+  "TED",
+  "Greenhouse",
+  "Clear",
+  "Checkout.com",
+  "SoundCloud",
+  "Reddit",
+  "The New York Times",
+  "IDEO",
+  "Upwork",
+  "Discord",
+];
+
+const FOOTER_COLS = [
+  {
+    heading: "Product",
+    links: [
+      { label: "Overview", href: "/webflow-clone" },
+      { label: "Designer", href: "#" },
+      { label: "CMS", href: "#" },
+      { label: "Hosting", href: "#" },
+      { label: "AI Features", href: "#" },
+    ],
+  },
+  {
+    heading: "Ecosystem",
+    links: [
+      { label: "Apps", href: "/apps" },
+      { label: "Libraries", href: "/libraries" },
+      { label: "Templates", href: "/templates" },
+      { label: "Integrations", href: "/integrations" },
+      { label: "Showcase", href: "/made-in-webflow" },
+    ],
+  },
+  {
+    heading: "Solutions",
+    links: [
+      { label: "Marketing Teams", href: "#" },
+      { label: "Agencies", href: "#" },
+      { label: "Startups", href: "#" },
+      { label: "Enterprise", href: "/enterprise" },
+      { label: "Freelancers", href: "#" },
+    ],
+  },
+  {
+    heading: "Resources",
+    links: [
+      { label: "Blog", href: "/blog" },
+      { label: "Glossary", href: "/glossary" },
+      { label: "Community", href: "/community" },
+      { label: "Documentation", href: "#" },
+      { label: "Kreature Way", href: "/webflow-way" },
+    ],
+  },
+  {
+    heading: "Company",
+    links: [
+      { label: "About", href: "/company/about" },
+      { label: "Customers", href: "/customers" },
+      { label: "Partners", href: "/certified-partners" },
+      { label: "Careers", href: "/company/careers" },
+      { label: "Contact", href: "/contact-sales" },
+    ],
+  },
+  {
+    heading: "Compare",
+    links: [
+      { label: "vs WordPress", href: "#" },
+      { label: "vs Framer", href: "#" },
+      { label: "vs Wix", href: "#" },
+      { label: "vs Squarespace", href: "#" },
+      { label: "vs Bubble", href: "#" },
+    ],
+  },
+  {
+    heading: "Connect",
+    links: [
+      { label: "Twitter", href: "https://twitter.com" },
+      { label: "LinkedIn", href: "https://linkedin.com" },
+      { label: "YouTube", href: "https://youtube.com" },
+      { label: "Instagram", href: "https://instagram.com" },
+      { label: "Discord", href: "https://discord.com" },
+    ],
+  },
+];
+
+/* ─── Footer ─── */
+function Footer() {
   return (
-    <div className="page-wrapper" style={{ background: V("color-canvas"), color: V("color-body") }}>
-      <main>
-        {/* ═══════ HERO ═══════ */}
-        <section
-          className="relative overflow-hidden px-5 sm:px-8 pt-[clamp(4rem,10vw,8rem)] pb-[clamp(3rem,6vw,5rem)]"
-          style={{ background: V("color-ink") }}
-        >
-          {/* Subtle grid texture */}
-          <div
-            className="absolute inset-0 pointer-events-none z-0 opacity-10"
-            style={{
-              backgroundImage: "radial-gradient(circle, rgba(59,137,255,0.3) 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
-            }}
-          />
-          {/* Blue glow orbs */}
-          <div
-            className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full pointer-events-none z-0 opacity-25"
-            style={{
-              background: `radial-gradient(circle, ${V("color-accent-blue")} 0%, transparent 70%)`,
-              transform: "translate(30%, -30%)",
-            }}
-          />
-          <div
-            className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none z-0 opacity-15"
-            style={{
-              background: `radial-gradient(circle, ${V("color-accent-blue")} 0%, transparent 70%)`,
-              transform: "translate(-20%, 30%)",
-            }}
-          />
-
-          <div className="max-w-[1440px] mx-auto relative z-10">
-            <div className="max-w-[800px]">
-              {/* Eyebrow */}
-              <p
-                className="mb-4"
-                style={{ ...S.eyebrow, color: V("color-accent-blue"), textTransform: "uppercase" as const }}
+    <footer
+      className="border-t"
+      style={{ borderColor: V("color-hairline"), background: V("color-canvas") }}
+    >
+      <div
+        className="mx-auto px-5 sm:px-8 py-14 sm:py-16"
+        style={{ maxWidth: "1440px" }}
+      >
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-8">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
+            <div className="flex items-center gap-2.5 mb-3">
+              <img
+                src="/logo/kreature-logo-dark.png"
+                alt="Kreature"
+                className="logo-dark h-[36px] w-auto"
+              />
+              <img
+                src="/logo/kreature-logo-light.png"
+                alt="Kreature"
+                className="logo-light h-[36px] w-auto"
+              />
+              <span
+                className="font-heading font-[800] text-xl tracking-tight"
+                style={{ color: V("color-ink") }}
               >
-                Customer stories
-              </p>
-
-              {/* H1 */}
-              <h1
-                className="font-semibold leading-[1.04] tracking-[-0.01em] mb-6"
-                style={{ ...S.h1, color: V("color-canvas") }}
-              >
-                See what our customers build
-              </h1>
-
-              {/* Subtext */}
-              <p className="max-w-[650px] mb-10" style={{ ...S.bodyLg, color: V("color-mute-soft") }}>
-                From global enterprises to fast-growing startups, teams use Kreature to build, launch,
-                and optimize digital experiences that drive real business results.
-              </p>
-
-              {/* Hero metrics */}
-              <div className="flex flex-wrap gap-8 lg:gap-16">
-                {[
-                  { value: "300,000+", label: "teams on Kreature" },
-                  { value: "5M+", label: "sites launched" },
-                  { value: "98%", label: "customer satisfaction" },
-                ].map((m) => (
-                  <div key={m.label}>
-                    <div
-                      className="font-semibold leading-none mb-1"
-                      style={{ fontSize: "clamp(1.5rem,3vw,2rem)", color: V("color-canvas") }}
-                    >
-                      {m.value}
-                    </div>
-                    <p style={{ ...S.bodySm, color: V("color-mute-soft") }}>{m.label}</p>
-                  </div>
-                ))}
-              </div>
+                Kreature
+                <span style={{ color: V("color-accent-blue") }}>.</span>
+              </span>
             </div>
-          </div>
-        </section>
-
-        {/* ═══════ LOGO WALL ═══════ */}
-        <Section>
-          <div className="text-center mb-10">
-            <p style={{ ...S.bodySm, fontWeight: 500, color: V("color-mute"), textTransform: "uppercase", letterSpacing: "0.1em" }}>
-              Trusted by industry leaders
+            <p
+              className="text-sm leading-relaxed max-w-xs"
+              style={{ color: V("color-mute") }}
+            >
+              See how the world&apos;s best teams build with Kreature. Customer
+              stories from startups to the enterprise.
             </p>
           </div>
 
-          {/* Logo grid */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-            {CUSTOMER_LOGOS.map((brand) => (
+          {FOOTER_COLS.map((col) => (
+            <div key={col.heading}>
               <div
-                key={brand}
-                className="flex items-center justify-center py-4 px-3 rounded-lg transition-colors"
-                style={{
-                  border: `1px solid ${V("color-hairline")}`,
-                  background: V("color-canvas-soft"),
-                }}
+                className="text-xs uppercase tracking-wider mb-4"
+                style={{ color: V("color-mute-soft"), fontWeight: 550 }}
               >
+                {col.heading}
+              </div>
+              <ul className="space-y-2.5">
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-sm transition-colors"
+                      style={{ color: V("color-body-mid") }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.color = V("color-ink"))
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.color = V("color-body-mid"))
+                      }
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div
+          className="mt-14 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4"
+          style={{ borderColor: V("color-hairline") }}
+        >
+          <p className="text-xs" style={{ color: V("color-mute") }}>
+            &copy; {new Date().getFullYear()} Kreature Studio. All rights
+            reserved.
+          </p>
+          <div className="flex items-center gap-5">
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Twitter"
+              className="transition-colors"
+              style={{ color: V("color-mute") }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="transition-colors"
+              style={{ color: V("color-mute") }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ─── Page ─── */
+export default function CustomersPage() {
+  const [activeTab, setActiveTab] = useState<"customers" | "agencies">(
+    "customers"
+  );
+
+  return (
+    <>
+      {/* Hero */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          paddingTop: "calc(68px + 120px)",
+          paddingBottom: "80px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full blur-[130px]"
+            style={{
+              background: `color-mix(in srgb, ${V("color-accent-blue")} 6%, transparent)`,
+            }}
+          />
+        </div>
+
+        <div
+          className="relative z-10 mx-auto px-5 sm:px-8 text-center"
+          style={{ maxWidth: "900px" }}
+        >
+          <h1
+            className="font-heading tracking-tight mb-6"
+            style={{
+              fontSize: "72px",
+              fontWeight: 600,
+              lineHeight: "76px",
+              letterSpacing: "-0.8px",
+              color: V("color-ink"),
+            }}
+          >
+            Customer stories
+          </h1>
+          <p
+            className="mx-auto mb-12"
+            style={{
+              fontSize: "20px",
+              lineHeight: 1.5,
+              color: V("color-body"),
+              maxWidth: "650px",
+            }}
+          >
+            Kreature powers websites for enterprises, agencies, and businesses
+            large and small. See how the world&apos;s best teams build with
+            Kreature.
+          </p>
+
+          {/* Trusted by bar */}
+          <div className="mb-4">
+            <p
+              className="text-sm mb-5"
+              style={{
+                color: V("color-mute"),
+                fontWeight: 500,
+                letterSpacing: "0.5px",
+              }}
+            >
+              Trusted by teams at
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-10">
+              {TRUSTED_BY_LOGOS.map((logo) => (
                 <span
-                  className="font-semibold whitespace-nowrap"
+                  key={logo}
+                  className="text-base font-semibold whitespace-nowrap"
+                  style={{ color: V("color-mute-soft") }}
+                >
+                  {logo}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Product hero mockups placeholder */}
+          <div
+            className="mt-14 rounded-xl overflow-hidden"
+            style={{
+              background: V("color-canvas-soft"),
+              border: `1px solid ${V("color-hairline")}`,
+              height: "360px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <p style={{ color: V("color-mute") }}>
+              Kreature platform preview
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Tabs: Customer Stories | Agency Stories */}
+      <section
+        style={{
+          paddingTop: "40px",
+          paddingBottom: "20px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
+        >
+          <div className="flex items-center gap-2 mb-10">
+            <button
+              onClick={() => setActiveTab("customers")}
+              className="font-medium transition-all px-6 py-2.5 rounded-full text-sm"
+              style={{
+                background:
+                  activeTab === "customers"
+                    ? V("color-ink")
+                    : V("color-canvas-soft"),
+                color:
+                  activeTab === "customers"
+                    ? V("color-canvas")
+                    : V("color-body"),
+                border:
+                  activeTab === "customers"
+                    ? `1px solid ${V("color-ink")}`
+                    : `1px solid ${V("color-hairline")}`,
+              }}
+            >
+              Customer stories
+            </button>
+            <button
+              onClick={() => setActiveTab("agencies")}
+              className="font-medium transition-all px-6 py-2.5 rounded-full text-sm"
+              style={{
+                background:
+                  activeTab === "agencies"
+                    ? V("color-ink")
+                    : V("color-canvas-soft"),
+                color:
+                  activeTab === "agencies"
+                    ? V("color-canvas")
+                    : V("color-body"),
+                border:
+                  activeTab === "agencies"
+                    ? `1px solid ${V("color-ink")}`
+                    : `1px solid ${V("color-hairline")}`,
+              }}
+            >
+              Agency partner stories
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Stories Grid */}
+      <section
+        style={{
+          paddingBottom: "100px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
+        >
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {(activeTab === "customers" ? CUSTOMER_STORIES : AGENCY_STORIES).map(
+              (story) => (
+                <a
+                  key={story.name}
+                  href="#"
+                  className="group rounded-xl overflow-hidden transition-all duration-300 flex flex-col"
                   style={{
-                    fontSize: brand.length > 10 ? "11px" : "14px",
-                    color: V("color-body-mid"),
-                    letterSpacing: "0.02em",
+                    background: V("color-canvas"),
+                    border: `1px solid ${V("color-hairline")}`,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = `0 8px 30px rgba(0,0,0,0.08)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "none";
                   }}
                 >
-                  {brand}
+                  {/* Card top: logo area */}
+                  <div
+                    className="h-40 flex items-center justify-center"
+                    style={{
+                      background: V("color-canvas-soft"),
+                    }}
+                  >
+                    <span
+                      className="text-lg font-bold"
+                      style={{ color: V("color-ink") }}
+                    >
+                      {story.name}
+                    </span>
+                  </div>
+
+                  {/* Card body */}
+                  <div className="p-6 flex flex-col flex-1">
+                    {/* Tags - only for customer stories */}
+                    {story.kind === "customer" && (
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        {story.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-xs px-2 py-0.5 rounded-full"
+                            style={{
+                              background: V("color-canvas-soft"),
+                              color: V("color-body-mid"),
+                              fontWeight: 500,
+                            }}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <p
+                      className="mb-4 flex-1"
+                      style={{
+                        fontSize: "14px",
+                        lineHeight: "22.4px",
+                        color: V("color-body"),
+                      }}
+                    >
+                      {story.summary}
+                    </p>
+
+                    {/* Metric */}
+                    <div
+                      className="mb-3"
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: 700,
+                        lineHeight: "26px",
+                        color: V("color-ink"),
+                      }}
+                    >
+                      {story.metric}
+                    </div>
+
+                    {/* Meta info - only for customer stories */}
+                    {story.kind === "customer" && (
+                      <div
+                        className="text-xs mb-4"
+                        style={{ color: V("color-mute") }}
+                      >
+                        {story.segment}  |  {story.industry}
+                      </div>
+                    )}
+
+                    <span
+                      className="text-sm font-medium inline-flex items-center group-hover:underline"
+                      style={{ color: V("color-accent-blue") }}
+                    >
+                      Read story <Arrow />
+                    </span>
+                  </div>
+                </a>
+              )
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* G2 Awards */}
+      <section
+        style={{
+          paddingTop: "80px",
+          paddingBottom: "80px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8 text-center"
+          style={{ maxWidth: "900px" }}
+        >
+          <h2
+            className="font-heading tracking-tight mb-4"
+            style={{
+              fontSize: "40px",
+              fontWeight: 600,
+              lineHeight: "44px",
+              color: V("color-ink"),
+            }}
+          >
+            Customers love us
+          </h2>
+          <p
+            className="mx-auto mb-10"
+            style={{
+              fontSize: "18px",
+              lineHeight: 1.6,
+              color: V("color-body"),
+              maxWidth: "550px",
+            }}
+          >
+            But don&apos;t just take our word for it -- check out our latest G2
+            awards.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-8">
+            {[
+              "Enterprise Leader Winter 2026",
+              "Overall Leader Winter 2026",
+              "Regional Leader EMEA Winter 2026",
+            ].map((badge) => (
+              <div
+                key={badge}
+                className="flex items-center gap-3 px-6 py-4 rounded-lg"
+                style={{
+                  background: V("color-canvas"),
+                  border: `1px solid ${V("color-hairline")}`,
+                }}
+              >
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{ background: V("color-accent-blue") }}
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#fff"
+                    strokeWidth="2.5"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+                <span
+                  className="text-sm font-semibold"
+                  style={{ color: V("color-ink") }}
+                >
+                  G2 {badge}
                 </span>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="text-center mt-8">
-            <p style={{ ...S.bodySm, color: V("color-mute") }}>
-              And 300,000+ more teams worldwide
-            </p>
-          </div>
-        </Section>
-
-        {/* ═══════ FEATURED CUSTOMER STORIES ═══════ */}
-        <Section bg="soft">
-          <div className="mb-14">
-            <p
-              className="mb-4"
-              style={{ ...S.eyebrow, color: V("color-accent-blue"), textTransform: "uppercase" as const }}
-            >
-              Featured stories
-            </p>
-            <h2 className="font-semibold leading-[1.04]" style={{ ...S.h2, color: V("color-ink") }}>
-              Results that speak for themselves
-            </h2>
-          </div>
-
-          {/* Story tabs */}
-          <div className="flex flex-wrap gap-3 mb-12">
-            {FEATURED_STORIES.map((story, i) => (
-              <button
-                key={story.id}
-                onClick={() => setActiveStory(i)}
-                className="transition-all"
-                style={{
-                  ...S.bodySm,
-                  fontWeight: 500,
-                  padding: "8px 18px",
-                  borderRadius: "100px",
-                  border: `1px solid ${i === activeStory ? V(`color-accent-${story.accent}`) : V("color-hairline")}`,
-                  background: i === activeStory ? V(`color-accent-${story.accent}`) : "transparent",
-                  color: i === activeStory ? "#fff" : V("color-body-mid"),
-                }}
-              >
-                {story.company}
-              </button>
-            ))}
-          </div>
-
-          {/* Active story card */}
-          {FEATURED_STORIES.map((story, i) => (
-            <div key={story.id} className={i === activeStory ? "block" : "hidden"}>
-              <div className="grid lg:grid-cols-5 gap-10 lg:gap-16">
-                {/* Left: Story content */}
-                <div className="lg:col-span-3">
-                  {/* Industry badge */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm shrink-0"
-                      style={{
-                        background: V(`color-accent-${story.accent}`),
-                        color: "#fff",
-                      }}
-                    >
-                      {story.logo}
-                    </div>
-                    <div>
-                      <p className="font-semibold" style={{ ...S.bodySm, color: V("color-ink") }}>
-                        {story.company}
-                      </p>
-                      <p style={{ ...S.caption, color: V("color-mute") }}>{story.industry}</p>
-                    </div>
-                  </div>
-
-                  {/* Headline */}
-                  <h3 className="font-semibold mb-6" style={{ ...S.h3, color: V("color-ink") }}>
-                    {story.headline}
-                  </h3>
-
-                  {/* Quote */}
-                  <blockquote
-                    className="relative mb-8 pl-6"
-                    style={{ borderLeft: `3px solid ${V(`color-accent-${story.accent}`)}` }}
-                  >
-                    <p className="mb-6 italic" style={{ ...S.bodyLg, color: V("color-body") }}>
-                      &ldquo;{story.quote}&rdquo;
-                    </p>
-                    <footer>
-                      <p className="font-semibold" style={{ ...S.bodySm, color: V("color-ink") }}>
-                        {story.author}
-                      </p>
-                      <p style={{ ...S.caption, color: V("color-mute") }}>{story.role}</p>
-                    </footer>
-                  </blockquote>
-
-                  {/* CTA */}
-                  <a
-                    href="#"
-                    className="inline-flex items-center transition-colors hover:gap-2"
-                    style={{ ...S.bodySm, fontWeight: 500, color: V(`color-accent-${story.accent}`) }}
-                  >
-                    Read full story <Arrow />
-                  </a>
-                </div>
-
-                {/* Right: Stats cards */}
-                <div className="lg:col-span-2 flex flex-col gap-4">
-                  {story.stats.map((stat) => (
-                    <div
-                      key={stat.label}
-                      className="rounded-lg p-[clamp(1.5rem,2vw,2rem)]"
-                      style={{
-                        borderRadius: "8px",
-                        background: V("color-canvas"),
-                        border: `1px solid ${V("color-hairline")}`,
-                      }}
-                    >
-                      <div
-                        className="font-semibold leading-none mb-2"
-                        style={{ fontSize: "clamp(1.8rem,3vw,2.5rem)", color: V(`color-accent-${story.accent}`) }}
-                      >
-                        {stat.value}
-                      </div>
-                      <p style={{ ...S.bodySm, color: V("color-body-mid") }}>{stat.label}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </Section>
-
-        {/* ═══════ MORE STORIES GRID ═══════ */}
-        <Section>
-          <div className="mb-14">
-            <p
-              className="mb-4"
-              style={{ ...S.eyebrow, color: V("color-accent-blue"), textTransform: "uppercase" as const }}
-            >
-              More customer stories
-            </p>
-            <h2 className="font-semibold leading-[1.04] mb-4" style={{ ...S.h2, color: V("color-ink") }}>
-              Teams of every size ship with Kreature
-            </h2>
-            <p className="max-w-[650px]" style={{ ...S.bodyLg, color: V("color-body-mid") }}>
-              Explore how customers across industries use Kreature to launch faster, convert better, and scale their digital presence.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                company: "SoundCloud",
-                industry: "Audio Streaming",
-                stat: "200+",
-                label: "landing pages in 2 weeks",
-                quote: "Kreature's visual canvas let our creative team move at the speed of culture.",
-              },
-              {
-                company: "Clear",
-                industry: "Travel Tech",
-                stat: "40%",
-                label: "faster time to market",
-                quote: "We went from concept to global rollout in a fraction of the time.",
-              },
-              {
-                company: "IDEO",
-                industry: "Design Consultancy",
-                stat: "3x",
-                label: "more client projects shipped",
-                quote: "Kreature became our secret weapon for rapid prototyping at enterprise scale.",
-              },
-              {
-                company: "Upwork",
-                industry: "Marketplace",
-                stat: "250K+",
-                label: "visitors served daily",
-                quote: "The platform handles our traffic effortlessly while our team ships faster than ever.",
-              },
-              {
-                company: "Checkout.com",
-                industry: "Fintech",
-                stat: "99.99%",
-                label: "uptime across all sites",
-                quote: "Enterprise-grade reliability without the enterprise complexity.",
-              },
-              {
-                company: "Greenhouse",
-                industry: "HR Tech",
-                stat: "60%",
-                label: "reduction in page load time",
-                quote: "Performance is built in, not bolted on. Our pages have never been faster.",
-              },
-            ].map((card) => (
-              <div
-                key={card.company}
-                className="rounded-lg p-[clamp(1.5rem,2.5vw,2rem)] transition-all hover:shadow-lg group"
-                style={{
-                  borderRadius: "8px",
-                  border: `1px solid ${V("color-hairline")}`,
-                  background: V("color-canvas"),
-                }}
-              >
-                {/* Company name */}
-                <div className="flex items-center gap-2 mb-4">
-                  <div
-                    className="w-8 h-8 rounded-md flex items-center justify-center font-bold text-xs shrink-0"
-                    style={{ background: V("color-canvas-soft"), color: V("color-accent-blue") }}
-                  >
-                    {card.company.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-semibold" style={{ ...S.bodySm, color: V("color-ink") }}>
-                      {card.company}
-                    </p>
-                    <p style={{ fontSize: "11px", color: V("color-mute") }}>{card.industry}</p>
-                  </div>
-                </div>
-
-                {/* Stat */}
-                <div
-                  className="font-semibold leading-none mb-1"
-                  style={{ fontSize: "clamp(1.5rem,2.5vw,2rem)", color: V("color-accent-blue") }}
-                >
-                  {card.stat}
-                </div>
-                <p className="mb-4" style={{ ...S.bodySm, color: V("color-body-mid") }}>
-                  {card.label}
-                </p>
-
-                {/* Quote */}
-                <p style={{ ...S.bodySm, color: V("color-body"), fontStyle: "italic" }}>
-                  &ldquo;{card.quote}&rdquo;
-                </p>
-
-                {/* Read more */}
-                <a
-                  href="#"
-                  className="inline-flex items-center mt-4 transition-colors hover:gap-2"
-                  style={{ ...S.bodySm, fontWeight: 500, color: V("color-accent-blue") }}
-                >
-                  Read story <Arrow />
-                </a>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {/* ═══════ CTA SECTION ═══════ */}
-        <section
-          className="relative overflow-hidden px-5 sm:px-8 py-[clamp(4rem,10vw,8rem)]"
-          style={{ background: V("color-ink") }}
+      {/* Logo Carousel with Metrics */}
+      <section
+        className="overflow-hidden"
+        style={{
+          paddingTop: "80px",
+          paddingBottom: "80px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
         >
-          {/* Blue glow */}
-          <div
-            className="absolute top-1/2 left-1/2 w-[800px] h-[800px] rounded-full pointer-events-none z-0 opacity-25"
+          <h2
+            className="font-heading tracking-tight mb-12 text-center"
             style={{
-              background: `radial-gradient(circle, ${V("color-accent-blue")} 0%, transparent 70%)`,
-              transform: "translate(-50%, -50%)",
+              fontSize: "40px",
+              fontWeight: 600,
+              lineHeight: "44px",
+              color: V("color-ink"),
             }}
-          />
+          >
+            Trusted by leading brands
+          </h2>
 
-          <div className="max-w-[1440px] mx-auto relative z-10 text-center">
-            <div className="max-w-[700px] mx-auto">
-              <h2
-                className="font-semibold leading-[1.04] mb-6"
-                style={{ ...S.h2, color: V("color-canvas") }}
+          {/* Logo strip */}
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 mb-14">
+            {CAROUSEL_LOGOS.map((logo) => (
+              <span
+                key={logo}
+                className="text-sm font-semibold whitespace-nowrap"
+                style={{ color: V("color-mute-soft") }}
               >
-                Become a customer
-              </h2>
-              <p className="mb-10" style={{ ...S.bodyLg, color: V("color-mute-soft") }}>
-                Join 300,000+ teams building with Kreature. Start for free — no credit card required,
-                no time limit. See why the world&apos;s best teams choose Kreature to ship faster.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href="/signup"
-                  className="inline-flex items-center transition-colors"
-                  style={{ ...S.btn, background: V("color-accent-blue"), color: "#fff" }}
+                {logo}
+              </span>
+            ))}
+          </div>
+
+          {/* Highlighted metric cards */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {LOGO_CAROUSEL.map((item) => (
+              <a
+                key={item.name}
+                href="#"
+                className="group rounded-xl p-5 transition-all duration-300"
+                style={{
+                  background: V("color-canvas"),
+                  border: `1px solid ${V("color-hairline")}`,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+              >
+                <span
+                  className="block text-sm font-semibold mb-3"
+                  style={{ color: V("color-ink") }}
                 >
-                  Get started free <Arrow />
-                </a>
-                <a
-                  href="/enterprise/contact-sales"
-                  className="inline-flex items-center transition-colors"
+                  {item.name}
+                </span>
+                <div
+                  className="mb-3"
                   style={{
-                    ...S.btn,
-                    background: "transparent",
-                    color: V("color-canvas"),
-                    border: `1px solid rgba(255,255,255,0.2)`,
+                    fontSize: "24px",
+                    fontWeight: 700,
+                    lineHeight: "30px",
+                    color: V("color-ink"),
                   }}
                 >
-                  Talk to sales
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* ═══════ FOOTER ═══════ */}
-      <footer
-        className="py-16 px-5 sm:px-8"
-        style={{ borderTop: `1px solid ${V("color-hairline")}`, background: V("color-canvas") }}
-      >
-        <div className="max-w-[1440px] mx-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-10 mb-16">
-            {Object.entries(FOOTER).map(([heading, items]) => (
-              <div key={heading}>
-                <h4
-                  className="font-semibold mb-6"
-                  style={{ fontSize: "20px", fontWeight: 500, lineHeight: "28px", color: V("color-ink") }}
+                  {item.metric}
+                </div>
+                <span
+                  className="text-sm font-medium inline-flex items-center group-hover:underline"
+                  style={{ color: V("color-accent-blue") }}
                 >
-                  {heading}
-                </h4>
-                <ul className="space-y-2.5">
-                  {items.map((item: string) => (
-                    <li key={item}>
-                      <a
-                        href="#"
-                        className="text-sm hover:underline inline-flex items-center gap-1"
-                        style={{ ...S.bodySm, color: V("color-body-mid") }}
-                      >
-                        {item}
-                        {item === "AEO" && (
-                          <span
-                            className="text-[0.6rem] font-semibold uppercase"
-                            style={{ color: V("color-accent-blue") }}
-                          >
-                            New
-                          </span>
-                        )}
-                        {item === "Careers" && (
-                          <span
-                            className="text-[0.6rem] font-semibold uppercase"
-                            style={{ color: V("color-accent-green") }}
-                          >
-                            We&apos;re hiring
-                          </span>
-                        )}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                  Read story <Arrow />
+                </span>
+              </a>
             ))}
           </div>
+        </div>
+      </section>
 
+      {/* Bottom CTA */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          paddingTop: "100px",
+          paddingBottom: "100px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        <div className="absolute inset-0 pointer-events-none">
           <div
-            className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs"
-            style={{ borderTop: `1px solid ${V("color-hairline")}` }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] rounded-full blur-[100px]"
+            style={{
+              background: `color-mix(in srgb, ${V("color-accent-blue")} 10%, transparent)`,
+            }}
+          />
+        </div>
+        <div
+          className="relative z-10 mx-auto px-5 sm:px-8 text-center"
+          style={{ maxWidth: "650px" }}
+        >
+          <h2
+            className="font-heading tracking-tight mb-4"
+            style={{
+              fontSize: "56px",
+              fontWeight: 600,
+              lineHeight: "58.24px",
+              color: V("color-ink"),
+            }}
           >
-            <p style={{ fontSize: "12px", color: V("color-mute") }}>
-              &copy; {new Date().getFullYear()} Kreature, Inc. All rights reserved
-            </p>
-            <div className="flex items-center gap-4" style={{ fontSize: "12px", color: V("color-mute") }}>
-              <a href="#" className="hover:underline">
-                Made in Kreature
-              </a>
-              {["YouTube", "X", "Facebook", "LinkedIn", "Instagram", "TikTok"].map((p) => (
-                <a key={p} href="#" className="hover:underline">
-                  {p}
-                </a>
-              ))}
-            </div>
+            Get started for free
+          </h2>
+          <p
+            className="mx-auto mb-10"
+            style={{
+              fontSize: "20px",
+              lineHeight: 1.5,
+              color: V("color-body"),
+            }}
+          >
+            Try Kreature for as long as you like with our free Starter plan.
+            Purchase a paid Site plan to publish, host, and unlock additional
+            features.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="#"
+              className="font-medium transition-colors inline-flex items-center"
+              style={{
+                fontSize: "16px",
+                fontWeight: 500,
+                padding: "16px 24px",
+                borderRadius: "4px",
+                background: V("color-accent-blue"),
+                color: "#fff",
+              }}
+            >
+              Get started -- it&apos;s free <Arrow />
+            </a>
+            <a
+              href="#"
+              className="font-medium transition-colors inline-flex items-center"
+              style={{
+                fontSize: "16px",
+                fontWeight: 500,
+                padding: "16px 24px",
+                borderRadius: "4px",
+                border: `1px solid ${V("color-hairline")}`,
+                color: V("color-ink"),
+              }}
+            >
+              Watch demo
+            </a>
           </div>
         </div>
-      </footer>
-    </div>
+      </section>
+
+      <Footer />
+    </>
   );
 }

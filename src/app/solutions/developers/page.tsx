@@ -1,18 +1,305 @@
 "use client";
 
-/* ──────────────── Helpers ──────────────── */
+import { useState } from "react";
+
+/* ──────────────── CDN & Helpers ──────────────── */
 
 const V = (n: string) => `var(--${n})`;
+const CDN = "https://cdn.prod.website-files.com/686294e263eb7e215bd232f7";
+const LOGOS_CDN = "https://dhygzobemt712.cloudfront.net/Web/logos/dark";
+const ICONS_CDN = "https://dhygzobemt712.cloudfront.net/Icons/Light/64px";
 
-/* ──────────────── Shared Components ──────────────── */
+/* ──────────────── Typography ──────────────── */
 
-function Arrow() {
+const T = {
+  h1: {
+    fontFamily: "var(--font-heading)",
+    fontWeight: 600,
+    fontSize: "clamp(44px, 6vw, 80px)",
+    lineHeight: 1.04,
+    letterSpacing: "-0.8px",
+  } as React.CSSProperties,
+  h2: {
+    fontFamily: "var(--font-heading)",
+    fontWeight: 600,
+    fontSize: "clamp(32px, 4.5vw, 56px)",
+    lineHeight: 1.06,
+    letterSpacing: "-0.4px",
+  } as React.CSSProperties,
+  h3: {
+    fontFamily: "var(--font-heading)",
+    fontWeight: 600,
+    fontSize: "clamp(22px, 2.5vw, 28px)",
+    lineHeight: 1.2,
+  } as React.CSSProperties,
+  heroSub: {
+    fontSize: 14,
+    fontWeight: 600,
+    letterSpacing: "0.16em",
+    textTransform: "uppercase" as const,
+    lineHeight: 1.4,
+  } as React.CSSProperties,
+  bodyLg: {
+    fontSize: 18,
+    lineHeight: 1.7,
+  } as React.CSSProperties,
+  body: {
+    fontSize: 15,
+    lineHeight: 1.7,
+  } as React.CSSProperties,
+  bodySm: {
+    fontSize: 13,
+    lineHeight: 1.6,
+  } as React.CSSProperties,
+  caption: {
+    fontSize: 11,
+    lineHeight: 1.5,
+  } as React.CSSProperties,
+  btn: {
+    fontSize: 15,
+    fontWeight: 500,
+    lineHeight: 1,
+  } as React.CSSProperties,
+  quote: {
+    fontSize: 16,
+    lineHeight: 1.65,
+    fontStyle: "italic" as const,
+  } as React.CSSProperties,
+};
+
+/* ──────────────── Shared Sub-Components ──────────────── */
+
+function Wordmark({ large }: { large?: boolean }) {
   return (
-    <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>
+    <span
+      style={{
+        fontFamily: "var(--font-heading)",
+        fontWeight: 800,
+        fontSize: large ? 22 : 18,
+        letterSpacing: "-0.3px",
+        color: V("color-ink"),
+      }}
+    >
+      Kreature<span style={{ color: V("color-accent-blue") }}>.</span>
+    </span>
   );
 }
 
-/* ──────────────── Footer Data ──────────────── */
+function Arrow() {
+  return (
+    <span className="ml-1.5 text-[1.1em] leading-none select-none">&rarr;</span>
+  );
+}
+
+function Badge({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      style={{
+        ...T.heroSub,
+        color: V("color-accent-blue"),
+        display: "inline-block",
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
+function Section({
+  children,
+  soft,
+  id,
+  className,
+}: {
+  children: React.ReactNode;
+  soft?: boolean;
+  id?: string;
+  className?: string;
+}) {
+  return (
+    <section
+      id={id}
+      className={`px-5 sm:px-8 py-20 sm:py-28 lg:py-36 ${className ?? ""}`}
+      style={{
+        backgroundColor: soft ? V("color-canvas-soft") : V("color-canvas"),
+        borderTop: `1px solid ${V("color-hairline")}`,
+      }}
+    >
+      <div className="max-w-7xl mx-auto">{children}</div>
+    </section>
+  );
+}
+
+function PrimaryBtn({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      className="inline-flex items-center text-[15px] font-medium px-7 py-3.5 rounded-lg transition-all duration-200"
+      style={{
+        backgroundColor: V("color-accent-blue"),
+        color: "#ffffff",
+      }}
+    >
+      {children}
+      <Arrow />
+    </a>
+  );
+}
+
+function OutlineBtn({
+  href,
+  children,
+  dark,
+}: {
+  href: string;
+  children: React.ReactNode;
+  dark?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      className="inline-flex items-center text-[15px] font-medium px-7 py-3.5 rounded-lg transition-all duration-200 border"
+      style={{
+        borderColor: dark ? "rgba(255,255,255,0.2)" : V("color-hairline"),
+        color: dark ? "#fff" : V("color-ink"),
+      }}
+    >
+      {children}
+    </a>
+  );
+}
+
+/* ──────────────── Data ──────────────── */
+
+const LOGOS = [
+  { name: "Verifone", src: `${LOGOS_CDN}/verifone.svg`, stat: "", sub: "" },
+  { name: "NCR", src: `${LOGOS_CDN}/ncr.svg`, stat: "10x", sub: "In cost savings annually" },
+  { name: "monday.com", src: `${LOGOS_CDN}/monday.svg`, stat: "", sub: "" },
+  { name: "Spotify", src: `${LOGOS_CDN}/spotify.svg`, stat: "", sub: "" },
+  { name: "TED", src: `${LOGOS_CDN}/ted.svg`, stat: "", sub: "" },
+  { name: "Dropbox", src: `${LOGOS_CDN}/dropbox.svg`, stat: "67%", sub: "decrease in dev ticketing" },
+  { name: "Greenhouse", src: `${LOGOS_CDN}/greenhouse.svg`, stat: "", sub: "" },
+  { name: "Clear", src: `${LOGOS_CDN}/clear.svg`, stat: "", sub: "" },
+  { name: "OrangeTheory", src: `${LOGOS_CDN}/orangetheory.svg`, stat: "$6M", sub: "in cost savings annually" },
+  { name: "Checkout.com", src: `${LOGOS_CDN}/checkout.svg`, stat: "", sub: "" },
+  { name: "SoundCloud", src: `${LOGOS_CDN}/soundcloud.svg`, stat: "", sub: "" },
+  { name: "Walker & Dunlop", src: `${LOGOS_CDN}/walker-dunlop.svg`, stat: "56%", sub: "increase in form fills" },
+  { name: "Reddit", src: `${LOGOS_CDN}/reddit.svg`, stat: "", sub: "" },
+  { name: "Docusign", src: `${LOGOS_CDN}/docusign.svg`, stat: "1,170%", sub: "increase in traffic YoY" },
+  { name: "ABM", src: `${LOGOS_CDN}/abm.svg`, stat: "$200M", sub: "in new pipeline generated" },
+  { name: "NYT", src: `${LOGOS_CDN}/the-new-york-times.svg`, stat: "", sub: "" },
+  { name: "IDEO", src: `${LOGOS_CDN}/ideo.svg`, stat: "", sub: "" },
+  { name: "Upwork", src: `${LOGOS_CDN}/upwork.svg`, stat: "", sub: "" },
+  { name: "Discord", src: `${LOGOS_CDN}/discord.svg`, stat: "", sub: "" },
+  { name: "Lattice", src: `${LOGOS_CDN}/lattice.svg`, stat: "+20%", sub: "increase in site-wide conversion" },
+];
+
+const TABS = [
+  {
+    label: "Build visually with clean code",
+    body: "Kreature's visual canvas generates production-ready HTML, CSS, and JavaScript. Developers get full access to the underlying code, can add custom components, and ship without wrestling a CMS.",
+    image: `${CDN}/69178a0ed0acdaeb58690174_0820643ae5edbc64eb9651cc035b1075_eng-code-editor.jpg`,
+  },
+  {
+    label: "Consistent components",
+    body: "Define design tokens, create reusable components, and enforce brand consistency across every page. Components sync with your design system so nothing drifts out of spec.",
+    image: `${CDN}/694ab6eeb7183ee695cde5ee_developers_component.avif`,
+  },
+  {
+    label: "Integrated platform",
+    body: "Connect your existing stack through REST APIs, webhooks, and native integrations. Kreature plugs into your CI/CD pipeline, version control, and monitoring tools.",
+    image: `${CDN}/69178a0e43a9e1012b11bc08_85f8aff7f50c1fb3c65826fab8f3d33b_eng_cms-api.png`,
+  },
+  {
+    label: "Serverless deployment",
+    body: "Push to deploy. Kreature handles builds, CDN distribution, and scaling automatically. Preview branches, rollbacks, and zero-downtime deploys come standard.",
+    image: `${CDN}/694abdcde2a1d8936f921721_developers-step-4.avif`,
+  },
+];
+
+const PRODUCTION_CARDS = [
+  {
+    title: "Built to perform",
+    body: "Lighthouse scores in the high 90s out of the box. Automatic code splitting, lazy loading, image optimization, and edge caching keep every page fast.",
+    image: `${CDN}/68b9db37fd0b2fa5a48b37ea_home_engineering-teams_scale-group.webp`,
+  },
+  {
+    title: "Embedded AI",
+    body: "AI-assisted code generation, content drafting, and design suggestions work alongside your team. Developers control what AI touches and review every change.",
+    image: `${CDN}/6913adae0f3ea94179303311_code-generation_apps-optimized.webp`,
+  },
+  {
+    title: "Hosting handled",
+    body: "Global CDN, DDoS protection, SSL, and 99.99% uptime SLA included. No servers to patch, no config to manage. Focus on building, not infrastructure.",
+    image: `${CDN}/68b9af7bc5fb5ea81e2a27e5_4162b5b3f0642fb94cc4f841a64e8057_home_engineering-teams_integration-asset-3.webp`,
+  },
+];
+
+const EXTEND_CARDS = [
+  {
+    icon: `${ICONS_CDN}/Apps.svg`,
+    title: "Apps",
+    body: "Build and publish apps that extend Kreature's functionality. Connect third-party services, add custom UI panels, or automate workflows.",
+  },
+  {
+    icon: `${ICONS_CDN}/Cloud.svg`,
+    title: "Cloud",
+    body: "Deploy serverless functions, manage databases, and run background jobs on Kreature Cloud. Scale from prototype to enterprise without changing platforms.",
+  },
+  {
+    icon: `${ICONS_CDN}/Ai.svg`,
+    title: "MCP",
+    body: "Use the Model Context Protocol to connect AI agents directly to your site's data, content, and APIs. Build smarter, context-aware experiences.",
+  },
+];
+
+const INTEGRATIONS = [
+  {
+    icon: `${CDN}/694971efcd465d7d54b18bbb_developers-logo-01.svg`,
+    title: "GitHub",
+    body: "Every Kreature project is a Git repository. Push, pull, branch, merge, and collaborate using the tools you already know.",
+  },
+  {
+    icon: `${CDN}/694971efcd465d7d54b18bbb_developers-logo-02.svg`,
+    title: "Figma",
+    body: "Sync designs from Figma into Kreature with two-way updates. Design changes flow into production without manual handoff.",
+  },
+  {
+    icon: `${CDN}/694971efcd465d7d54b18bbb_developers-logo-03.svg`,
+    title: "VS Code",
+    body: "Edit code in VS Code with full IntelliSense while previewing the visual canvas side-by-side using the Kreature extension.",
+  },
+  {
+    icon: `${CDN}/694971efcd465d7d54b18bbb_developers-logo-04.svg`,
+    title: "REST API",
+    body: "Programmatically manage sites, content, and users through a fully-documented REST API with typed SDKs for major languages.",
+  },
+];
+
+const FAQS = [
+  {
+    q: "Can I use my own code with Kreature?",
+    a: "Absolutely. Kreature generates clean, standards-based HTML, CSS, and JavaScript that you can extend with custom code components. You can write React, use npm packages, and manage state your way — all while non-developers build visually on the same project.",
+  },
+  {
+    q: "Does Kreature support Git and CI/CD workflows?",
+    a: "Yes. Every Kreature project is a Git repository with full branching, merging, and pull request support. Webhooks and APIs integrate with GitHub Actions, GitLab CI, CircleCI, and any CI/CD pipeline. Preview branches are generated automatically on every push.",
+  },
+  {
+    q: "How does hosting and deployment work?",
+    a: "Kreature provides fully-managed hosting on a global edge network. Deploy with a single command from the CLI, via Git push, or directly from the visual editor. Every deployment includes automatic SSL, DDoS protection, and a 99.99% uptime SLA.",
+  },
+  {
+    q: "Can I use Kreature as a headless CMS?",
+    a: "Yes. Kreature's CMS is API-first with REST and GraphQL endpoints for every content type. You can build your frontend in any framework — Next.js, Nuxt, SvelteKit, Astro — and use Kreature purely for content management while your team edits visually.",
+  },
+];
 
 const FOOTER_DATA = [
   {
@@ -70,318 +357,106 @@ const FOOTER_DATA = [
   },
 ];
 
-/* ──────────────── Section Data ──────────────── */
-
-const FEATURES = [
-  {
-    icon: "🧬",
-    title: "Custom Code Components",
-    accent: "color-accent-purple",
-    body: "Build React components directly in the visual editor or write them in VS Code. Kreature syncs bi-directionally. Use your own packages, state management, and logic.",
-  },
-  {
-    icon: "🔌",
-    title: "REST & GraphQL APIs",
-    accent: "color-accent-orange",
-    body: "Connect to any external API, database, or microservice. Define endpoints, set authentication, and map responses to UI components with a visual data binder.",
-  },
-  {
-    icon: "⚡",
-    title: "Webhooks & Automation",
-    accent: "color-accent-green",
-    body: "Trigger external workflows on any site event. Connect to Zapier, Make, GitHub, or your own servers. Incoming webhooks can rebuild or redeploy your site.",
-  },
-  {
-    icon: "🧠",
-    title: "Visual Logic Builder",
-    accent: "color-accent-blue",
-    body: "Define conditional rendering, computed properties, and user flows without writing boilerplate. Logic compiles to clean, tree-shakeable JavaScript.",
-  },
-  {
-    icon: "☁",
-    title: "Cloud Hosting & Edge",
-    accent: "color-accent-pink",
-    body: "Deploy to a global edge network with a single command. Automatic CI/CD, preview branches, rollbacks, and real-time logs included out of the box.",
-  },
-];
-
-const HEADLESS_CMS_FEATURES = [
-  {
-    title: "Content API",
-    body: "REST and GraphQL endpoints for every content type you define. Fully typed, auto-documented, and available at your-domain.com/api.",
-  },
-  {
-    title: "Custom Content Models",
-    body: "Define your own content types with custom fields, validation rules, and relationships. Use the visual builder or write JSON schema directly.",
-  },
-  {
-    title: "Webhooks",
-    body: "Trigger builds, invalidate caches, and sync content to external systems whenever content changes. Granular event filtering per content type.",
-  },
-  {
-    title: "SDKs & Starter Kits",
-    body: "First-party SDKs for Next.js, Nuxt, SvelteKit, and Astro. Clone a starter kit and have a working headless site in under five minutes.",
-  },
-  {
-    title: "Preview & Drafts",
-    body: "Live preview URLs for draft content. Share preview links with stakeholders before publishing. Branch-based previews for larger changes.",
-  },
-  {
-    title: "Media CDN",
-    body: "Automatic image optimization, format conversion (WebP/AVIF), and responsive srcset generation. Serve assets from the edge with zero configuration.",
-  },
-];
-
-const DEV_TOOLS = [
-  {
-    name: "Kreature CLI",
-    desc: "Scaffold projects, sync components, and manage deployments from your terminal.",
-  },
-  {
-    name: "VS Code Extension",
-    desc: "Edit code with full IntelliSense while previewing the visual canvas side-by-side.",
-  },
-  {
-    name: "Git Integration",
-    desc: "Every project is a git repo. Push, pull, branch, and merge. We handle the CI/CD.",
-  },
-  {
-    name: "Component Registry",
-    desc: "Publish and install components across projects. Private registry for your org.",
-  },
-  {
-    name: "Environment Variables",
-    desc: "Manage secrets per environment. Inject at build time or runtime. Encrypted at rest.",
-  },
-  {
-    name: "Testing Framework",
-    desc: "Built-in visual regression, accessibility, and performance testing. Run in CI or locally.",
-  },
-];
-
 /* ──────────────── Page Component ──────────────── */
 
 export default function DevelopersPage() {
+  const [tabIndex, setTabIndex] = useState(0);
+
   return (
-    <>
+    <div className="page-wrapper">
       <main>
-        {/* ── HERO ── */}
+        {/* ═══════════════════════════════════════════
+            SECTION 1 — HERO
+            ═══════════════════════════════════════════ */}
         <section
           className="px-5 sm:px-8 py-20 sm:py-28 lg:py-36 text-center"
           style={{ backgroundColor: V("color-canvas") }}
         >
           <div className="max-w-4xl mx-auto">
             <p
-              className="text-sm uppercase tracking-widest mb-5"
-              style={{ color: V("color-accent-orange") }}
+              className="mb-5"
+              style={{ ...T.heroSub, color: V("color-accent-blue") }}
             >
-              For developers
+              Developers
             </p>
             <h1
-              className="max-w-3xl mx-auto"
-              style={{
-                fontSize: "clamp(44px, 6vw, 80px)",
-                fontWeight: 600,
-                lineHeight: 1.04,
-                letterSpacing: "-0.8px",
-                color: V("color-ink"),
-              }}
+              className="max-w-3xl mx-auto mb-6"
+              style={{ ...T.h1, color: V("color-ink") }}
             >
-              Build beyond the visual canvas
+              Build visually. Bring your code with you.
             </h1>
             <p
-              className="mt-6 max-w-2xl mx-auto"
-              style={{
-                fontSize: 18,
-                lineHeight: 1.7,
-                color: V("color-body"),
-              }}
+              className="max-w-2xl mx-auto mb-10"
+              style={{ ...T.bodyLg, color: V("color-body") }}
             >
-              Kreature gives you a visual editor your team can use, and a
-              code-first development environment you can love. Custom code, APIs,
-              headless CMS, and edge hosting -- all in one platform.
+              Kreature lets teams build visually while developers control code
+              quality, integrations, and deployments in one system.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
               <a
-                href="#cta"
-                className="text-base font-medium px-8 py-4 rounded transition-colors inline-flex items-center"
+                href="https://developers.webflow.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-[15px] font-medium px-7 py-3.5 rounded-lg transition-all duration-200"
                 style={{
-                  backgroundColor: V("color-accent-orange"),
-                  color: "#fff",
+                  backgroundColor: V("color-accent-blue"),
+                  color: "#ffffff",
                 }}
               >
-                Start building <Arrow />
+                Explore developer tools
+                <Arrow />
               </a>
-              <a
-                href="#headless"
-                className="text-base font-medium px-8 py-4 rounded transition-colors border inline-flex items-center"
-                style={{
-                  borderColor: V("color-hairline"),
-                  color: V("color-ink"),
-                }}
-              >
-                Explore the CMS
-              </a>
+              <OutlineBtn href="/signup">Try Kreature</OutlineBtn>
             </div>
-          </div>
-        </section>
 
-        {/* ── FEATURES ── */}
-        <section
-          id="features"
-          className="px-5 sm:px-8 py-20 sm:py-28"
-          style={{
-            backgroundColor: V("color-canvas-soft"),
-            borderTop: `1px solid ${V("color-hairline")}`,
-          }}
-        >
-          <div className="max-w-6xl mx-auto">
-            <p
-              className="text-sm uppercase tracking-widest mb-3"
-              style={{ color: V("color-accent-orange") }}
-            >
-              Developer features
-            </p>
-            <h2
+            {/* Hero image */}
+            <div className="mb-16 rounded-lg overflow-hidden" style={{ borderRadius: "8px" }}>
+              <img
+                src={`${CDN}/68fb8d15836afb59a523e121_component-canvas-updates-2560x1440.png`}
+                alt="Kreature developer platform"
+                className="w-full h-auto"
+                loading="lazy"
+              />
+            </div>
+
+            {/* Logo marquee with stats */}
+            <div
+              className="py-12 overflow-hidden"
               style={{
-                fontSize: "clamp(32px, 4vw, 56px)",
-                fontWeight: 600,
-                lineHeight: 1.04,
-                color: V("color-ink"),
+                borderTop: `1px solid ${V("color-hairline")}`,
+                borderBottom: `1px solid ${V("color-hairline")}`,
               }}
             >
-              Code meets canvas
-            </h2>
-            <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {FEATURES.map((f) => (
-                <div
-                  key={f.title}
-                  className="p-6 rounded-xl border transition-colors"
-                  style={{
-                    borderColor: V("color-hairline"),
-                    backgroundColor: V("color-canvas"),
-                  }}
-                >
-                  <div className="text-2xl mb-4">{f.icon}</div>
-                  <div
-                    className="inline-block text-xs font-semibold uppercase tracking-wider mb-3 px-2 py-0.5 rounded-full"
-                    style={{
-                      backgroundColor: V("color-canvas-soft"),
-                      color: V(f.accent),
-                    }}
-                  >
-                    {f.title === "Custom Code Components" && "Core"}
-                    {f.title === "REST & GraphQL APIs" && "Integration"}
-                    {f.title === "Webhooks & Automation" && "Automation"}
-                    {f.title === "Visual Logic Builder" && "Logic"}
-                    {f.title === "Cloud Hosting & Edge" && "Infrastructure"}
-                  </div>
-                  <h4
-                    className="mb-2"
-                    style={{
-                      fontSize: 18,
-                      fontWeight: 600,
-                      color: V("color-ink"),
-                    }}
-                  >
-                    {f.title}
-                  </h4>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: V("color-body-mid") }}
-                  >
-                    {f.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── HEADLESS CMS ── */}
-        <section
-          id="headless"
-          className="px-5 sm:px-8 py-20 sm:py-28"
-          style={{ backgroundColor: V("color-canvas") }}
-        >
-          <div className="max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-16 items-start">
-              <div>
-                <p
-                  className="text-sm uppercase tracking-widest mb-3"
-                  style={{ color: V("color-accent-blue") }}
-                >
-                  Headless CMS
-                </p>
-                <h2
-                  className="mb-4"
-                  style={{
-                    fontSize: "clamp(32px, 4vw, 56px)",
-                    fontWeight: 600,
-                    lineHeight: 1.04,
-                    color: V("color-ink"),
-                  }}
-                >
-                  Content infrastructure for developers
-                </h2>
-                <p
-                  className="leading-relaxed mb-8"
-                  style={{ color: V("color-body"), lineHeight: 1.7 }}
-                >
-                  Kreature&apos;s headless CMS is built API-first. Define content
-                  models, query via REST or GraphQL, and render in any frontend
-                  framework. The visual editor is just one of many consumers.
-                </p>
-                <div
-                  className="p-6 rounded-lg border"
-                  style={{
-                    borderColor: V("color-hairline"),
-                    backgroundColor: V("color-canvas-soft"),
-                  }}
-                >
-                  <p
-                    className="text-xs uppercase tracking-wider font-semibold mb-3"
-                    style={{ color: V("color-mute") }}
-                  >
-                    Get started in seconds
-                  </p>
-                  <pre
-                    className="text-sm p-4 rounded overflow-x-auto"
-                    style={{
-                      backgroundColor: V("color-canvas"),
-                      color: V("color-ink"),
-                      border: `1px solid ${V("color-hairline")}`,
-                      lineHeight: 1.6,
-                    }}
-                  >
-{`npx create-kreature-app my-site
-cd my-site
-npm run dev`}
-                  </pre>
-                </div>
-              </div>
-              <div className="grid gap-4">
-                {HEADLESS_CMS_FEATURES.map((f) => (
-                  <div
-                    key={f.title}
-                    className="p-5 rounded-lg border"
-                    style={{
-                      borderColor: V("color-hairline"),
-                      backgroundColor: V("color-canvas-soft"),
-                    }}
-                  >
-                    <h4
-                      className="text-sm font-semibold mb-1.5"
-                      style={{ color: V("color-ink") }}
-                    >
-                      {f.title}
-                    </h4>
-                    <p
-                      className="text-xs leading-relaxed"
-                      style={{ color: V("color-body-mid") }}
-                    >
-                      {f.body}
-                    </p>
+              <div
+                className="flex gap-8 w-max"
+                style={{
+                  animation: "marquee 40s linear infinite",
+                }}
+              >
+                {[...LOGOS, ...LOGOS].map((l, i) => (
+                  <div key={i} className="flex items-center gap-4 shrink-0">
+                    <img
+                      src={l.src}
+                      alt={l.name}
+                      className="h-6 w-auto opacity-40"
+                      loading="lazy"
+                    />
+                    {l.stat && (
+                      <div className="flex flex-col text-left">
+                        <span
+                          style={{
+                            fontSize: "14px",
+                            fontWeight: 600,
+                            color: V("color-ink"),
+                          }}
+                        >
+                          {l.stat}
+                        </span>
+                        <span style={{ fontSize: "12px", color: V("color-mute") }}>
+                          {l.sub}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -389,58 +464,164 @@ npm run dev`}
           </div>
         </section>
 
-        {/* ── DEV TOOLS ── */}
-        <section
-          id="tools"
-          className="px-5 sm:px-8 py-20 sm:py-28"
-          style={{ backgroundColor: V("color-canvas-soft") }}
-        >
-          <div className="max-w-6xl mx-auto">
-            <p
-              className="text-sm uppercase tracking-widest mb-3"
-              style={{ color: V("color-accent-purple") }}
-            >
-              Developer tools
+        {/* ═══════════════════════════════════════════
+            SECTION 2 — Problem Statement
+            ═══════════════════════════════════════════ */}
+        <Section soft>
+          <div className="max-w-3xl mx-auto text-center">
+            <h3 className="mb-6" style={{ ...T.h3, color: V("color-ink") }}>
+              Building for the web shouldn&apos;t feel like maintenance work
+            </h3>
+            <p className="mb-12" style={{ ...T.bodyLg, color: V("color-body") }}>
+              Too often, developers spend more time managing content updates,
+              chasing layout bugs, and integrating disconnected tools than
+              actually building. Teams end up with a patchwork of platforms
+              that slow everyone down and create friction between engineering,
+              marketing, and design.
             </p>
-            <h2
-              className="mb-4"
-              style={{
-                fontSize: "clamp(32px, 4vw, 56px)",
-                fontWeight: 600,
-                lineHeight: 1.04,
-                color: V("color-ink"),
-              }}
-            >
-              Your workflow, supercharged
+            <h2 className="mb-6" style={{ ...T.h2, color: V("color-ink") }}>
+              Go from design to production in one system
             </h2>
-            <p
-              className="max-w-xl mb-14"
-              style={{ color: V("color-body"), lineHeight: 1.7 }}
-            >
-              Kreature integrates with the tools you already use so you can build
-              without changing how you work.
+            <p style={{ ...T.bodyLg, color: V("color-body") }}>
+              Kreature brings visual building and code-level control into a
+              single platform. Designers work on a canvas that generates clean
+              code. Developers extend it with custom components, connect
+              external APIs, and deploy to a global edge network — all without
+              switching tools or sacrificing quality.
             </p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {DEV_TOOLS.map((tool) => (
-                <div
-                  key={tool.name}
-                  className="p-6 rounded-xl border text-center"
+          </div>
+        </Section>
+
+        {/* ═══════════════════════════════════════════
+            SECTION 3 — Tabbed Features
+            ═══════════════════════════════════════════ */}
+        <section
+          className="px-5 sm:px-8 py-20 sm:py-28 lg:py-36"
+          style={{ backgroundColor: V("color-canvas") }}
+        >
+          <div className="max-w-7xl mx-auto">
+            {/* Tab nav */}
+            <div
+              className="flex flex-wrap gap-1 mb-12 border-b pb-1"
+              style={{ borderColor: V("color-hairline") }}
+            >
+              {TABS.map((tab, i) => (
+                <button
+                  key={tab.label}
+                  onClick={() => setTabIndex(i)}
+                  className="px-4 py-3 text-sm font-medium rounded-sm transition-colors whitespace-nowrap"
                   style={{
-                    borderColor: V("color-hairline"),
-                    backgroundColor: V("color-canvas"),
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    background: tabIndex === i ? V("color-canvas-soft") : "transparent",
+                    color: V("color-ink"),
+                    border: tabIndex === i
+                      ? `1px solid ${V("color-hairline")}`
+                      : "1px solid transparent",
+                    borderBottom:
+                      tabIndex === i
+                        ? `2px solid ${V("color-accent-blue")}`
+                        : "2px solid transparent",
+                    borderRadius: "4px",
                   }}
                 >
-                  <h4
-                    className="text-base font-semibold mb-2"
-                    style={{ color: V("color-ink") }}
-                  >
-                    {tool.name}
-                  </h4>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: V("color-body-mid") }}
-                  >
-                    {tool.desc}
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab content */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h3 className="mb-4" style={{ ...T.h3, color: V("color-ink") }}>
+                  {TABS[tabIndex].label}
+                </h3>
+                <p style={{ ...T.bodyLg, color: V("color-body") }}>
+                  {TABS[tabIndex].body}
+                </p>
+              </div>
+              <div className="rounded-lg overflow-hidden" style={{ borderRadius: "8px" }}>
+                <img
+                  src={TABS[tabIndex].image}
+                  alt={TABS[tabIndex].label}
+                  className="w-full h-auto"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            SECTION 4 — Production-Ready Cards
+            ═══════════════════════════════════════════ */}
+        <Section soft>
+          <h2 className="mb-16 text-center" style={{ ...T.h2, color: V("color-ink") }}>
+            Production-ready by default
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {PRODUCTION_CARDS.map((card) => (
+              <div
+                key={card.title}
+                className="rounded-lg overflow-hidden transition-all hover:shadow-lg"
+                style={{
+                  borderRadius: "8px",
+                  border: `1px solid ${V("color-hairline")}`,
+                  backgroundColor: V("color-canvas"),
+                }}
+              >
+                <img
+                  src={card.image}
+                  alt={card.title}
+                  className="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+                <div className="p-6">
+                  <h3 className="mb-3" style={{ ...T.h3, color: V("color-ink") }}>
+                    {card.title}
+                  </h3>
+                  <p style={{ ...T.body, color: V("color-body-mid") }}>
+                    {card.body}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ═══════════════════════════════════════════
+            SECTION 5 — Extend Cards
+            ═══════════════════════════════════════════ */}
+        <section
+          className="px-5 sm:px-8 py-20 sm:py-28 lg:py-36"
+          style={{ backgroundColor: V("color-canvas") }}
+        >
+          <div className="max-w-7xl mx-auto">
+            <h2 className="mb-16 text-center" style={{ ...T.h2, color: V("color-ink") }}>
+              Extend what&apos;s possible with Kreature
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {EXTEND_CARDS.map((card) => (
+                <div
+                  key={card.title}
+                  className="p-8 rounded-lg text-center transition-all hover:shadow-lg"
+                  style={{
+                    borderRadius: "8px",
+                    border: `1px solid ${V("color-hairline")}`,
+                    backgroundColor: V("color-canvas-soft"),
+                  }}
+                >
+                  <img
+                    src={card.icon}
+                    alt={card.title}
+                    className="w-12 h-12 mx-auto mb-5 opacity-80"
+                    loading="lazy"
+                  />
+                  <h3 className="mb-3" style={{ ...T.h3, color: V("color-ink") }}>
+                    {card.title}
+                  </h3>
+                  <p style={{ ...T.body, color: V("color-body-mid") }}>
+                    {card.body}
                   </p>
                 </div>
               ))}
@@ -448,59 +629,234 @@ npm run dev`}
           </div>
         </section>
 
-        {/* ── CTA ── */}
+        {/* ═══════════════════════════════════════════
+            SECTION 6 — Integrations
+            ═══════════════════════════════════════════ */}
+        <Section soft>
+          <h2 className="mb-16 text-center" style={{ ...T.h2, color: V("color-ink") }}>
+            Top integrations for developers
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {INTEGRATIONS.map((item) => (
+              <div
+                key={item.title}
+                className="p-6 rounded-lg text-center transition-all hover:shadow-lg"
+                style={{
+                  borderRadius: "8px",
+                  border: `1px solid ${V("color-hairline")}`,
+                  backgroundColor: V("color-canvas"),
+                }}
+              >
+                <img
+                  src={item.icon}
+                  alt={item.title}
+                  className="w-12 h-12 mx-auto mb-4"
+                  loading="lazy"
+                />
+                <h4
+                  className="mb-2"
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    color: V("color-ink"),
+                  }}
+                >
+                  {item.title}
+                </h4>
+                <p style={{ ...T.bodySm, color: V("color-body-mid") }}>
+                  {item.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ═══════════════════════════════════════════
+            SECTION 7 — CTA with Image
+            ═══════════════════════════════════════════ */}
         <section
-          id="cta"
-          className="px-5 sm:px-8 py-20 sm:py-28"
+          className="px-5 sm:px-8 py-20 sm:py-28 lg:py-36"
           style={{ backgroundColor: V("color-canvas") }}
         >
-          <div className="max-w-3xl mx-auto text-center">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="mb-6" style={{ ...T.h2, color: V("color-ink") }}>
+                  Kreature for developers
+                </h2>
+                <p className="mb-8" style={{ ...T.bodyLg, color: V("color-body") }}>
+                  From custom code components to API-first content management,
+                  Kreature gives developers the tools to build faster without
+                  sacrificing control. See how engineering teams ship better
+                  web experiences on Kreature.
+                </p>
+                <a
+                  href="https://developers.webflow.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-[15px] font-medium px-7 py-3.5 rounded-lg transition-all duration-200"
+                  style={{
+                    backgroundColor: V("color-accent-blue"),
+                    color: "#ffffff",
+                  }}
+                >
+                  Explore developer tools
+                  <Arrow />
+                </a>
+              </div>
+              <div className="rounded-lg overflow-hidden" style={{ borderRadius: "8px" }}>
+                <img
+                  src={`${CDN}/68e7e623172a7054393c807b_vs_vercel_developers.webp`}
+                  alt="Kreature for developers"
+                  className="w-full h-auto"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            SECTION 8 — Engineering Leads CTA
+            ═══════════════════════════════════════════ */}
+        <Section soft>
+          <div className="max-w-4xl mx-auto text-center">
+            <p className="mb-5" style={{ ...T.heroSub, color: V("color-accent-blue") }}>
+              Engineering leads
+            </p>
+            <h2 className="mb-6" style={{ ...T.h2, color: V("color-ink") }}>
+              How engineering leads use Kreature
+            </h2>
+            <p className="mb-10" style={{ ...T.bodyLg, color: V("color-body") }}>
+              Stop being the bottleneck for marketing requests. Empower your
+              team to build and publish without sacrificing code quality,
+              security, or governance.
+            </p>
+            <div
+              className="rounded-lg overflow-hidden mb-8"
+              style={{ borderRadius: "8px" }}
+            >
+              <img
+                src={`${CDN}/68f11eb1ec4203437859be3b_Eng_2400x1260-1-3.png`}
+                alt="Engineering leads using Kreature"
+                className="w-full h-auto"
+                loading="lazy"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <PrimaryBtn href="/signup">Try Kreature</PrimaryBtn>
+              <OutlineBtn href="/enterprise">Learn about Enterprise</OutlineBtn>
+            </div>
+          </div>
+        </Section>
+
+        {/* ═══════════════════════════════════════════
+            SECTION 9 — FAQ
+            ═══════════════════════════════════════════ */}
+        <section
+          className="px-5 sm:px-8 py-20 sm:py-28 lg:py-36"
+          style={{ backgroundColor: V("color-canvas") }}
+        >
+          <div className="max-w-3xl mx-auto">
+            <h2 className="mb-16 text-center" style={{ ...T.h2, color: V("color-ink") }}>
+              Frequently asked questions
+            </h2>
+            <div className="space-y-4">
+              {FAQS.map((faq) => (
+                <div
+                  key={faq.q}
+                  className="p-6 rounded-lg"
+                  style={{
+                    borderRadius: "8px",
+                    border: `1px solid ${V("color-hairline")}`,
+                    backgroundColor: V("color-canvas-soft"),
+                  }}
+                >
+                  <h4
+                    className="mb-2"
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      color: V("color-ink"),
+                    }}
+                  >
+                    {faq.q}
+                  </h4>
+                  <p style={{ ...T.body, color: V("color-body-mid") }}>
+                    {faq.a}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            SECTION 10 — Bottom CTA (dark bg)
+            ═══════════════════════════════════════════ */}
+        <section
+          className="relative overflow-hidden px-5 sm:px-8"
+          style={{
+            backgroundColor: V("color-ink"),
+            paddingTop: "clamp(3rem, 8vw, 7rem)",
+            paddingBottom: "clamp(3rem, 8vw, 7rem)",
+          }}
+        >
+          {/* Ambient decorative images */}
+          <img
+            src={`${CDN}/6894d7a5d9b174d9177a363c_pagebuilding-cta.avif`}
+            alt=""
+            className="absolute bottom-0 left-0 w-48 opacity-20 pointer-events-none z-0"
+            loading="lazy"
+          />
+          <img
+            src={`${CDN}/6894d7a5d9b174d9177a363c_pagebuilding-cta.avif`}
+            alt=""
+            className="absolute top-0 right-0 w-48 opacity-20 pointer-events-none z-0 scale-x-[-1]"
+            loading="lazy"
+          />
+
+          <div className="max-w-3xl mx-auto text-center relative z-10">
             <h2
               className="mb-6"
-              style={{
-                fontSize: "clamp(32px, 4vw, 56px)",
-                fontWeight: 600,
-                lineHeight: 1.04,
-                color: V("color-ink"),
-              }}
+              style={{ ...T.h2, color: V("color-canvas") }}
             >
-              Start building
+              Get started for free
             </h2>
             <p
-              className="mb-10 max-w-xl mx-auto"
-              style={{ color: V("color-body"), lineHeight: 1.7, fontSize: 18 }}
+              className="mb-8"
+              style={{
+                fontSize: "18px",
+                lineHeight: 1.7,
+                color: V("color-mute-soft"),
+              }}
             >
-              Get the power of a visual builder with the flexibility of a
-              code-first platform. Build your first project free -- no credit
-              card required.
+              Build your first project with full access to Kreature&apos;s
+              developer tools. No credit card required.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
                 href="/signup"
-                className="text-base font-medium px-8 py-4 rounded transition-colors inline-flex items-center"
+                className="inline-flex items-center text-[15px] font-medium px-7 py-3.5 rounded-lg transition-all duration-200"
                 style={{
-                  backgroundColor: V("color-accent-orange"),
-                  color: "#fff",
+                  backgroundColor: V("color-accent-blue"),
+                  color: "#ffffff",
                 }}
               >
-                Start building <Arrow />
+                Sign up
+                <Arrow />
               </a>
-              <a
-                href="/platform"
-                className="text-base font-medium px-8 py-4 rounded transition-colors border inline-flex items-center"
-                style={{
-                  borderColor: V("color-hairline"),
-                  color: V("color-ink"),
-                }}
-              >
-                Read the docs
-              </a>
+              <OutlineBtn href="https://developers.webflow.com/" dark>
+                Explore docs
+              </OutlineBtn>
             </div>
           </div>
         </section>
       </main>
 
-      {/* ════════════════ FOOTER ════════════════ */}
+      {/* ═══════════════════════════════════════════
+          FOOTER
+          ═══════════════════════════════════════════ */}
       <footer
         className="border-t"
         style={{
@@ -551,7 +907,7 @@ npm run dev`}
                     <li key={link.label}>
                       <a
                         href={link.href}
-                        className="text-xs transition-colors"
+                        className="text-xs transition-colors hover:underline"
                         style={{ color: V("color-mute") }}
                       >
                         {link.label}
@@ -600,6 +956,18 @@ npm run dev`}
           </div>
         </div>
       </footer>
-    </>
+
+      {/* Marquee animation keyframe */}
+      <style jsx global>{`
+        @keyframes marquee {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+      `}</style>
+    </div>
   );
 }

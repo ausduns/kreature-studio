@@ -1,777 +1,731 @@
 "use client";
 
-/* ─── Helpers ─── */
+import { useState, useMemo } from "react";
+
+/* ─── CSS Var Helper ─── */
 const V = (n: string) => `var(--${n})`;
 
-/* ─── Shared Components ─── */
+/* ─── CDNs ─── */
+const CDN_LOGO = "https://cdn.prod.website-files.com/686294e263eb7e215bd232f7";
+const CDN_INTEGRATION =
+  "https://cdn.prod.website-files.com/687e8d1b96312cc631cafec7";
+const PLACEHOLDER_IMG = `${CDN_LOGO}/686294e363eb7e215bd2337f_63da7b29ef9e6444889d95cf_hassaan-qaiser-bKfkhVRAJTQ-unsplash.jpg`;
+
+/* ─── Typography (EXACT) ─── */
+const T = {
+  h1: {
+    fontSize: "72px",
+    fontWeight: 600,
+    lineHeight: "74.88px",
+    letterSpacing: "-0.72px",
+  } as React.CSSProperties,
+  h2: {
+    fontSize: "48px",
+    fontWeight: 600,
+    lineHeight: "49.92px",
+  } as React.CSSProperties,
+  h3: {
+    fontSize: "24px",
+    fontWeight: 600,
+    lineHeight: "31.2px",
+  } as React.CSSProperties,
+  bodyLg: {
+    fontSize: "18px",
+    fontWeight: 400,
+    lineHeight: "28.8px",
+  } as React.CSSProperties,
+  body: {
+    fontSize: "16px",
+    fontWeight: 400,
+    lineHeight: "25.6px",
+  } as React.CSSProperties,
+  bodySm: {
+    fontSize: "14px",
+    fontWeight: 400,
+    lineHeight: "22.4px",
+  } as React.CSSProperties,
+  categoryTag: {
+    fontSize: "12.8px",
+    fontWeight: 550,
+    lineHeight: "15.36px",
+    textTransform: "uppercase",
+    letterSpacing: "0.02em",
+  } as React.CSSProperties,
+  btn: {
+    fontSize: "16px",
+    fontWeight: 500,
+    lineHeight: "19.2px",
+    padding: "16px 24px",
+    borderRadius: "4px",
+  } as React.CSSProperties,
+};
+
+/* ─── Arrow Helper ─── */
 function Arrow() {
   return (
-    <span className="ml-1 text-[1.1em] leading-none select-none">&rarr;</span>
-  );
-}
-
-/* ─── Data ─── */
-const INTEGRATION_CATEGORIES = [
-  {
-    name: "Analytics",
-    icon: "\u{1F4CA}",
-    desc: "Track performance, understand user behavior, and make data-driven decisions.",
-    count: 18,
-    accent: "color-accent-blue",
-  },
-  {
-    name: "Marketing",
-    icon: "\u{1F4E3}",
-    desc: "Grow your audience with email campaigns, automation, and conversion tools.",
-    count: 24,
-    accent: "color-accent-purple",
-  },
-  {
-    name: "CRM",
-    icon: "\u{1F465}",
-    desc: "Manage customer relationships, track leads, and automate your sales pipeline.",
-    count: 15,
-    accent: "color-accent-orange",
-  },
-  {
-    name: "Forms & Surveys",
-    icon: "\u{1F4DD}",
-    desc: "Capture leads, gather feedback, and build powerful forms.",
-    count: 12,
-    accent: "color-accent-green",
-  },
-  {
-    name: "Payments",
-    icon: "\u{1F4B3}",
-    desc: "Accept payments, manage subscriptions, and handle billing securely.",
-    count: 10,
-    accent: "color-accent-pink",
-  },
-  {
-    name: "Automation",
-    icon: "\u{1F916}",
-    desc: "Connect apps, automate workflows, and eliminate manual work.",
-    count: 16,
-    accent: "color-accent-blue",
-  },
-  {
-    name: "AI & Machine Learning",
-    icon: "\u{1F9E0}",
-    desc: "Add AI-powered features like chatbots, personalization, and content generation.",
-    count: 9,
-    accent: "color-accent-purple",
-  },
-  {
-    name: "Social Media",
-    icon: "\u{1F4F1}",
-    desc: "Embed feeds, schedule posts, and integrate with every social platform.",
-    count: 11,
-    accent: "color-accent-orange",
-  },
-  {
-    name: "Scheduling",
-    icon: "\u{1F4C5}",
-    desc: "Add booking, appointment scheduling, and calendar integration.",
-    count: 8,
-    accent: "color-accent-green",
-  },
-];
-
-const FEATURED_INTEGRATIONS = [
-  { name: "Google Analytics", category: "Analytics", desc: "The world's most popular web analytics platform. Track traffic, conversions, and user behavior.", icon: "GA", color: "color-accent-orange" },
-  { name: "HubSpot", category: "CRM", desc: "All-in-one CRM platform with marketing, sales, and customer service tools.", icon: "HS", color: "color-accent-orange" },
-  { name: "Mailchimp", category: "Marketing", desc: "Email marketing and automation platform for growing your audience.", icon: "MC", color: "color-accent-blue" },
-  { name: "Stripe", category: "Payments", desc: "Payment processing platform for online businesses. Accept payments globally.", icon: "ST", color: "color-accent-purple" },
-  { name: "Zapier", category: "Automation", desc: "Connect Kreature to 5,000+ apps and automate workflows without code.", icon: "ZP", color: "color-accent-pink" },
-  { name: "Slack", category: "Automation", desc: "Team communication platform. Get notifications, share updates, and collaborate.", icon: "SL", color: "color-accent-green" },
-  { name: "Salesforce", category: "CRM", desc: "Enterprise CRM platform for managing customer relationships at scale.", icon: "SF", color: "color-accent-blue" },
-  { name: "Hotjar", category: "Analytics", desc: "Behavior analytics and user feedback tools. Heatmaps, recordings, and surveys.", icon: "HJ", color: "color-accent-purple" },
-  { name: "Typeform", category: "Forms & Surveys", desc: "Create beautiful, conversational forms that people actually want to fill out.", icon: "TF", color: "color-accent-blue" },
-  { name: "Intercom", category: "CRM", desc: "Customer messaging platform with live chat, bots, and product tours.", icon: "IC", color: "color-accent-green" },
-  { name: "Shopify", category: "Ecommerce", desc: "Ecommerce platform for selling products online and in-person.", icon: "SH", color: "color-accent-green" },
-  { name: "Mixpanel", category: "Analytics", desc: "Product analytics for understanding user behavior and driving growth.", icon: "MP", color: "color-accent-pink" },
-  { name: "Segment", category: "Analytics", desc: "Customer data platform that collects, cleans, and routes your data.", icon: "SG", color: "color-accent-orange" },
-  { name: "Airtable", category: "Automation", desc: "Spreadsheet-database hybrid for organizing anything, with your team.", icon: "AT", color: "color-accent-purple" },
-  { name: "Calendly", category: "Scheduling", desc: "Scheduling automation platform for booking meetings without the back-and-forth.", icon: "CL", color: "color-accent-blue" },
-  { name: "Notion", category: "Automation", desc: "All-in-one workspace for notes, docs, wikis, and project management.", icon: "NT", color: "color-accent-green" },
-  { name: "ConvertKit", category: "Marketing", desc: "Email marketing built for creators. Newsletters, automations, and landing pages.", icon: "CK", color: "color-accent-pink" },
-  { name: "Klaviyo", category: "Marketing", desc: "Email and SMS marketing platform built for ecommerce.", icon: "KV", color: "color-accent-orange" },
-  { name: "OpenAI", category: "AI & Machine Learning", desc: "Integrate GPT models for content generation, chatbots, and AI-powered features.", icon: "AI", color: "color-accent-purple" },
-  { name: "Anthropic", category: "AI & Machine Learning", desc: "Claude AI integration for safe, helpful, and honest AI assistants.", icon: "AN", color: "color-accent-blue" },
-  { name: "Snowflake", category: "Analytics", desc: "Cloud data platform for storage, processing, and analytics at scale.", icon: "SN", color: "color-accent-green" },
-  { name: "Datadog", category: "Analytics", desc: "Monitoring and security platform for cloud applications.", icon: "DD", color: "color-accent-purple" },
-  { name: "Webhooks by Zapier", category: "Automation", desc: "Connect Kreature to any app with custom webhooks and HTTP requests.", icon: "WH", color: "color-accent-pink" },
-  { name: "Memberstack", category: "Memberships", desc: "Add user authentication, memberships, and gated content to your site.", icon: "MS", color: "color-accent-orange" },
-  { name: "Finsweet Attributes", category: "Automation", desc: "Powerful no-code tools for filtering, sorting, and dynamic content.", icon: "FS", color: "color-accent-blue" },
-  { name: "Make (Integromat)", category: "Automation", desc: "Visual automation platform for connecting apps and building workflows.", icon: "MK", color: "color-accent-green" },
-  { name: "Brevo (Sendinblue)", category: "Marketing", desc: "Email marketing, SMS, chat, and CRM platform for growing businesses.", icon: "BR", color: "color-accent-purple" },
-  { name: "Amplitude", category: "Analytics", desc: "Digital analytics platform for product-led growth.", icon: "AM", color: "color-accent-pink" },
-  { name: "Google Ads", category: "Marketing", desc: "Track conversions, retarget visitors, and manage campaigns directly.", icon: "GA", color: "color-accent-orange" },
-  { name: "Meta Pixel", category: "Marketing", desc: "Facebook and Instagram conversion tracking and audience retargeting.", icon: "MP", color: "color-accent-blue" },
-  { name: "LinkedIn Insight Tag", category: "Marketing", desc: "LinkedIn conversion tracking and professional audience targeting.", icon: "LI", color: "color-accent-purple" },
-  { name: "Plaid", category: "Payments", desc: "Financial data platform for connecting bank accounts and verifying users.", icon: "PL", color: "color-accent-green" },
-];
-
-const FOOTER_COLS = [
-  {
-    heading: "Product",
-    links: [
-      { label: "Overview", href: "/webflow-clone" },
-      { label: "Designer", href: "#" },
-      { label: "CMS", href: "#" },
-      { label: "Hosting", href: "#" },
-      { label: "AI Features", href: "#" },
-    ],
-  },
-  {
-    heading: "Ecosystem",
-    links: [
-      { label: "Apps", href: "/apps" },
-      { label: "Libraries", href: "/libraries" },
-      { label: "Templates", href: "/templates" },
-      { label: "Integrations", href: "/integrations" },
-      { label: "Showcase", href: "/made-in-webflow" },
-    ],
-  },
-  {
-    heading: "Solutions",
-    links: [
-      { label: "Marketing Teams", href: "#" },
-      { label: "Agencies", href: "#" },
-      { label: "Startups", href: "#" },
-      { label: "Enterprise", href: "/enterprise" },
-      { label: "Freelancers", href: "#" },
-    ],
-  },
-  {
-    heading: "Resources",
-    links: [
-      { label: "Blog", href: "/blog" },
-      { label: "Glossary", href: "/glossary" },
-      { label: "Community", href: "/community" },
-      { label: "Documentation", href: "#" },
-      { label: "Webflow Way", href: "/webflow-way" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "About", href: "/company" },
-      { label: "Customers", href: "/customers" },
-      { label: "Partners", href: "/certified-partners" },
-      { label: "Careers", href: "#" },
-      { label: "Contact", href: "/contact-sales" },
-    ],
-  },
-  {
-    heading: "Compare",
-    links: [
-      { label: "vs WordPress", href: "#" },
-      { label: "vs Framer", href: "#" },
-      { label: "vs Wix", href: "#" },
-      { label: "vs Squarespace", href: "#" },
-      { label: "vs Bubble", href: "#" },
-    ],
-  },
-  {
-    heading: "Connect",
-    links: [
-      { label: "Twitter", href: "https://twitter.com" },
-      { label: "LinkedIn", href: "https://linkedin.com" },
-      { label: "YouTube", href: "https://youtube.com" },
-      { label: "Instagram", href: "https://instagram.com" },
-      { label: "Discord", href: "https://discord.com" },
-    ],
-  },
-];
-
-/* ─── Footer ─── */
-function Footer() {
-  return (
-    <footer
-      className="border-t"
-      style={{ borderColor: V("color-hairline"), background: V("color-canvas") }}
+    <span
+      className="ml-1 text-[1.1em] leading-none select-none"
+      aria-hidden="true"
     >
-      <div
-        className="mx-auto px-5 sm:px-8 py-14 sm:py-16"
-        style={{ maxWidth: "1440px" }}
-      >
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-8">
-          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-            <div className="flex items-center gap-2.5 mb-3">
-              <img
-                src="/logo/kreature-logo-dark.png"
-                alt="Kreature"
-                className="logo-dark h-[36px] w-auto"
-              />
-              <img
-                src="/logo/kreature-logo-light.png"
-                alt="Kreature"
-                className="logo-light h-[36px] w-auto"
-              />
-              <span
-                className="font-heading font-[800] text-xl tracking-tight"
-                style={{ color: V("color-ink") }}
-              >
-                Kreature
-                <span style={{ color: V("color-accent-blue") }}>.</span>
-              </span>
-            </div>
-            <p
-              className="text-sm leading-relaxed max-w-xs"
-              style={{ color: V("color-mute") }}
-            >
-              Connect Kreature to the tools your team already uses. Hundreds of
-              integrations ready to go.
-            </p>
-          </div>
-
-          {FOOTER_COLS.map((col) => (
-            <div key={col.heading}>
-              <div
-                className="text-xs uppercase tracking-wider mb-4"
-                style={{ color: V("color-mute-soft"), fontWeight: 550 }}
-              >
-                {col.heading}
-              </div>
-              <ul className="space-y-2.5">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-sm transition-colors"
-                      style={{ color: V("color-body-mid") }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.color = V("color-ink"))
-                      }
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.color = V("color-body-mid"))
-                      }
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        <div
-          className="mt-14 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4"
-          style={{ borderColor: V("color-hairline") }}
-        >
-          <p className="text-xs" style={{ color: V("color-mute") }}>
-            &copy; {new Date().getFullYear()} Kreature Studio. All rights
-            reserved.
-          </p>
-          <div className="flex items-center gap-5">
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Twitter"
-              className="transition-colors"
-              style={{ color: V("color-mute") }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="transition-colors"
-              style={{ color: V("color-mute") }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
+      &rarr;
+    </span>
   );
 }
 
-/* ─── Page ─── */
+/* ─── Filter Categories ─── */
+const FILTER_CATEGORIES = [
+  "Accessibility tools",
+  "Analytics and targeting tools",
+  "Anti-spam",
+  "App integration and task automation",
+  "Assets",
+  "Authentication tools",
+  "Calendars and scheduling",
+  "Cloneable resources",
+  "Content Marketing",
+  "CRM",
+  "Customer engagement",
+  "Domains",
+  "Ecommerce",
+  "Email hosting",
+  "Email marketing",
+  "Event Management",
+  "Faceted navigation",
+  "Forms & surveys",
+  "Job board",
+  "Localization",
+  "Maps",
+  "Memberships and user login",
+  "Migration tools",
+  "Music streaming",
+  "Office suites",
+  "Payment processing",
+  "Plugins and integrations library",
+  "Quizzes",
+  "Search",
+  "Social media",
+  "Templates",
+];
+
+/* ─── Integration Cards Data ─── */
+interface Integration {
+  name: string;
+  logo: string;
+  desc: string;
+  category: string;
+}
+
+const INTEGRATIONS: Integration[] = [
+  {
+    name: "OpenStreetMap",
+    logo: `${CDN_INTEGRATION}/68dd0c50ae37def572b6d1b8_openstreetmap-logo.png`,
+    desc: "Connect OpenStreetMap’s collaborative mapping platform to your Kreature site for cost-effective, customizable maps. Display store locations, visualize service areas, and create interactive location-based experiences without Google Maps fees or restrictions.",
+    category: "Maps",
+  },
+  {
+    name: "Zapier",
+    logo: `${CDN_INTEGRATION}/69f6ef5fb0cc5688eb1cf384_icon.jpeg`,
+    desc: "Connect Zapier with Kreature to automate form routing, CMS updates, and ecommerce order processing across 7,000+ apps.",
+    category: "App integration and task automation",
+  },
+  {
+    name: "Google Docs",
+    logo: `${CDN_INTEGRATION}/69e9fc154461b269300e6b81_icon.jpeg`,
+    desc: "Connect Google Docs with Kreature to embed live documents, sync content to CMS Collections, or build custom API publishing pipelines.",
+    category: "App integration and task automation",
+  },
+  {
+    name: "Formly",
+    logo: `${CDN_INTEGRATION}/6a1ea786f6532e79d6bad9b8_icon.jpeg`,
+    desc: "Connect Formly, an attribute-driven multistep form library by VI Designs, with Kreature to add multistep flows, conditional logic, and progress indicators to native form blocks without custom JavaScript.",
+    category: "Forms & surveys",
+  },
+  {
+    name: "Consent Pro by Finsweet",
+    logo: `${CDN_INTEGRATION}/69f339d23b4a686eef349bbf_icon.jpeg`,
+    desc: "Connect Consent Pro with Kreature to manage cookie consent and privacy compliance directly inside your Kreature project.",
+    category: "Legal compliance solutions",
+  },
+  {
+    name: "Smartarget Contact Us",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Smartarget Contact Us with Kreature to add a floating multi-channel contact widget that lets visitors reach you on WhatsApp, Telegram, email, and 12+ messaging platforms.",
+    category: "App integration and task automation",
+  },
+  {
+    name: "CMS Bridge",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect CMS Bridge with Kreature to sync Airtable records to your CMS collections with record-level control over content states and publishing.",
+    category: "App integration and task automation",
+  },
+  {
+    name: "Osmo SVG Import",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Osmo SVG Import with Kreature to add fully editable SVG elements to your site without character limits or manual code editing.",
+    category: "App integration and task automation",
+  },
+  {
+    name: "Telegram Chat - Contact Us",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Telegram Chat - Contact Us to your Kreature site to add a floating Telegram chat widget that lets visitors message you directly from any page.",
+    category: "App integration and task automation",
+  },
+  {
+    name: "Form Fields Pro",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Form Fields Pro with Kreature to add advanced input types, including searchable selects, date pickers, number range pickers, and file uploaders, to native Kreature forms.",
+    category: "App integration and task automation",
+  },
+  {
+    name: "Countdown Bar Timer",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Countdown Bar Timer with Kreature to add urgency-driven countdown timers to landing pages, product pages, and sitewide promotions.",
+    category: "Analytics and targeting tools",
+  },
+  {
+    name: "Vault Vision User Authentication",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Vault Vision with Kreature to add passwordless login, social sign-in, and per-page access control to any Kreature site without backend code.",
+    category: "App integration and task automation",
+  },
+  {
+    name: "Letterdrop",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Letterdrop to Kreature to publish, manage, and track B2B blog content directly from a collaborative content platform.",
+    category: "Email marketing",
+  },
+  {
+    name: "Smartarget Reviews",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Smartarget Reviews with Kreature to display curated customer testimonials and star ratings on your site without building a review system from scratch.",
+    category: "Analytics and targeting tools",
+  },
+  {
+    name: "TripleChecker",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect TripleChecker, an automated proofreading tool, with Kreature to scan your published site for spelling errors, grammar mistakes, and broken links on a recurring schedule.",
+    category: "Analytics and targeting tools",
+  },
+  {
+    name: "Integrately",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Integrately with Kreature to automate form submissions, CMS updates, and e-commerce orders across 1,500+ apps without writing code.",
+    category: "App integration and task automation",
+  },
+  {
+    name: "Flowstar: Contact Form Builder",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Flowstar: Contact Form Builder with Kreature to add multi-step booking, order, registration, and pre-order forms with embedded, popup, and targeted widget display modes.",
+    category: "Forms & surveys",
+  },
+  {
+    name: "Cookie Consent",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Cookie Consent, a GDPR and CCPA compliance app, with Kreature to add configurable cookie banners that block third-party scripts until visitors make a consent choice.",
+    category: "Analytics and targeting tools",
+  },
+  {
+    name: "ScheduleFlow",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect ScheduleFlow to Kreature to schedule site and CMS publishes at specific dates and times.",
+    category: "App integration and task automation",
+  },
+  {
+    name: "Twise",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Twise, an AI chat assistant, with Kreature to answer visitor questions, capture leads, and respond in 92 languages using a chat widget that learns from your site content.",
+    category: "Customer engagement",
+  },
+  {
+    name: "Postblaster",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Postblaster, a LinkedIn automation tool, with Kreature to automatically generate and publish LinkedIn posts when you add new content to your CMS collections.",
+    category: "Social media",
+  },
+  {
+    name: "Visual Sitemap",
+    logo: PLACEHOLDER_IMG,
+    desc: "Add Visual Sitemap to Kreature to generate styled HTML sitemap pages directly on your canvas — no code required.",
+    category: "Templates",
+  },
+  {
+    name: "Flowstar: Banners",
+    logo: PLACEHOLDER_IMG,
+    desc: "Connect Flowstar: Banners with Kreature to display promotional pop-ups and announcement banners without writing code.",
+    category: "Customer engagement",
+  },
+  {
+    name: "Remove Background",
+    logo: `${CDN_INTEGRATION}/6a2f5b361372de816be7d658_icon.png`,
+    desc: "Connect Remove Background with Kreature to remove image backgrounds on the canvas without uploading files to external servers.",
+    category: "Assets",
+  },
+];
+
+/* ─── Brand Logo Data ─── */
+const BRAND_LOGOS = [
+  { name: "IDEO", src: `${CDN_LOGO}/68c9a39c128261b2128439dc_ideo-logo.svg` },
+  {
+    name: "Monday.com",
+    src: `${CDN_LOGO}/68c9a39c128261b2128439c8_monday.com.svg`,
+  },
+  { name: "BBDO", src: `${CDN_LOGO}/68c9a39c128261b2128439db_bbdo-logo.svg` },
+  {
+    name: "The New York Times",
+    src: `${CDN_LOGO}/68c9a39c128261b2128439d9_nytimes.svg`,
+  },
+  { name: "TED", src: `${CDN_LOGO}/68c9a39c128261b2128439d8_TED.svg` },
+  {
+    name: "Docusign",
+    src: `${CDN_LOGO}/68c9a39c128261b2128439c9_Docusign-dark.svg`,
+  },
+];
+
+/* ─── Constants ─── */
+const TOTAL_PAGES = 29;
+const CARDS_PER_PAGE = 24;
+
+/* ══════════════════════════════════════════════════════════════
+   PAGE
+   ══════════════════════════════════════════════════════════════ */
 export default function IntegrationsPage() {
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const filteredIntegrations = useMemo(() => {
+    if (!activeFilter) return INTEGRATIONS;
+    return INTEGRATIONS.filter(
+      (i) => i.category.toLowerCase() === activeFilter.toLowerCase()
+    );
+  }, [activeFilter]);
+
+  const paginatedIntegrations = useMemo(() => {
+    return filteredIntegrations.slice(0, CARDS_PER_PAGE);
+  }, [filteredIntegrations]);
+
   return (
-    <>
-      {/* Hero */}
+    <div
+      className="page-wrapper"
+      style={{ background: V("color-canvas"), color: V("color-body") }}
+    >
+      {/* ═══════════════════════════════════════════
+          HERO
+          ═══════════════════════════════════════════ */}
       <section
         className="relative overflow-hidden"
         style={{
           paddingTop: "calc(68px + 120px)",
-          paddingBottom: "120px",
+          paddingBottom: "0px",
           background: V("color-canvas"),
         }}
       >
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full blur-[120px]"
-            style={{
-              background: `color-mix(in srgb, ${V("color-accent-orange")} 8%, transparent)`,
-            }}
-          />
-        </div>
         <div
-          className="relative z-10 mx-auto px-5 sm:px-8 text-center"
+          className="mx-auto px-5 sm:px-8 text-center"
           style={{ maxWidth: "800px" }}
         >
           <h1
             className="font-heading tracking-tight mb-6"
             style={{
-              fontSize: "80px",
-              fontWeight: 600,
-              lineHeight: "83.2px",
-              letterSpacing: "-0.8px",
+              ...T.h1,
               color: V("color-ink"),
             }}
           >
-            Connect your stack
+            Kreature Integrations
           </h1>
           <p
             className="mx-auto mb-10"
             style={{
               fontSize: "20px",
-              lineHeight: 1.5,
+              fontWeight: 400,
+              lineHeight: "32px",
               color: V("color-body"),
-              maxWidth: "600px",
+              maxWidth: "640px",
             }}
           >
-            Kreature integrates with hundreds of tools your team already uses.
-            From analytics to CRM, connect your entire workflow in minutes.
+            Power your website with a library of integrations for everything
+            from analytics and A/B testing to ecommerce and sales.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="#featured"
-              className="font-medium transition-colors inline-flex items-center"
-              style={{
-                fontSize: "16px",
-                fontWeight: 500,
-                padding: "16px 24px",
-                borderRadius: "4px",
-                background: V("color-accent-orange"),
-                color: "#fff",
-              }}
-            >
-              Explore integrations <Arrow />
-            </a>
-            <a
-              href="#categories"
-              className="font-medium transition-colors inline-flex items-center"
-              style={{
-                fontSize: "16px",
-                fontWeight: 500,
-                padding: "16px 24px",
-                borderRadius: "4px",
-                border: `1px solid ${V("color-hairline")}`,
-                color: V("color-ink"),
-              }}
-            >
-              Browse by category
-            </a>
-          </div>
         </div>
-      </section>
 
-      {/* Integration Categories */}
-      <section
-        id="categories"
-        style={{
-          paddingTop: "100px",
-          paddingBottom: "100px",
-          background: V("color-canvas-soft"),
-        }}
-      >
+        {/* Trusted by + logos */}
         <div
-          className="mx-auto px-5 sm:px-8"
+          className="mx-auto px-5 sm:px-8 text-center mb-10"
           style={{ maxWidth: "1200px" }}
         >
-          <div className="text-center mb-16">
-            <h2
-              className="font-heading tracking-tight mb-4"
-              style={{
-                fontSize: "56px",
-                fontWeight: 600,
-                lineHeight: "58.24px",
-                color: V("color-ink"),
-              }}
-            >
-              Integration categories
-            </h2>
-            <p
-              style={{
-                fontSize: "20px",
-                lineHeight: 1.5,
-                color: V("color-body"),
-                maxWidth: "540px",
-                margin: "0 auto",
-              }}
-            >
-              Find the right tools to extend your site, organized by what you
-              want to accomplish.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {INTEGRATION_CATEGORIES.map((cat) => (
-              <a
-                key={cat.name}
-                href="#"
-                className="group rounded-xl p-8 transition-all duration-300"
-                style={{
-                  background: V("color-canvas"),
-                  border: `1px solid ${V("color-hairline")}`,
-                  boxShadow: V("shadow-card"),
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = V(cat.accent);
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = V("color-hairline");
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <div className="text-3xl mb-4">{cat.icon}</div>
-                <div className="flex items-center gap-3 mb-3">
-                  <h3
-                    className="font-heading"
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: 600,
-                      lineHeight: "28px",
-                      color: V("color-ink"),
-                    }}
-                  >
-                    {cat.name}
-                  </h3>
-                  <span
-                    className="text-xs px-2 py-0.5 rounded-full"
-                    style={{
-                      background: `color-mix(in srgb, ${V(cat.accent)} 12%, transparent)`,
-                      color: V(cat.accent),
-                    }}
-                  >
-                    {cat.count} integrations
-                  </span>
-                </div>
-                <p
-                  style={{
-                    fontSize: "16px",
-                    lineHeight: "25.6px",
-                    color: V("color-body-mid"),
-                  }}
-                >
-                  {cat.desc}
-                </p>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Integrations */}
-      <section
-        id="featured"
-        style={{
-          paddingTop: "100px",
-          paddingBottom: "100px",
-          background: V("color-canvas"),
-        }}
-      >
-        <div
-          className="mx-auto px-5 sm:px-8"
-          style={{ maxWidth: "1200px" }}
-        >
-          <div className="text-center mb-16">
-            <h2
-              className="font-heading tracking-tight mb-4"
-              style={{
-                fontSize: "56px",
-                fontWeight: 600,
-                lineHeight: "58.24px",
-                color: V("color-ink"),
-              }}
-            >
-              Popular integrations
-            </h2>
-            <p
-              style={{
-                fontSize: "20px",
-                lineHeight: 1.5,
-                color: V("color-body"),
-                maxWidth: "540px",
-                margin: "0 auto",
-              }}
-            >
-              The most popular tools our users connect to their Kreature sites.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {FEATURED_INTEGRATIONS.map((integration) => (
-              <a
-                key={integration.name}
-                href="#"
-                className="group rounded-xl p-5 transition-all duration-300 flex flex-col"
-                style={{
-                  background: V("color-canvas"),
-                  border: `1px solid ${V("color-hairline")}`,
-                  boxShadow: V("shadow-card"),
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = V(integration.color);
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = V("color-hairline");
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold shrink-0"
-                    style={{
-                      background: `color-mix(in srgb, ${V(integration.color)} 12%, transparent)`,
-                      color: V(integration.color),
-                    }}
-                  >
-                    {integration.icon}
-                  </div>
-                  <div className="min-w-0">
-                    <h3
-                      className="font-heading truncate"
-                      style={{
-                        fontSize: "16px",
-                        fontWeight: 600,
-                        lineHeight: "22px",
-                        color: V("color-ink"),
-                      }}
-                    >
-                      {integration.name}
-                    </h3>
-                    <span
-                      className="text-xs"
-                      style={{ color: V("color-mute") }}
-                    >
-                      {integration.category}
-                    </span>
-                  </div>
-                </div>
-                <p
-                  className="flex-1 mb-3"
-                  style={{
-                    fontSize: "13px",
-                    lineHeight: "20px",
-                    color: V("color-body-mid"),
-                  }}
-                >
-                  {integration.desc}
-                </p>
-                <span
-                  className="text-xs font-medium inline-flex items-center group-hover:underline"
-                  style={{ color: V(integration.color) }}
-                >
-                  Connect <Arrow />
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* API Access */}
-      <section
-        style={{
-          paddingTop: "100px",
-          paddingBottom: "100px",
-          background: V("color-canvas-soft"),
-        }}
-      >
-        <div
-          className="mx-auto px-5 sm:px-8"
-          style={{ maxWidth: "1000px" }}
-        >
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div
-                className="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-6 uppercase tracking-wider"
-                style={{
-                  background: `color-mix(in srgb, ${V("color-accent-orange")} 12%, transparent)`,
-                  color: V("color-accent-orange"),
-                }}
-              >
-                Developer tools
-              </div>
-              <h2
-                className="font-heading tracking-tight mb-4"
-                style={{
-                  fontSize: "56px",
-                  fontWeight: 600,
-                  lineHeight: "58.24px",
-                  color: V("color-ink"),
-                }}
-              >
-                Build your own
-              </h2>
-              <p
-                className="mb-6"
-                style={{
-                  fontSize: "16px",
-                  lineHeight: "25.6px",
-                  color: V("color-body-mid"),
-                }}
-              >
-                Can&apos;t find the integration you need? Use our MACH-certified
-                APIs and webhooks to build custom integrations for any service.
-                Connect anything to Kreature with a few lines of code.
-              </p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  "REST and GraphQL APIs with full documentation",
-                  "Custom webhooks for real-time event triggers",
-                  "OAuth 2.0 and API key authentication",
-                  "MACH Alliance certified for composable architectures",
-                  "Logic flows for visual workflow automation",
-                ].map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-start gap-2"
-                    style={{
-                      fontSize: "14px",
-                      lineHeight: "22.4px",
-                      color: V("color-body-mid"),
-                    }}
-                  >
-                    <span
-                      style={{
-                        color: V("color-accent-orange"),
-                        fontWeight: 600,
-                        flexShrink: 0,
-                      }}
-                    >
-                      &check;
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#"
-                className="font-medium transition-colors inline-flex items-center"
-                style={{
-                  fontSize: "16px",
-                  fontWeight: 500,
-                  padding: "16px 24px",
-                  borderRadius: "4px",
-                  background: V("color-accent-orange"),
-                  color: "#fff",
-                }}
-              >
-                View API docs <Arrow />
-              </a>
-            </div>
-            <div
-              className="rounded-2xl p-10 text-center"
-              style={{
-                background: `color-mix(in srgb, ${V("color-accent-orange")} 6%, transparent)`,
-                border: `1px solid ${V("color-hairline")}`,
-              }}
-            >
-              <div
-                className="text-5xl mb-6"
-                style={{ color: V("color-accent-orange") }}
-              >
-                {"{ }"}
-              </div>
-              <p
-                className="text-sm mb-4"
-                style={{
-                  color: V("color-body-mid"),
-                  fontFamily: "var(--font-mono)",
-                  lineHeight: "22.4px",
-                }}
-              >
-                {"fetch(\"https://api.kreature.com/v1/sites\", {\n  headers: {\n    \"Authorization\": \"Bearer \" + API_KEY\n  }\n})"}
-              </p>
-              <p
-                className="text-xs"
-                style={{ color: V("color-mute") }}
-              >
-                Connect any service with a single API call
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section
-        className="relative overflow-hidden"
-        style={{
-          paddingTop: "100px",
-          paddingBottom: "100px",
-          background: V("color-canvas"),
-        }}
-      >
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] rounded-full blur-[100px]"
+          <p
+            className="mb-6 uppercase tracking-wider"
             style={{
-              background: `color-mix(in srgb, ${V("color-accent-orange")} 10%, transparent)`,
+              fontSize: "14px",
+              fontWeight: 400,
+              letterSpacing: "0.05em",
+              color: V("color-mute"),
             }}
-          />
+          >
+            Trusted by teams at
+          </p>
+          <div className="flex flex-wrap justify-center gap-8 items-center opacity-40">
+            {BRAND_LOGOS.map((logo) => (
+              <img
+                key={logo.name}
+                src={logo.src}
+                alt={logo.name}
+                className="h-5 w-auto"
+                loading="lazy"
+              />
+            ))}
+          </div>
         </div>
+
+        {/* Hero image */}
+        <div className="mx-auto px-5 sm:px-8" style={{ maxWidth: "1200px" }}>
+          <div
+            className="rounded-lg overflow-hidden"
+            style={{
+              border: `1px solid ${V("color-hairline")}`,
+              boxShadow: V("shadow-card-strong"),
+              borderRadius: "8px",
+            }}
+          >
+            <img
+              src={`${CDN_LOGO}/68c9a39c128261b2128439d0_webflow-desktop.webp`}
+              alt="Kreature platform preview"
+              className="w-full h-auto"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          FILTER SECTION
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "100px",
+          paddingBottom: "48px",
+          background: V("color-canvas"),
+        }}
+      >
         <div
-          className="relative z-10 mx-auto px-5 sm:px-8 text-center"
-          style={{ maxWidth: "600px" }}
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
         >
           <h2
-            className="font-heading tracking-tight mb-4"
+            className="font-heading tracking-tight mb-10"
             style={{
-              fontSize: "56px",
-              fontWeight: 600,
-              lineHeight: "58.24px",
+              ...T.h2,
               color: V("color-ink"),
             }}
           >
-            Ready to connect?
+            Integration types
           </h2>
-          <p
-            className="mx-auto mb-10"
-            style={{
-              fontSize: "20px",
-              lineHeight: 1.5,
-              color: V("color-body"),
-            }}
-          >
-            Explore the full directory of integrations and connect your favorite
-            tools to Kreature in minutes.
-          </p>
-          <a
-            href="#featured"
-            className="font-medium transition-colors inline-flex items-center"
-            style={{
-              fontSize: "16px",
-              fontWeight: 500,
-              padding: "16px 24px",
-              borderRadius: "4px",
-              background: V("color-accent-orange"),
-              color: "#fff",
-            }}
-          >
-            Explore integrations <Arrow />
-          </a>
+
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-3">
+            {FILTER_CATEGORIES.map((cat, idx) => (
+              <span key={cat} className="flex items-center">
+                {idx > 0 && (
+                  <span
+                    className="mx-2 select-none"
+                    style={{ color: V("color-hairline") }}
+                    aria-hidden="true"
+                  >
+                    |
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setActiveFilter(
+                      activeFilter?.toLowerCase() === cat.toLowerCase()
+                        ? null
+                        : cat
+                    )
+                  }
+                  className="transition-colors hover:underline whitespace-nowrap"
+                  style={{
+                    fontSize: "16px",
+                    fontWeight:
+                      activeFilter?.toLowerCase() === cat.toLowerCase()
+                        ? 600
+                        : 400,
+                    lineHeight: "25.6px",
+                    color:
+                      activeFilter?.toLowerCase() === cat.toLowerCase()
+                        ? V("color-ink")
+                        : V("color-body-mid"),
+                    textDecoration:
+                      activeFilter?.toLowerCase() === cat.toLowerCase()
+                        ? "underline"
+                        : "none",
+                    textUnderlineOffset: "4px",
+                    textDecorationThickness: "2px",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0,
+                  }}
+                >
+                  {cat}
+                </button>
+              </span>
+            ))}
+          </div>
+
+          {activeFilter && (
+            <button
+              type="button"
+              onClick={() => setActiveFilter(null)}
+              className="mt-6 transition-colors hover:underline inline-flex items-center"
+              style={{
+                fontSize: "14px",
+                fontWeight: 500,
+                color: V("color-accent-blue"),
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+              }}
+            >
+              Clear filter
+            </button>
+          )}
         </div>
       </section>
 
-      <Footer />
-    </>
+      {/* ═══════════════════════════════════════════
+          INTEGRATION CARDS GRID
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "32px",
+          paddingBottom: "64px",
+          background: V("color-canvas"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
+        >
+          {paginatedIntegrations.length === 0 ? (
+            <div
+              className="text-center py-20"
+              style={{ color: V("color-mute") }}
+            >
+              <p style={{ ...T.bodyLg }}>
+                No results &mdash; Sorry, we couldn&apos;t find any matches to
+                your search.
+              </p>
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {paginatedIntegrations.map((integration) => (
+                <a
+                  key={integration.name}
+                  href={`/integrations/${integration.name
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")
+                    .replace(/[^a-z0-9-]/g, "")}`}
+                  className="group rounded-xl p-6 transition-all duration-300 flex flex-col"
+                  style={{
+                    background: V("color-canvas"),
+                    border: `1px solid ${V("color-hairline")}`,
+                    borderRadius: "8px",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = V("color-hairline");
+                    e.currentTarget.style.boxShadow = V("shadow-card");
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = V("color-hairline");
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                >
+                  {/* Logo */}
+                  <div className="w-12 h-12 rounded-lg mb-4 overflow-hidden flex items-center justify-center shrink-0">
+                    <img
+                      src={integration.logo}
+                      alt={`${integration.name} logo`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  {/* Title */}
+                  <h3
+                    className="font-heading mb-2"
+                    style={{
+                      ...T.h3,
+                      color: V("color-ink"),
+                    }}
+                  >
+                    {integration.name}
+                  </h3>
+
+                  {/* Description */}
+                  <p
+                    className="mb-5 flex-1"
+                    style={{
+                      ...T.body,
+                      color: V("color-body-mid"),
+                    }}
+                  >
+                    {integration.desc}
+                  </p>
+
+                  {/* Category tag + Learn more */}
+                  <div className="flex items-center justify-between mt-auto">
+                    <span
+                      className="tracking-wider"
+                      style={{
+                        ...T.categoryTag,
+                        color: V("color-mute"),
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {integration.category}
+                    </span>
+                    <span
+                      className="transition-colors inline-flex items-center"
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        color: V("color-body-mid"),
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = V("color-ink");
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = V("color-body-mid");
+                      }}
+                    >
+                      Learn more <Arrow />
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
+
+          {/* Pagination */}
+          <div
+            className="flex items-center justify-center gap-6 mt-14"
+            style={{ color: V("color-body-mid") }}
+          >
+            <button
+              type="button"
+              disabled={currentPage <= 1}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              className="transition-colors hover:underline disabled:opacity-30 disabled:cursor-default disabled:no-underline inline-flex items-center"
+              style={{
+                fontSize: "16px",
+                fontWeight: 500,
+                color: V("color-body-mid"),
+                background: "none",
+                border: "none",
+                cursor: currentPage <= 1 ? "default" : "pointer",
+                padding: 0,
+              }}
+            >
+              Previous
+            </button>
+
+            <span
+              style={{
+                fontSize: "14px",
+                color: V("color-mute"),
+              }}
+            >
+              {currentPage} / {TOTAL_PAGES}
+            </span>
+
+            <button
+              type="button"
+              disabled={currentPage >= TOTAL_PAGES}
+              onClick={() =>
+                setCurrentPage((p) => Math.min(TOTAL_PAGES, p + 1))
+              }
+              className="transition-colors hover:underline disabled:opacity-30 disabled:cursor-default disabled:no-underline inline-flex items-center"
+              style={{
+                fontSize: "16px",
+                fontWeight: 500,
+                color: V("color-body-mid"),
+                background: "none",
+                border: "none",
+                cursor: currentPage >= TOTAL_PAGES ? "default" : "pointer",
+                padding: 0,
+              }}
+            >
+              Load more
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          BOTTOM CTA
+          ═══════════════════════════════════════════ */}
+      <section
+        style={{
+          paddingTop: "80px",
+          paddingBottom: "80px",
+          background: V("color-canvas-soft"),
+        }}
+      >
+        <div
+          className="mx-auto px-5 sm:px-8"
+          style={{ maxWidth: "1200px" }}
+        >
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2
+                className="font-heading tracking-tight mb-4"
+                style={{
+                  ...T.h2,
+                  color: V("color-ink"),
+                }}
+              >
+                Get started for free
+              </h2>
+              <p
+                className="mb-8"
+                style={{
+                  ...T.body,
+                  color: V("color-body-mid"),
+                  maxWidth: "480px",
+                }}
+              >
+                Try Kreature for as long as you like with our free Starter plan.
+                Purchase a paid Site plan to publish, host, and unlock additional
+                features.
+              </p>
+              <a
+                href="/signup"
+                className="inline-flex items-center transition-opacity hover:opacity-90"
+                style={{
+                  ...T.btn,
+                  background: V("color-accent-blue"),
+                  color: "#fff",
+                }}
+              >
+                Get started &mdash; it&apos;s free
+              </a>
+            </div>
+
+            <div className="flex justify-center">
+              <img
+                src={`${CDN_LOGO}/6894d7a5d9b174d9177a363c_pagebuilding-cta.avif`}
+                alt="Kreature page building preview"
+                className="max-w-full h-auto rounded-lg"
+                style={{
+                  borderRadius: "8px",
+                  boxShadow: V("shadow-card-strong"),
+                }}
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
